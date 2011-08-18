@@ -77,15 +77,22 @@ public class CouchListAdapter extends BaseAdapter {
 //        JsonNode document = row.getDocAsNode();
         JsonNode document = (JsonNode)getItem(position);
         JsonNode textNode = document.get("text");
-        label.setText(textNode.getTextValue());
-        
-        JsonNode checkNode = document.get("check");
-        ImageView icon = (ImageView) v.findViewById(R.id.icon);
-        if(checkNode.getBooleanValue()) {
-        	icon.setImageResource(R.drawable.list_area___checkbox___checked);
+        if(textNode != null) {
+        	label.setText(textNode.getTextValue());
         }
         else {
-        	icon.setImageResource(R.drawable.list_area___checkbox___unchecked);
+        	label.setText("");
+        }
+        
+        JsonNode checkNode = document.get("check");
+        if(checkNode != null) {
+	        ImageView icon = (ImageView) v.findViewById(R.id.icon);
+	        if(checkNode.getBooleanValue()) {
+	        	icon.setImageResource(R.drawable.list_area___checkbox___checked);
+	        }
+	        else {
+	        	icon.setImageResource(R.drawable.list_area___checkbox___unchecked);
+	        }
         }
         
         
