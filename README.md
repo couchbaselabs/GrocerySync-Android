@@ -15,6 +15,7 @@ Android typically uses a long-click to trigger additional action, as opposed to 
 ## Known Issues
 
 1.  Artifacts from iOS were used, may need to be updated to look nice on other devices
+
 2.  The following actions are not asynchronous and cause the app to hang
   - Initial Push/Pull syncs 
   - Add Item
@@ -24,3 +25,7 @@ Android typically uses a long-click to trigger additional action, as opposed to 
   (In case you're wonder what actually IS asynchronous, the table updates off of the changes feed off the main thread)
 
 3.  Unlike the iOS version we have to handle the Sync URL changing at runtime (not currently handled, if you change it, exit the app and restart)
+
+4.  List view is not ordered properly
+
+5.  Completely untested on real device :)
