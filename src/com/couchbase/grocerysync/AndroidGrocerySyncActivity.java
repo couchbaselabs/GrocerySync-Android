@@ -181,14 +181,14 @@ public class AndroidGrocerySyncActivity extends Activity {
 			
 			ReplicationCommand pushReplication = new ReplicationCommand.Builder()
 				.source(DATABASE_NAME)
-				.target(prefs.getString("sync_url", "http://mschoch.iriscouch.com/grocery-sync"))
+				.target(prefs.getString("sync_url", "http://couchbase.iriscouch.com/grocery-sync"))
 				.continuous(true)
 				.build();
 			
 			dbInstance.replicate(pushReplication);
 			
 			ReplicationCommand pullReplication = new ReplicationCommand.Builder()
-				.source(prefs.getString("sync_url", "http://mschoch.iriscouch.com/grocery-sync"))
+				.source(prefs.getString("sync_url", "http://couchbase.iriscouch.com/grocery-sync"))
 				.target(DATABASE_NAME)
 				.continuous(true)
 				.build();
