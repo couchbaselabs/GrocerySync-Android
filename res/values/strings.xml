@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Grocery Sync</string>
+    <string name="startup_message">Starting Couchbase Mobile</string>
+    <string name="installing_message">Installing Couchbase Mobile</string>
+    <string name="add_item_hint">Add Item</string>
+</resources>

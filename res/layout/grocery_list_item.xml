@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content" android:layout_height="wrap_content">
+	<ImageView android:id="@+id/icon" android:layout_height="fill_parent"
+		android:src="@drawable/list_area___checkbox___unchecked" android:layout_width="52px"
+		android:layout_marginLeft="15px"
+		android:background="#efefeb">
+	</ImageView>
+	<LinearLayout android:layout_height="fill_parent" android:id="@+id/linearLayout1" android:layout_width="wrap_content"
+	android:background="@drawable/item_right_background" android:layout_marginRight="0px">
+		<TextView android:text="@+id/TextView01" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:id="@+id/label"
+		android:layout_marginLeft="10px"
+		android:textSize="20px" android:gravity="center_vertical" android:textColor="#808080"
+		></TextView>
+	</LinearLayout>
+
+</LinearLayout>

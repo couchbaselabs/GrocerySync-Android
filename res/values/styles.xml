@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="SplashScreenBackgroundColor">#efeee9</color>
+    <color name="CouchbaseRed">#efeee9</color>
+	<color name="CouchbaseRedGradientStart">#9e0c0c</color>
+	<color name="CouchbaseRedGradientEnd">#c96565</color>    
+    <style name="SplashScreenStyle">
+        <item name="android:padding">0dp</item>
+        <item name="android:windowBackground">@color/SplashScreenBackgroundColor</item>
+        <item name="android:windowFrame">@null</item>
+    </style>
+    
+</resources>

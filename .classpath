@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="lib" path="assets/org.ektorp-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="assets/jackson-core-asl-1.7.9.jar"/>
+	<classpathentry exported="true" kind="lib" path="assets/jackson-mapper-asl-1.7.9.jar"/>
+	<classpathentry exported="true" kind="lib" path="assets/httpclient-4.1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="assets/slf4j-api-1.6.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="assets/slf4j-jdk14-1.6.1.jar"/>
+	<classpathentry kind="lib" path="/Android-Couchbase/lib/commons-compress-1.0.jar"/>
+	<classpathentry kind="src" path="Android-Couchbase_src"/>
+	<classpathentry exported="true" kind="lib" path="assets/commons-io-2.0.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

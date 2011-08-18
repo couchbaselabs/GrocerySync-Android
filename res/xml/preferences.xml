@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference android:defaultValue="http://couchbase.iriscouch.com/grocery-sync" android:dialogTitle="Sync URL" android:key="sync_url" android:title="Sync URL" android:summary="CouchDB database to sync grocery list" android:dialogMessage="CouchDB database to sync grocery list"></EditTextPreference>
+    
+</PreferenceScreen>
