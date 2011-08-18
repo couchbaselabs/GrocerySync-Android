@@ -21,8 +21,7 @@ Android typically uses a long-click to trigger additional action, as opposed to 
   - Add Item
   - Toggle Check Item
   - Delete Item
-
-  (In case you're wonder what actually IS asynchronous, the table updates off of the changes feed off the main thread)
+  - (In case you're wonder what actually IS asynchronous, the table updates off of the changes feed off the main thread)
 
 3.  Unlike the iOS version we have to handle the Sync URL changing at runtime (not currently handled, if you change it, exit the app and restart)
 
