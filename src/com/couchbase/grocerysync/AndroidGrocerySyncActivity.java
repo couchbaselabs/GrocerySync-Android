@@ -36,7 +36,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.couchbase.libcouch.CouchbaseEmbeddedServer;
+import com.couchbase.libcouch.CouchbaseMobile;
 import com.couchbase.libcouch.ICouchClient;
 
 public class AndroidGrocerySyncActivity extends Activity implements OnItemClickListener, OnItemLongClickListener, OnKeyListener {
@@ -89,7 +89,17 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 		}
 		
 		public void exit(String error) throws RemoteException {
-			
+			AlertDialog.Builder builder = new AlertDialog.Builder(AndroidGrocerySyncActivity.this);
+			builder.setMessage(error)
+			       .setCancelable(false)
+			       .setPositiveButton(R.string.error_dialog_button, new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			        	   AndroidGrocerySyncActivity.this.finish();
+			           }
+			       })
+			       .setTitle(R.string.error_dialog_title);
+			AlertDialog alert = builder.create();			
+			alert.show();
 		}		
 		
 		public void couchStarted(String host, int port) throws RemoteException {
@@ -126,7 +136,7 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 	};
 	
 	protected void startCouch() {
-		CouchbaseEmbeddedServer couch = new CouchbaseEmbeddedServer(getBaseContext(), couchCallbackHandler);
+		CouchbaseMobile couch = new CouchbaseMobile(getBaseContext(), couchCallbackHandler);
 		couchServiceConnection = couch.startCouchbase(); 		
 	}
 	

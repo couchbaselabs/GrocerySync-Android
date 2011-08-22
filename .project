@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<projectDescription>
+<?xml version="1.0" encoding="UTF-8"?><projectDescription>
 	<name>AndroidGrocerySync</name>
-	<comment></comment>
+	<comment/>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -25,7 +24,7 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
-	</buildSpec>
+	<buildCommand><name>org.eclipse.ui.externaltools.ExternalToolBuilder</name><triggers>full,incremental,</triggers><arguments><dictionary><key>LaunchConfigHandle</key><value>&lt;project&gt;/.externalToolBuilders/CouchbaseBuilder.launch</value></dictionary></arguments></buildCommand></buildSpec>
 	<natures>
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
