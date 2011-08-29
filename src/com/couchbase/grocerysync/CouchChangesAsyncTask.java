@@ -1,6 +1,5 @@
 package com.couchbase.grocerysync;
 
-import org.codehaus.jackson.JsonNode;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.changes.ChangesCommand;
 import org.ektorp.changes.ChangesFeed;
@@ -12,10 +11,10 @@ public class CouchChangesAsyncTask extends AsyncTask<Integer, DocumentChange, Vo
 	
 	private CouchListAdapter parent;
 	private CouchDbConnector couchDbConnector;
-	private Integer since;
+	private Long since;
 	private ChangesFeed feed;
 	
-	public CouchChangesAsyncTask(CouchListAdapter parent, CouchDbConnector couchDbConnector, Integer since) {
+	public CouchChangesAsyncTask(CouchListAdapter parent, CouchDbConnector couchDbConnector, Long since) {
 		this.parent = parent;
 		this.couchDbConnector = couchDbConnector;
 		this.since = since;

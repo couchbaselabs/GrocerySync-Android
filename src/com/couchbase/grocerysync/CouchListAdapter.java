@@ -2,7 +2,6 @@ package com.couchbase.grocerysync;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import org.codehaus.jackson.JsonNode;
 import org.ektorp.CouchDbConnector;
@@ -22,7 +21,6 @@ import android.widget.TextView;
 public class CouchListAdapter extends BaseAdapter {
 	
 	protected Context context;
-	//protected List<Row> rows;
 	public HashMap<String, JsonNode> rowMap;
 	
 	public CouchListAdapter(Context context, CouchDbConnector couchDbConnector) {
@@ -31,10 +29,9 @@ public class CouchListAdapter extends BaseAdapter {
 		rowMap = new HashMap<String, JsonNode>();
 		
 		DbInfo dbInfo = couchDbConnector.getDbInfo();
-		int lastUpdateSeq = dbInfo.getUpdateSeq();
+		long lastUpdateSeq = dbInfo.getUpdateSeq();
 		
 		ViewResult vr = couchDbConnector.queryView(new ViewQuery().allDocs().includeDocs(true));
-//		rows = vr.getRows();
 		Iterator<Row> rowIterator = vr.iterator();
 		while(rowIterator.hasNext()) {
 			Row row = rowIterator.next();
@@ -48,13 +45,11 @@ public class CouchListAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-//		return rows.size();
 		return rowMap.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-//		return rows.get(position);
 		String key = (String)rowMap.keySet().toArray()[position];
 		return rowMap.get(key);
 	}
@@ -72,9 +67,7 @@ public class CouchListAdapter extends BaseAdapter {
             v = vi.inflate(R.layout.grocery_list_item, null);
         }
         
-//        Row row = (Row)rows.get(position);
         TextView label = (TextView) v.findViewById(R.id.label);
-//        JsonNode document = row.getDocAsNode();
         JsonNode document = (JsonNode)getItem(position);
         JsonNode textNode = document.get("text");
         if(textNode != null) {

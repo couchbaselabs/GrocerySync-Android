@@ -11,8 +11,8 @@ import org.codehaus.jackson.node.ObjectNode;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.CouchDbInstance;
 import org.ektorp.ReplicationCommand;
+import org.ektorp.http.AndroidHttpClient;
 import org.ektorp.http.HttpClient;
-import org.ektorp.http.StdHttpClient;
 import org.ektorp.impl.StdCouchDbInstance;
 
 import android.app.Activity;
@@ -36,8 +36,8 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.couchbase.libcouch.CouchbaseMobile;
-import com.couchbase.libcouch.ICouchClient;
+import com.couchbase.android.ICouchbaseDelegate;
+import com.couchbase.android.CouchbaseMobile;
 
 public class AndroidGrocerySyncActivity extends Activity implements OnItemClickListener, OnItemLongClickListener, OnKeyListener {
 	
@@ -82,7 +82,7 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 		}
 	}    
     
-    protected ICouchClient couchCallbackHandler = new ICouchClient.Stub() {
+    protected ICouchbaseDelegate couchCallbackHandler = new ICouchbaseDelegate.Stub() {
 		
 		public void installing(int completed, int total) throws RemoteException {
 			AndroidGrocerySyncActivity.this.splashDialog.updateSplashScreenProgress(completed,  total);
@@ -102,10 +102,10 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 			alert.show();
 		}		
 		
-		public void couchStarted(String host, int port) throws RemoteException {
+		public void couchbaseStarted(String host, int port) throws RemoteException {
 			AndroidGrocerySyncActivity.this.removeSplashScreen();
 			
-			HttpClient httpClient = new StdHttpClient.Builder().host(host).port(port).build();
+			HttpClient httpClient = new AndroidHttpClient.Builder().host(host).port(port).build();
 			CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
 			couchDbConnector = dbInstance.createConnector(DATABASE_NAME, true);
 			
