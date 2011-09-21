@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">Grocery Sync</string>
     <string name="startup_message">Starting Couchbase Mobile</string>
-    <string name="installing_message">Installing Couchbase Mobile</string>
     <string name="add_item_hint">Add Item</string>
     <string name="error_dialog_title">Couchbase Error</string>
     <string name="error_dialog_button">Exit</string>
