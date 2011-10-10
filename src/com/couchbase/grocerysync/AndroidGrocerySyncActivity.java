@@ -5,6 +5,7 @@ import org.ektorp.CouchDbConnector;
 import org.ektorp.CouchDbInstance;
 import org.ektorp.DocumentNotFoundException;
 import org.ektorp.ReplicationCommand;
+import org.ektorp.UpdateConflictException;
 import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult.Row;
 import org.ektorp.android.http.AndroidHttpClient;
@@ -33,8 +34,6 @@ import android.widget.ListView;
 
 import com.couchbase.android.CouchbaseMobile;
 import com.couchbase.android.ICouchbaseDelegate;
-import com.couchbase.ektorp.CouchbaseDocumentAsyncTask;
-import com.couchbase.ektorp.CouchbaseReplicationAsyncTask;
 
 public class AndroidGrocerySyncActivity extends Activity implements OnItemClickListener, OnItemLongClickListener, OnKeyListener {
 
@@ -42,6 +41,9 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 
 	//constants
 	public static final String DATABASE_NAME = "grocery-sync";
+	public static final String dDocId = "_design/grocery-local";
+	public static final String byDateViewName = "byDate";
+	public static final String byDateViewMapFunction = "function(doc) {if (doc.created_at) emit(doc.created_at, doc);}";
 
 	//splash screen
 	protected SplashScreenDialog splashDialog;
@@ -56,9 +58,10 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 	protected static AndroidHttpClient httpClient;
 
 	//ektorp impl
+	protected CouchDbInstance dbInstance;
 	protected CouchDbConnector couchDbConnector;
-	protected ReplicationCommand pushReplication;
-	protected ReplicationCommand pullReplication;
+	protected ReplicationCommand pushReplicationCommand;
+	protected ReplicationCommand pullReplicationCommand;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -128,61 +131,81 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 		if(httpClient != null) {
 			httpClient.shutdown();
 		}
+
 		httpClient = (AndroidHttpClient) new AndroidHttpClient.Builder().host(host).port(port).maxConnections(100).build();
+		dbInstance = new StdCouchDbInstance(httpClient);
 
-		CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
-		couchDbConnector = dbInstance.createConnector(DATABASE_NAME, true);
+		GrocerySyncEktorpAsyncTask startupTask = new GrocerySyncEktorpAsyncTask() {
 
-		//ensure we have a design document with a view
-		String dDocId = "_design/grocery-local";
-		String byDateViewName = "byDate";
-		String byDateViewMapFunction = "function(doc) {if (doc.created_at) emit(doc.created_at, doc);}";
+			@Override
+			protected void doInBackground() {
 
-		//update the design document if it exists, or create it if it does not exist
-		try {
-			DesignDocument dDoc = couchDbConnector.get(DesignDocument.class, dDocId);
-			dDoc.addView("byDate", new DesignDocument.View(byDateViewMapFunction));
-			couchDbConnector.update(dDoc);
-		}
-		catch(DocumentNotFoundException ndfe) {
-			DesignDocument dDoc = new DesignDocument(dDocId);
-			dDoc.addView("byDate", new DesignDocument.View(byDateViewMapFunction));
-			couchDbConnector.create(dDoc);
-		}
+				couchDbConnector = dbInstance.createConnector(DATABASE_NAME, true);
 
+				//ensure we have a design document with a view
+				//update the design document if it exists, or create it if it does not exist
+				try {
+					DesignDocument dDoc = couchDbConnector.get(DesignDocument.class, dDocId);
+					dDoc.addView("byDate", new DesignDocument.View(byDateViewMapFunction));
+					couchDbConnector.update(dDoc);
+				}
+				catch(DocumentNotFoundException ndfe) {
+					DesignDocument dDoc = new DesignDocument(dDocId);
+					dDoc.addView("byDate", new DesignDocument.View(byDateViewMapFunction));
+					couchDbConnector.create(dDoc);
+				}
 
-		//attach list adapter to the list and handle clicks
-		ViewQuery viewQuery = new ViewQuery().designDocId(dDocId).viewName(byDateViewName).descending(true);
-		itemListViewAdapter = new GrocerySyncListAdapter(AndroidGrocerySyncActivity.this, couchDbConnector, viewQuery);
-		itemListView.setAdapter(itemListViewAdapter);
-		itemListView.setOnItemClickListener(AndroidGrocerySyncActivity.this);
-		itemListView.setOnItemLongClickListener(AndroidGrocerySyncActivity.this);
+			}
 
+			@Override
+			protected void onSuccess() {
+				//attach list adapter to the list and handle clicks
+				ViewQuery viewQuery = new ViewQuery().designDocId(dDocId).viewName(byDateViewName).descending(true);
+				itemListViewAdapter = new GrocerySyncListAdapter(AndroidGrocerySyncActivity.this, couchDbConnector, viewQuery);
+				itemListView.setAdapter(itemListViewAdapter);
+				itemListView.setOnItemClickListener(AndroidGrocerySyncActivity.this);
+				itemListView.setOnItemLongClickListener(AndroidGrocerySyncActivity.this);
 
+				startReplications();
+			}
+		};
+		startupTask.execute();
+	}
+
+	public void startReplications() {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 
-		Log.v(TAG, "before push starts");
-
-		pushReplication = new ReplicationCommand.Builder()
+		pushReplicationCommand = new ReplicationCommand.Builder()
 			.source(DATABASE_NAME)
 			.target(prefs.getString("sync_url", "http://couchbase.iriscouch.com/grocery-sync"))
 			.continuous(true)
 			.build();
 
-		//dbInstance.replicate(pushReplication);
-		new CouchbaseReplicationAsyncTask(dbInstance).execute(pushReplication);
+		GrocerySyncEktorpAsyncTask pushReplication = new GrocerySyncEktorpAsyncTask() {
 
-		Log.v(TAG, "before pull starts");
+			@Override
+			protected void doInBackground() {
+				dbInstance.replicate(pushReplicationCommand);
+			}
+		};
 
-		pullReplication = new ReplicationCommand.Builder()
+		pushReplication.execute();
+
+		pullReplicationCommand = new ReplicationCommand.Builder()
 			.source(prefs.getString("sync_url", "http://couchbase.iriscouch.com/grocery-sync"))
 			.target(DATABASE_NAME)
 			.continuous(true)
 			.build();
 
-		//dbInstance.replicate(pullReplication);
-		new CouchbaseReplicationAsyncTask(dbInstance).execute(pullReplication);
-		Log.v(TAG, "finished starting ektorp");
+		GrocerySyncEktorpAsyncTask pullReplication = new GrocerySyncEktorpAsyncTask() {
+
+			@Override
+			protected void doInBackground() {
+				dbInstance.replicate(pullReplicationCommand);
+			}
+		};
+
+		pullReplication.execute();
 	}
 
 	public void stopEktorp() {
@@ -286,20 +309,72 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
     }
 
     public void createGroceryItem(String name) {
-    	JsonNode item = GroceryItemUtils.createWithText(name);
-    	CouchbaseDocumentAsyncTask createTask = new CouchbaseDocumentAsyncTask(couchDbConnector, CouchbaseDocumentAsyncTask.OPERATION_CREATE);
-    	createTask.execute(item);
+        final JsonNode item = GroceryItemUtils.createWithText(name);
+        GrocerySyncEktorpAsyncTask createItemTask = new GrocerySyncEktorpAsyncTask() {
+
+			@Override
+			protected void doInBackground() {
+				couchDbConnector.create(item);
+			}
+
+			@Override
+			protected void onSuccess() {
+				Log.d(TAG, "Document created successfully");
+			}
+
+			@Override
+			protected void onUpdateConflict(
+					UpdateConflictException updateConflictException) {
+				Log.d(TAG, "Got an update conflict for: " + item.toString());
+			}
+		};
+	    createItemTask.execute();
     }
 
-    public void toggleItemChecked(JsonNode item) {
-    	item = GroceryItemUtils.toggleCheck(item);
-    	CouchbaseDocumentAsyncTask updateTask = new CouchbaseDocumentAsyncTask(couchDbConnector, CouchbaseDocumentAsyncTask.OPERATION_UPDATE);
-    	updateTask.execute(item);
+    public void toggleItemChecked(final JsonNode item) {
+        GroceryItemUtils.toggleCheck(item);
+
+        GrocerySyncEktorpAsyncTask updateTask = new GrocerySyncEktorpAsyncTask() {
+
+			@Override
+			protected void doInBackground() {
+				couchDbConnector.update(item);
+			}
+
+			@Override
+			protected void onSuccess() {
+				Log.d(TAG, "Document updated successfully");
+			}
+
+			@Override
+			protected void onUpdateConflict(
+					UpdateConflictException updateConflictException) {
+				Log.d(TAG, "Got an update conflict for: " + item.toString());
+			}
+		};
+	    updateTask.execute();
     }
 
-    public void deleteGroceryItem(JsonNode item) {
-    	CouchbaseDocumentAsyncTask deleteTask = new CouchbaseDocumentAsyncTask(couchDbConnector, CouchbaseDocumentAsyncTask.OPERATION_DELETE);
-    	deleteTask.execute(item);
+    public void deleteGroceryItem(final JsonNode item) {
+        GrocerySyncEktorpAsyncTask deleteTask = new GrocerySyncEktorpAsyncTask() {
+
+			@Override
+			protected void doInBackground() {
+				couchDbConnector.delete(item);
+			}
+
+			@Override
+			protected void onSuccess() {
+				Log.d(TAG, "Document deleted successfully");
+			}
+
+			@Override
+			protected void onUpdateConflict(
+					UpdateConflictException updateConflictException) {
+				Log.d(TAG, "Got an update conflict for: " + item.toString());
+			}
+		};
+	    deleteTask.execute();
     }
 
 }

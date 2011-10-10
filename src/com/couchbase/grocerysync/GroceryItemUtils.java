@@ -12,7 +12,7 @@ import android.text.format.DateFormat;
 
 public class GroceryItemUtils {
 
-	public static JsonNode toggleCheck(JsonNode item) {
+	public static void toggleCheck(JsonNode item) {
 		ObjectNode itemObject = (ObjectNode)item;
 		JsonNode checkNode = item.get("check");
 		if(checkNode != null) {
@@ -26,8 +26,6 @@ public class GroceryItemUtils {
 		else {
 			itemObject.put("check", true);
 		}
-
-		return item;
 	}
 
 	public static JsonNode createWithText(String text) {
