@@ -9,6 +9,7 @@ import org.ektorp.UpdateConflictException;
 import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult.Row;
 import org.ektorp.android.http.AndroidHttpClient;
+import org.ektorp.http.HttpClient;
 import org.ektorp.impl.StdCouchDbInstance;
 import org.ektorp.support.DesignDocument;
 
@@ -55,7 +56,7 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 
 	//couch internals
 	protected static ServiceConnection couchServiceConnection;
-	protected static AndroidHttpClient httpClient;
+	protected static HttpClient httpClient;
 
 	//ektorp impl
 	protected CouchDbInstance dbInstance;
@@ -132,7 +133,7 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 			httpClient.shutdown();
 		}
 
-		httpClient = (AndroidHttpClient) new AndroidHttpClient.Builder().host(host).port(port).maxConnections(100).build();
+		httpClient =  new AndroidHttpClient.Builder().host(host).port(port).maxConnections(100).build();
 		dbInstance = new StdCouchDbInstance(httpClient);
 
 		GrocerySyncEktorpAsyncTask startupTask = new GrocerySyncEktorpAsyncTask() {
