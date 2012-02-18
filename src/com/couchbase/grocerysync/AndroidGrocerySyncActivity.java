@@ -1,23 +1,22 @@
 package com.couchbase.grocerysync;
 
+import java.io.IOException;
+import java.util.Map;
+
 import org.codehaus.jackson.JsonNode;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.CouchDbInstance;
-import org.ektorp.DocumentNotFoundException;
 import org.ektorp.ReplicationCommand;
 import org.ektorp.UpdateConflictException;
 import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult.Row;
-import org.ektorp.android.http.AndroidHttpClient;
 import org.ektorp.http.HttpClient;
 import org.ektorp.impl.StdCouchDbInstance;
-import org.ektorp.support.DesignDocument;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -33,8 +32,13 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.couchbase.android.CouchbaseMobile;
-import com.couchbase.android.ICouchbaseDelegate;
+import com.couchbase.touchdb.TDDatabase;
+import com.couchbase.touchdb.TDServer;
+import com.couchbase.touchdb.TDView;
+import com.couchbase.touchdb.TDViewMapBlock;
+import com.couchbase.touchdb.TDViewMapEmitBlock;
+import com.couchbase.touchdb.ektorp.TouchDBHttpClient;
+import com.couchbase.touchdb.router.TDURLStreamHandlerFactory;
 
 public class AndroidGrocerySyncActivity extends Activity implements OnItemClickListener, OnItemLongClickListener, OnKeyListener {
 
@@ -42,9 +46,9 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 
 	//constants
 	public static final String DATABASE_NAME = "grocery-sync";
-	public static final String dDocId = "_design/grocery-local";
+	public static final String dDocName = "grocery-local";
+	public static final String dDocId = "_design/" + dDocName;
 	public static final String byDateViewName = "byDate";
-	public static final String byDateViewMapFunction = "function(doc) {if (doc.created_at) emit(doc.created_at, doc);}";
 
 	//splash screen
 	protected SplashScreenDialog splashDialog;
@@ -55,7 +59,7 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 	protected GrocerySyncListAdapter itemListViewAdapter;
 
 	//couch internals
-	protected static ServiceConnection couchServiceConnection;
+	protected static TDServer server;
 	protected static HttpClient httpClient;
 
 	//ektorp impl
@@ -64,6 +68,10 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 	protected ReplicationCommand pushReplicationCommand;
 	protected ReplicationCommand pullReplicationCommand;
 
+    //static inializer to ensure that touchdb:// URLs are handled properly
+    {
+        TDURLStreamHandlerFactory.registerSelfIgnoreError();
+    }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,14 +86,14 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 		addItemEditText.setOnKeyListener(this);
 
 		//show splash and start couch
-    	showSplashScreen();
-    	startCouch();
+		showSplashScreen();
+		removeSplashScreen();
+		startTouchDB();
+        startEktorp();
     }
 
 	protected void onDestroy() {
 		Log.v(TAG, "onDestroy");
-
-		unbindService(couchServiceConnection);
 
 		//need to stop the async task thats following the changes feed
 		itemListViewAdapter.cancelContinuous();
@@ -95,67 +103,51 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 			httpClient.shutdown();
 		}
 
+		if(server != null) {
+		    server.close();
+		}
+
 		super.onDestroy();
 	}
 
-    protected ICouchbaseDelegate couchCallbackHandler = new ICouchbaseDelegate() {
+	protected void startTouchDB() {
+	    String filesDir = getFilesDir().getAbsolutePath();
+	    try {
+            server = new TDServer(filesDir);
+        } catch (IOException e) {
+            Log.e(TAG, "Error starting TDServer", e);
+        }
 
-		public void exit(String error) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(AndroidGrocerySyncActivity.this);
-			builder.setMessage(error)
-			       .setCancelable(false)
-			       .setPositiveButton(R.string.error_dialog_button, new DialogInterface.OnClickListener() {
-			           public void onClick(DialogInterface dialog, int id) {
-			        	   AndroidGrocerySyncActivity.this.finish();
-			           }
-			       })
-			       .setTitle(R.string.error_dialog_title);
-			AlertDialog alert = builder.create();
-			alert.show();
-		}
+	    //install a view definition needed by the application
+	    TDDatabase db = server.getDatabaseNamed(DATABASE_NAME);
+	    TDView view = db.getViewNamed(String.format("%s/%s", dDocName, byDateViewName));
+	    view.setMapReduceBlocks(new TDViewMapBlock() {
 
-		public void couchbaseStarted(String host, int port) {
-			Log.v(TAG, "got couch started " + host + " " + port);
-			AndroidGrocerySyncActivity.this.removeSplashScreen();
-			startEktorp(host, port);
-		}
-	};
-
-	protected void startCouch() {
-		CouchbaseMobile couch = new CouchbaseMobile(getBaseContext(), couchCallbackHandler);
-		couchServiceConnection = couch.startCouchbase();
+            @Override
+            public void map(Map<String, Object> document, TDViewMapEmitBlock emitter) {
+                String createdAt = document.get("created_at").toString();
+                if(createdAt != null) {
+                    emitter.emit(createdAt, document);
+                }
+            }
+        }, null, "1.0");
 	}
 
-	protected void startEktorp(String host, int port) {
+	protected void startEktorp() {
 		Log.v(TAG, "starting ektorp");
 
 		if(httpClient != null) {
 			httpClient.shutdown();
 		}
 
-		httpClient =  new AndroidHttpClient.Builder().host(host).port(port).maxConnections(100).build();
+		httpClient = new TouchDBHttpClient(server);
 		dbInstance = new StdCouchDbInstance(httpClient);
 
 		GrocerySyncEktorpAsyncTask startupTask = new GrocerySyncEktorpAsyncTask() {
 
 			@Override
 			protected void doInBackground() {
-
 				couchDbConnector = dbInstance.createConnector(DATABASE_NAME, true);
-
-				//ensure we have a design document with a view
-				//update the design document if it exists, or create it if it does not exist
-				try {
-					DesignDocument dDoc = couchDbConnector.get(DesignDocument.class, dDocId);
-					dDoc.addView("byDate", new DesignDocument.View(byDateViewMapFunction));
-					couchDbConnector.update(dDoc);
-				}
-				catch(DocumentNotFoundException ndfe) {
-					DesignDocument dDoc = new DesignDocument(dDocId);
-					dDoc.addView("byDate", new DesignDocument.View(byDateViewMapFunction));
-					couchDbConnector.create(dDoc);
-				}
-
 			}
 
 			@Override
@@ -178,7 +170,7 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 
 		pushReplicationCommand = new ReplicationCommand.Builder()
 			.source(DATABASE_NAME)
-			.target(prefs.getString("sync_url", "http://couchbase.iriscouch.com/grocery-sync"))
+			.target(prefs.getString("sync_url", "http://mschoch.iriscouch.com/grocery-test"))
 			.continuous(true)
 			.build();
 
@@ -193,7 +185,7 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 		pushReplication.execute();
 
 		pullReplicationCommand = new ReplicationCommand.Builder()
-			.source(prefs.getString("sync_url", "http://couchbase.iriscouch.com/grocery-sync"))
+			.source(prefs.getString("sync_url", "http://mschoch.iriscouch.com/grocery-test"))
 			.target(DATABASE_NAME)
 			.continuous(true)
 			.build();

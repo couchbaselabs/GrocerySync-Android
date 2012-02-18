@@ -1,14 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?><classpath>
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="lib" path="libs/commons-compress-1.0.jar"/>
 	<classpathentry kind="lib" path="libs/jackson-core-asl-1.8.5.jar"/>
 	<classpathentry kind="lib" path="libs/jackson-mapper-asl-1.8.5.jar"/>
-	<classpathentry kind="lib" path="libs/commons-io-2.0.1.jar"/>
 	<classpathentry kind="lib" path="libs/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="libs/slf4j-jdk14-1.6.1.jar"/>
 	<classpathentry kind="lib" path="libs/org.ektorp-1.2.2.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/TouchDB-Android"/>
 	<classpathentry kind="lib" path="libs/org.ektorp.android-1.2.2.jar"/>
+	<classpathentry kind="lib" path="libs/commons-io-2.0.1.jar"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
-<classpathentry kind="lib" path="libs/couchbase-2.0.0-dp-31.jar"/><classpathentry kind="lib" path="libs/OtpErlang-r14b03.jar"/></classpath>
+</classpath>
