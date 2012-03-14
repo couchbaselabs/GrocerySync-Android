@@ -125,10 +125,11 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 
             @Override
             public void map(Map<String, Object> document, TDViewMapEmitBlock emitter) {
-                String createdAt = document.get("created_at").toString();
+                Object createdAt = document.get("created_at");
                 if(createdAt != null) {
-                    emitter.emit(createdAt, document);
+                    emitter.emit(createdAt.toString(), document);
                 }
+
             }
         }, null, "1.0");
 	}
