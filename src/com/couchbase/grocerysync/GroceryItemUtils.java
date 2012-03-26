@@ -1,5 +1,6 @@
 package com.couchbase.grocerysync;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.UUID;
@@ -8,9 +9,9 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.JsonNodeFactory;
 import org.codehaus.jackson.node.ObjectNode;
 
-import android.text.format.DateFormat;
-
 public class GroceryItemUtils {
+
+    public static SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
 	public static void toggleCheck(JsonNode item) {
 		ObjectNode itemObject = (ObjectNode)item;
@@ -32,7 +33,7 @@ public class GroceryItemUtils {
     	UUID uuid = UUID.randomUUID();
     	Calendar calendar = GregorianCalendar.getInstance();
     	long currentTime = calendar.getTimeInMillis();
-    	String currentTimeString = DateFormat.format("EEEE-MM-dd'T'HH:mm:ss.SSS'Z'", calendar).toString();
+        String currentTimeString = dateFormatter.format(calendar.getTime());
 
     	String id = currentTime + "-" + uuid.toString();
 
