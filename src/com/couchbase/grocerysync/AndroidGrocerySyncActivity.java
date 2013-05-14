@@ -32,13 +32,13 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.couchbase.touchdb.TDDatabase;
-import com.couchbase.touchdb.TDServer;
-import com.couchbase.touchdb.TDView;
-import com.couchbase.touchdb.TDViewMapBlock;
-import com.couchbase.touchdb.TDViewMapEmitBlock;
-import com.couchbase.touchdb.ektorp.TouchDBHttpClient;
-import com.couchbase.touchdb.router.TDURLStreamHandlerFactory;
+import com.couchbase.cblite.CBLDatabase;
+import com.couchbase.cblite.CBLServer;
+import com.couchbase.cblite.CBLView;
+import com.couchbase.cblite.CBLViewMapBlock;
+import com.couchbase.cblite.CBLViewMapEmitBlock;
+import com.couchbase.cblite.ektorp.CBLiteHttpClient;
+import com.couchbase.cblite.router.CBLURLStreamHandlerFactory;
 
 public class AndroidGrocerySyncActivity extends Activity implements OnItemClickListener, OnItemLongClickListener, OnKeyListener {
 
@@ -59,7 +59,7 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 	protected GrocerySyncListAdapter itemListViewAdapter;
 
 	//couch internals
-	protected static TDServer server;
+	protected static CBLServer server;
 	protected static HttpClient httpClient;
 
 	//ektorp impl
@@ -70,7 +70,7 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 
     //static inializer to ensure that touchdb:// URLs are handled properly
     {
-        TDURLStreamHandlerFactory.registerSelfIgnoreError();
+    	CBLURLStreamHandlerFactory.registerSelfIgnoreError();
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -113,18 +113,18 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 	protected void startTouchDB() {
 	    String filesDir = getFilesDir().getAbsolutePath();
 	    try {
-            server = new TDServer(filesDir);
+            server = new CBLServer(filesDir);
         } catch (IOException e) {
             Log.e(TAG, "Error starting TDServer", e);
         }
 
 	    //install a view definition needed by the application
-	    TDDatabase db = server.getDatabaseNamed(DATABASE_NAME);
-	    TDView view = db.getViewNamed(String.format("%s/%s", dDocName, byDateViewName));
-	    view.setMapReduceBlocks(new TDViewMapBlock() {
+	    CBLDatabase db = server.getDatabaseNamed(DATABASE_NAME);
+	    CBLView view = db.getViewNamed(String.format("%s/%s", dDocName, byDateViewName));
+	    view.setMapReduceBlocks(new CBLViewMapBlock() {
 
             @Override
-            public void map(Map<String, Object> document, TDViewMapEmitBlock emitter) {
+            public void map(Map<String, Object> document, CBLViewMapEmitBlock emitter) {
                 Object createdAt = document.get("created_at");
                 if(createdAt != null) {
                     emitter.emit(createdAt.toString(), document);
@@ -141,7 +141,7 @@ public class AndroidGrocerySyncActivity extends Activity implements OnItemClickL
 			httpClient.shutdown();
 		}
 
-		httpClient = new TouchDBHttpClient(server);
+		httpClient = new CBLiteHttpClient(server);
 		dbInstance = new StdCouchDbInstance(httpClient);
 
 		GrocerySyncEktorpAsyncTask startupTask = new GrocerySyncEktorpAsyncTask() {
