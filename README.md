@@ -12,8 +12,11 @@ The "use case" is a shared grocery list where all devices using the application 
 ## Running
 
 * Do a `git clone` on the repository
-* Open the project in Eclipse
-* Right-click com.couchbase.grocerysync package, choose "Run as .." / "Android Application"
+* Download android-support-v4.jar
+* Run $ mvn install:install-file -Dfile=android-support-v4.jar -DgroupId=com.google -DartifactId=android-support-v4 -Dversion=0.1 -Dpackaging=jar
+* Add the .so objects (somehow -- needs to be documented)
+* Open the project in Android Studio
+* Run it
 
 ## Point it to a custom DB
 
