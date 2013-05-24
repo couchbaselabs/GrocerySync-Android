@@ -22,6 +22,9 @@ The "use case" is a shared grocery list where all devices using the application 
 * Hit "Finish"  
 * In Package Explorer, navigate to AndroidGrocerySync/src
 * Right-click com.couchbase.grocerysync package, choose "Run as .." / "Android Application"
+* If the emulator shows a lock icon, hit fn + uparrow to unlock it.  
+
+This should start an Android device emulator and start the GrocerySync app.
 
 ## Point it to a custom DB
 
