@@ -15,7 +15,12 @@ The "use case" is a shared grocery list where all devices using the application 
 ## Running
 
 * Do a `git clone` on this repository
-* Open the project in Eclipse
+* Open the Android SDK (Eclipse)
+* Choose the File/Import menu
+* Choose Android/Existing Android Code into Workspace
+* Hit Browse.. button, and navigate to GrocerySync-Android directory cloned in earlier step.
+* Hit "Finish"  
+* In Package Explorer, navigate to AndroidGrocerySync/src
 * Right-click com.couchbase.grocerysync package, choose "Run as .." / "Android Application"
 
 ## Point it to a custom DB
