@@ -8,16 +8,27 @@ This is a simple example of using the [Couchbase Lite Android](https://github.co
 
 The "use case" is a shared grocery list where all devices using the application would see a mirror of the grocery list.  Any changes will automatically background sync with a CouchDB or [Sync Gateway](https://github.com/couchbaselabs/sync_gateway) running in the cloud.  (bi-directional)
 
+## Prerequisites
+
+* You must have the Android SDK installed (which bundles Eclipse Juno).  Here is the page to [Download the Android SDK](http://developer.android.com/sdk/index.html)
 
 ## Running
 
-* Do a `git clone` on the repository
+* Do a `git clone` on this repository
 * Open the project in Eclipse
 * Right-click com.couchbase.grocerysync package, choose "Run as .." / "Android Application"
 
 ## Point it to a custom DB
 
-In AndroidGrocerySyncActivity, change the URL from `http://mschoch.iriscouch.com/grocery-test` to the URL of your CouchDB instance (or [Sync Gateway](https://github.com/couchbaselabs/sync_gateway))
+By default, it will point to a shared database that has a lot of junk data in it.  Here are the instructions to point it to your own DB.
+
+In AndroidGrocerySyncActivity, change all instances of the URL from `http://mschoch.iriscouch.com/grocery-test` to one of the following:
+
+* The URL of your CouchDB instance 
+* The URL of your [Sync Gateway](https://github.com/couchbaselabs/sync_gateway) instance  
+
+In either case, you will need to make sure there is a database named "grocery-test" on the server.
+
 
 ## Deviations from the iOS version
 
