@@ -17,3 +17,4 @@ local.properties
 build.properties
 
 /GrocerySync-Android/build/
+/GrocerySync-Android/src/main/res/.DS_Store
