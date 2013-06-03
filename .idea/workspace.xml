@@ -14,43 +14,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd294f24-feb0-448d-abf3-a544969f5a39" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/project.properties" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/res/drawable-mdpi/splash.png" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/drawable-mdpi/splash.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/res/drawable/add_item_edittext_rounded_corners.xml" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/drawable/add_item_edittext_rounded_corners.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/res/drawable/couchbase_progress.xml" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/drawable/couchbase_progress.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/res/drawable/couchbase_red_gradient.xml" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/drawable/couchbase_red_gradient.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/res/drawable/item_background.png" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/drawable/item_background.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/res/drawable/item_left_background.png" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/drawable/item_left_background.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/res/drawable/item_right_background.png" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/drawable/item_right_background.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/res/drawable/list_area___checkbox___checked.png" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/drawable/list_area___checkbox___checked.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/res/drawable/list_area___checkbox___unchecked.png" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/drawable/list_area___checkbox___unchecked.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/res/drawable/rounded_corners.xml" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/drawable/rounded_corners.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/res/layout/grocery_list_item.xml" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/layout/grocery_list_item.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/res/layout/main.xml" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/layout/main.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/res/layout/splashscreen.xml" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/layout/splashscreen.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/res/values/strings.xml" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/values/strings.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/res/values/styles.xml" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/values/styles.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/couchbase/grocerysync/AndroidGrocerySyncActivity.java" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/java/com/couchbase/grocerysync/AndroidGrocerySyncActivity.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/couchbase/grocerysync/GroceryItemUtils.java" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/java/com/couchbase/grocerysync/GroceryItemUtils.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/couchbase/grocerysync/GrocerySyncEktorpAsyncTask.java" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/java/com/couchbase/grocerysync/GrocerySyncEktorpAsyncTask.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/couchbase/grocerysync/GrocerySyncListAdapter.java" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/java/com/couchbase/grocerysync/GrocerySyncListAdapter.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/couchbase/grocerysync/GrocerySyncPreferencesActivity.java" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/java/com/couchbase/grocerysync/GrocerySyncPreferencesActivity.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/couchbase/grocerysync/SplashScreenDialog.java" afterPath="$PROJECT_DIR$/GrocerySync-Android/src/main/java/com/couchbase/grocerysync/SplashScreenDialog.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/GrocerySync-Android/src/main/res/layout/activity_main.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="GrocerySync-Android.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370047473427" ignored="false" />
+    <file path="/Dummy.txt" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370294940966" ignored="false" />
     <file path="/fragment.java" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370047339588" ignored="false" />
     <file path="/AndroidManifest.xml" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370047366876" ignored="false" />
     <file path="$APPLICATION_HOME_DIR$/plugins/android/lib/android.jar!/org/jetbrains/android/android.xsd" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370047394139" ignored="false" />
     <file path="$PROJECT_DIR$/GrocerySync-Android/build/res/all/debug/menu/main.xml" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370047955548" ignored="false" />
-    <file path="$PROJECT_DIR$/GrocerySync-Android/build/res/all/debug/values-sw720dp-land/values.xml" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370047955548" ignored="false" />
-    <file path="$PROJECT_DIR$/GrocerySync-Android/build/res/all/debug/values-v14/values.xml" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370047955548" ignored="false" />
-    <file path="$PROJECT_DIR$/GrocerySync-Android/build/res/all/debug/values-v11/values.xml" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370047955548" ignored="false" />
     <file path="$PROJECT_DIR$/GrocerySync-Android/build/res/all/debug/values/values.xml" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370047955548" ignored="false" />
-    <file path="$PROJECT_DIR$/GrocerySync-Android/build/res/all/debug/layout/activity_main.xml" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370047955548" ignored="false" />
+    <file path="/a.dummy" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370292895549" ignored="false" />
+    <file path="$PROJECT_DIR$/../GrocerySyncAndroid/GrocerySyncAndroid/build.gradle" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370295595750" ignored="false" />
+    <file path="/build.gradle" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370294693908" ignored="false" />
+    <file path="$PROJECT_DIR$/../GrocerySyncAndroid/GrocerySyncAndroid/src/main/java/com/couchbase/grocerysync/MainActivity.java" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370296408016" ignored="false" />
+    <file path="/MainActivity.java" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370296370736" ignored="false" />
+    <file path="$PROJECT_DIR$/../GrocerySyncAndroid/GrocerySyncAndroid/src/main/res/layout/activity_main.xml" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370296335871" ignored="false" />
+    <file path="$PROJECT_DIR$/../GrocerySyncAndroid/GrocerySyncAndroid/build/res/all/debug/layout/activity_main.xml" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370296458510" ignored="false" />
+    <file path="$PROJECT_DIR$/../GrocerySyncAndroid/GrocerySyncAndroid/src/main/java/com/couchbase/grocerysync/GrocerySyncListAdapter.java" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370296543330" ignored="false" />
+    <file path="$PROJECT_DIR$/../GrocerySyncAndroid/GrocerySyncAndroid/src/main/java/com/couchbase/grocerysync/GrocerySyncEktorpAsyncTask.java" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370296560910" ignored="false" />
+    <file path="$PROJECT_DIR$/../GrocerySyncAndroid/GrocerySyncAndroid/build/source/r/debug/com/couchbase/grocerysync/R.java" changelist="cd294f24-feb0-448d-abf3-a544969f5a39" time="1370296715058" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,27 +103,16 @@
       <file leaf-file-name="build.gradle" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GrocerySync-Android/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="0" selection-start="471" selection-end="471" vertical-scroll-proportion="0.0">
+            <state line="8" column="23" selection-start="169" selection-end="169" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AndroidGrocerySyncActivity.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="AndroidGrocerySyncActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GrocerySync-Android/src/main/java/com/couchbase/grocerysync/AndroidGrocerySyncActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="78" column="28" selection-start="2587" selection-end="2587" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="preferences.xml" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/res/xml/preferences.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="77" column="0" selection-start="2558" selection-end="2558" vertical-scroll-proportion="0.6786543">
               <folding />
             </state>
           </provider>
@@ -149,10 +122,7 @@
         <entry file="file://$PROJECT_DIR$/GrocerySync-Android/build/source/r/debug/com/couchbase/grocerysync/R.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="55" column="30" selection-start="2549" selection-end="2549" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1370048082000" expanded="true" signature="3092:3394" placeholder="/**...*/" />
-                <marker date="1370048082000" expanded="true" signature="3542:3557" placeholder="/**...*/" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -160,7 +130,16 @@
       <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GrocerySync-Android/src/main/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="78" selection-start="575" selection-end="575" vertical-scroll-proportion="0.0">
+            <state line="27" column="0" selection-start="880" selection-end="880" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="activity_main.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/GrocerySync-Android/build/res/all/debug/layout/activity_main.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="8" column="20" selection-start="465" selection-end="465" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -178,7 +157,7 @@
       <file leaf-file-name="build.gradle" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="1" column="0" selection-start="100" selection-end="100" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -208,10 +187,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="31" />
-    <option name="y" value="22" />
-    <option name="width" value="1690" />
-    <option name="height" value="1121" />
+    <option name="x" value="127" />
+    <option name="y" value="156" />
+    <option name="width" value="1864" />
+    <option name="height" value="1297" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -258,28 +237,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xml" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -459,172 +416,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="values" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="menu" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="drawable-hdpi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="GrocerySync-Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -635,8 +426,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -756,6 +547,8 @@
       <option name="NETWORK_SPEED" value="full" />
       <option name="NETWORK_LATENCY" value="none" />
       <option name="CLEAR_LOGCAT" value="false" />
+      <RunnerSettings RunnerId="AndroidDebugRunner" />
+      <ConfigurationWrapper RunnerId="AndroidDebugRunner" />
       <method />
     </configuration>
     <list size="1">
@@ -802,38 +595,42 @@
       <workItem from="1370047016698" duration="145000" />
       <workItem from="1370047168788" duration="297000" />
       <workItem from="1370047472904" duration="622000" />
+      <workItem from="1370286412890" duration="1169000" />
+      <workItem from="1370292380806" duration="1992000" />
+      <workItem from="1370294595458" duration="215000" />
+      <workItem from="1370294937397" duration="1484000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1142000" />
+    <option name="totallyTimeSpent" value="6002000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="31" y="22" width="1690" height="1121" extended-state="0" />
-    <editor active="false" />
+    <frame x="127" y="156" width="1864" height="1297" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296837" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296837" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296837" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24384028" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32965165" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2743309" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24807481" sideWeight="0.7561597" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32948294" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32948294" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296837" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32994062" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -899,53 +696,9 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/GrocerySync-Android/build.gradle">
+    <entry file="file://$PROJECT_DIR$/GrocerySync-Android/build/res/all/debug/layout/activity_main.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="55" selection-start="136" selection-end="136" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GrocerySync-Android/src/main/java/com/couchbase/grocerysync/AndroidGrocerySyncActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="13" selection-start="1396" selection-end="1396" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GrocerySync-Android/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="78" selection-start="575" selection-end="575" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GrocerySync-Android/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GrocerySync-Android/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="78" selection-start="575" selection-end="575" vertical-scroll-proportion="0.0">
+        <state line="8" column="20" selection-start="465" selection-end="465" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -957,9 +710,58 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="0" selection-start="100" selection-end="100" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/GrocerySync-Android/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="0" selection-start="471" selection-end="471" vertical-scroll-proportion="0.0">
+        <state line="5" column="55" selection-start="136" selection-end="136" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GrocerySync-Android/src/main/java/com/couchbase/grocerysync/AndroidGrocerySyncActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="13" selection-start="1396" selection-end="1396" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GrocerySync-Android/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="78" selection-start="575" selection-end="575" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GrocerySync-Android/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GrocerySync-Android/GrocerySync-Android.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -967,35 +769,41 @@
     <entry file="file://$PROJECT_DIR$/GrocerySync-Android/build/source/r/debug/com/couchbase/grocerysync/R.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="55" column="30" selection-start="2549" selection-end="2549" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1370048082000" expanded="true" signature="3092:3394" placeholder="/**...*/" />
-            <marker date="1370048082000" expanded="true" signature="3542:3557" placeholder="/**...*/" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GrocerySync-Android/src/main/res/layout/activity_main.xml">
-      <provider editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GrocerySync-Android/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="0" selection-start="880" selection-end="880" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GrocerySync-Android/build/res/all/debug/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="20" selection-start="465" selection-end="465" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="0" selection-start="100" selection-end="100" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GrocerySync-Android/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="23" selection-start="169" selection-end="169" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/GrocerySync-Android/src/main/java/com/couchbase/grocerysync/AndroidGrocerySyncActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="28" selection-start="2587" selection-end="2587" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/xml/preferences.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="77" column="0" selection-start="2558" selection-end="2558" vertical-scroll-proportion="0.6786543">
           <folding />
         </state>
       </provider>
