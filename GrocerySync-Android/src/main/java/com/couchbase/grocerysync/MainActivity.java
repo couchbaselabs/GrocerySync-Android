@@ -171,7 +171,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
 
         pushReplicationCommand = new ReplicationCommand.Builder()
                 .source(DATABASE_NAME)
-                .target(prefs.getString("sync_url", "http://10.17.47.228:5984/grocery-test"))
+                .target(prefs.getString("sync_url", "http://10.0.2.2:5984/grocery-test"))
                 .continuous(true)
                 .build();
 
@@ -186,7 +186,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         pushReplication.execute();
 
         pullReplicationCommand = new ReplicationCommand.Builder()
-                .source(prefs.getString("sync_url", "http://10.17.47.228:5984/grocery-test"))
+                .source(prefs.getString("sync_url", "http://10.0.2.2:5984/grocery-test"))
                 .target(DATABASE_NAME)
                 .continuous(true)
                 .build();
