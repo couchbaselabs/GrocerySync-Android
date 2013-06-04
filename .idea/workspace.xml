@@ -101,7 +101,7 @@
       <file leaf-file-name="build.gradle" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GrocerySync-Android/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="30" selection-start="596" selection-end="596" vertical-scroll-proportion="0.43456542">
+            <state line="15" column="1" selection-start="302" selection-end="302" vertical-scroll-proportion="0.22477522">
               <folding />
             </state>
           </provider>
@@ -441,7 +441,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9488000" />
+    <option name="totallyTimeSpent" value="9522000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="68" y="22" width="1811" height="1445" extended-state="0" />
@@ -644,7 +644,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GrocerySync-Android/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="30" selection-start="596" selection-end="596" vertical-scroll-proportion="0.43456542">
+        <state line="15" column="1" selection-start="302" selection-end="302" vertical-scroll-proportion="0.22477522">
           <folding />
         </state>
       </provider>
