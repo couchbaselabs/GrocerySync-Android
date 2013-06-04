@@ -11,7 +11,7 @@ apply plugin: 'android'
 repositories {
     mavenCentral()
     maven {
-        url "http://macbuild.local:8081/nexus/content/repositories/releases/"
+        url "http://maven.hq.couchbase.com:8081/nexus/content/repositories/releases/"
     }
 }
 
