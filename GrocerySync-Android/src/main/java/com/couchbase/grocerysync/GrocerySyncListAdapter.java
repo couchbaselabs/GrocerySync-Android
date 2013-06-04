@@ -16,9 +16,9 @@ import android.widget.TextView;
 
 public class GrocerySyncListAdapter extends CouchbaseViewListAdapter {
 
-	protected AndroidGrocerySyncActivity parent;
+	protected MainActivity parent;
 
-	public GrocerySyncListAdapter(AndroidGrocerySyncActivity parent, CouchDbConnector couchDbConnector, ViewQuery viewQuery) {
+	public GrocerySyncListAdapter(MainActivity parent, CouchDbConnector couchDbConnector, ViewQuery viewQuery) {
 		super(couchDbConnector, viewQuery, true);
 		this.parent = parent;
 	}

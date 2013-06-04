@@ -21,6 +21,7 @@ dependencies {
 
     compile 'com.couchbase.cblite:CBLite:0.7'
     compile 'com.couchbase.cblite:CBLiteEktorp:0.7'
+    compile 'com.couchbase.cblite:CBLiteJavascript:0.7'
 
 }
 
@@ -33,7 +34,6 @@ android {
         targetSdkVersion 16
     }
 }
-
 
 // /begin .so hack - this is a hack until gradle supports dependencies on .so objects
 // the hack is described here:

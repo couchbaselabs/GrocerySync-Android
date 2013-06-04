@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.path="$MODULE_DIR$/../build.gradle" external.system.id="GRADLE" type="JAVA_MODULE" version="4">
+<module external.system.id="GRADLE" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="android" name="Android">
       <configuration>
@@ -81,6 +81,7 @@
     <orderEntry type="library" name="CBLite-0.7.aar" level="project" />
     <orderEntry type="library" name="CBLiteEktorp-0.7.aar" level="project" />
     <orderEntry type="library" name="CBLiteJavascript-0.7.aar" level="project" />
+    <orderEntry type="library" name="slf4j-jdk14-1.6.1" level="project" />
   </component>
 </module>
 

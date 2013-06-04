@@ -9,7 +9,7 @@ public abstract class GrocerySyncEktorpAsyncTask extends EktorpAsyncTask {
 
 	@Override
 	protected void onDbAccessException(DbAccessException dbAccessException) {
-		Log.e(AndroidGrocerySyncActivity.TAG, "DbAccessException in background", dbAccessException);
+		Log.e(MainActivity.TAG, "DbAccessException in background", dbAccessException);
 	}
 
 }
