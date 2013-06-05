@@ -1,48 +1,52 @@
-
 ## Grocery Sync for Couchbase Lite Android 
-
-
+ 
 ![](http://cl.ly/image/1H11131G2c3d/Screen%20Shot%202013-05-14%20at%204.44.48%20PM.png)
-
+ 
 This is a simple example of using the [Couchbase Lite Android](https://github.com/couchbase/couchbase-lite-android) mobile database framework.
-
+ 
 The "use case" is a shared grocery list where all devices using the application would see a mirror of the grocery list.  Any changes will automatically background sync with a CouchDB or [Sync Gateway](https://github.com/couchbaselabs/sync_gateway) running in the cloud.  (bi-directional)
+ 
+## Prequisites
 
-## Prerequisites
+* Install Android Studio 
 
-* You must have the Android SDK installed (which bundles Eclipse Juno).  Here is the page to [Download the Android SDK](http://developer.android.com/sdk/index.html)
+## Getting the code
 
-## Running
+* Do a `git clone` on the repository URL
 
-* Do a `git clone` on this repository
-* Open the Android SDK (Eclipse)
-* Choose the File/Import menu
-* Choose Android/Existing Android Code into Workspace
-* Hit Browse.. button, and navigate to GrocerySync-Android directory cloned in earlier step.
-* Hit "Finish"  
-* In Package Explorer, navigate to AndroidGrocerySync/src
-* Right-click com.couchbase.grocerysync package, choose "Run as .." / "Android Application"
-* If the emulator shows a lock icon, hit fn + uparrow to unlock it.  
+## Building via Android Studio
+ 
+* Open the project in Android Studio
+* Under Build menu, choose the Make Project option
 
-This should start an Android device emulator and start the GrocerySync app.
+## Building via Gradle
 
-## Point it to a custom DB
+* Run `./gradlew build`
 
-By default, it will point to a shared database that has a lot of junk data in it.  Here are the instructions to point it to your own DB.
+## Configuring
 
-In AndroidGrocerySyncActivity, change all instances of the URL from `http://mschoch.iriscouch.com/grocery-test` to one of the following:
+* Configure the DB URL's in MainActivity to the URL of your CouchDB instance (or [Sync Gateway](https://github.com/couchbaselabs/sync_gateway)).  
+* Create a DB named `grocery-test` if it doesn't already exist.
 
-* The URL of your CouchDB instance 
-* The URL of your [Sync Gateway](https://github.com/couchbaselabs/sync_gateway) instance  
+## Run via Android Studio UI
 
-In either case, you will need to make sure there is a database named "grocery-test" on the server.
+* Run it using the "play" or "debug" buttons in the UI
 
+## Run via Gradle
+
+* Run the android emulator
+* Run `./gradlew installDebug`
+* Switch to the emulator and you should have a new app called GrocerySync-Android
+* Tap it to open the app
+
+## Creating your own Couchbase-Lite app
+
+See the [Getting Started Guide](https://github.com/couchbase/couchbase-lite-android/wiki/Getting-Started).
 
 ## Deviations from the iOS version
-
+ 
 Android typically uses a long-click to trigger additional action, as opposed to swipe-to-delete, so this convention was followed.
-
+ 
 ## Known Issues
-
+ 
 We currently do not handle the Sync URL changing at runtime (if you change it you have to restart the app)
-
