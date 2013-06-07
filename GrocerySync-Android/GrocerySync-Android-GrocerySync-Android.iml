@@ -76,13 +76,13 @@
     <orderEntry type="library" name="commons-io-2.0.1" level="project" />
     <orderEntry type="library" name="slf4j-api-1.6.1" level="project" />
     <orderEntry type="library" name="org.ektorp-1.2.2" level="project" />
+    <orderEntry type="library" name="slf4j-jdk14-1.6.1" level="project" />
     <orderEntry type="library" name="org.ektorp.android-1.2.2" level="project" />
     <orderEntry type="library" name="rhino-1.7R3" level="project" />
+    <orderEntry type="library" name="td_collator_so" level="project" />
     <orderEntry type="library" name="CBLite-0.7.aar" level="project" />
     <orderEntry type="library" name="CBLiteEktorp-0.7.aar" level="project" />
     <orderEntry type="library" name="CBLiteJavascript-0.7.aar" level="project" />
-    <orderEntry type="library" name="slf4j-jdk14-1.6.1" level="project" />
-    <orderEntry type="library" name="td_collator_so" level="project" />
   </component>
 </module>
 
