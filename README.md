@@ -8,13 +8,13 @@ The "use case" is a shared grocery list where all devices using the application 
  
 ## Prequisites
 
-* Install Android Studio 
+* Install Android Studio version 0.1.3 or later
 
 ## Getting the code
 
 * `git clone git@github.com:couchbaselabs/GrocerySync-Android.git`
 
-_Note_: it is important to leave the directory name as the default, otherwise it could mess up the Android Studio IDE
+_Note_: it is important to leave the directory name as the default, otherwise it could confuse the Android Studio IDE
 
 ## Configure Android SDK location
 
@@ -27,18 +27,20 @@ Gradle needs to know where your Android SDK is, otherwise it won't be able to bu
 
 * Open the project in Android Studio by going to File / Open Project and choosing the top-level directory (it should contain local.properties, gradlew, etc)
 
+## Configuring a database
+
+GrocerySync is designed to sync all of its data to a CouchDB or Sync Gateway, so it needs a valid URL.
+
+* Configure the hardcoded DB URL's in the MainActivity.java file to the URL of your CouchDB instance (or [Sync Gateway](https://github.com/couchbaselabs/sync_gateway)).  
+* Create a DB named `grocery-test` if it doesn't already exist.
+
 ## Building via Android Studio
  
-* Under Build menu, choose the Make Project option.  This will just build the code to make sure there are no errors, it won't launch the app.
+* Under the Build menu, choose the Make Project option.  This will just build the code to make sure there are no errors, it won't launch the app.
 
 ## Building via Gradle
 
 * Run `./gradlew clean && ./gradlew build`
-
-## Configuring
-
-* Configure the DB URL's in MainActivity to the URL of your CouchDB instance (or [Sync Gateway](https://github.com/couchbaselabs/sync_gateway)).  
-* Create a DB named `grocery-test` if it doesn't already exist.
 
 ## Run via Android Studio UI
 
