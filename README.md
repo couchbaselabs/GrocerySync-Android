@@ -12,12 +12,14 @@ The "use case" is a shared grocery list where all devices using the application 
 
 ## Getting the code
 
-* Do a `git clone` on the repository URL
+* `git clone git@github.com:couchbaselabs/GrocerySync-Android.git`
+
+_Note_: it is important to leave the directory name as the default, otherwise it could mess up the Android Studio IDE
 
 ## Opening the project in Android Studio
 
 * First the local.properties file must be created so that Android knows where your SDK is: `$ cp local.properties.example local.properties`. 
-* Open `local.properties` and make sure it points to the Android SDK on your system.  Change the path is needed.
+* Open `local.properties` and make sure it points to the Android SDK on your system.  Change the path as needed.
 * Open the project in Android Studio by going to File / Open Project and choosing the top-level directory (it should contain local.properties, gradlew, etc)
 
 ## Building via Android Studio
