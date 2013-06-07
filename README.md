@@ -26,6 +26,7 @@ Gradle needs to know where your Android SDK is, otherwise it won't be able to bu
 ## Opening the project in Android Studio
 
 * Open the project in Android Studio by going to File / Open Project and choosing the top-level directory (it should contain local.properties, gradlew, etc)
+* After your open the project, it should look like [this](http://cl.ly/image/2E3T1T2q261E)
 
 ## Configuring a database
 
