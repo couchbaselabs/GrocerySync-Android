@@ -8,7 +8,7 @@ The "use case" is a shared grocery list where all devices using the application 
  
 ## Prequisites
 
-* Install Android Studio version 0.1.3 or later
+* Install [Android Studio](http://developer.android.com/sdk/installing/studio.html) version 0.1.3 or later
 
 ## Getting the code
 
@@ -21,11 +21,12 @@ _Note_: it is important to leave the directory name as the default, otherwise it
 Gradle needs to know where your Android SDK is, otherwise it won't be able to build anything.
 
 * First the local.properties file must be created so that Android knows where your SDK is: `$ cp local.properties.example local.properties`. 
-* Open `local.properties` and make sure it points to the Android SDK on your system.  Change the path as needed.
+* If you are on OSX and installed Android Studio to the default location, you should be ok with the defaults in `local.properties.example`
+* Otherwise, open `local.properties` and make sure it points to the Android SDK on your system.  Change the path as needed.
 
 ## Opening the project in Android Studio
 
-* Open the project in Android Studio by going to File / Open Project and choosing the top-level directory (it should contain local.properties, gradlew, etc)
+* Open the project in Android Studio from the startup dialog or by going to File / Open Project and choosing the top-level directory (it should contain local.properties, gradlew, etc)
 * After your open the project, it should look like [this](http://cl.ly/image/2E3T1T2q261E)
 
 ## Configuring a database
@@ -41,6 +42,7 @@ GrocerySync is designed to sync all of its data to a CouchDB or Sync Gateway, so
 
 ## Building via Gradle
 
+* Open a terminal and cd into the project root directory that you cloned
 * Run `./gradlew clean && ./gradlew build`
 
 ## Run via Android Studio UI
