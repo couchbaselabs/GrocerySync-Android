@@ -18,15 +18,15 @@ _Note_: it is important to leave the directory name as the default, otherwise it
 
 ## Configure Android SDK location
 
-Gradle needs to know where your Android SDK is, otherwise it won't be able to build anything.
+Gradle (the build system used by Studio) needs to know where your Android SDK is, otherwise it won't be able to build anything.
 
 * First the local.properties file must be created so that Android knows where your SDK is: `$ cp local.properties.example local.properties`. 
-* If you are on OSX and installed Android Studio to the default location, you should be ok with the defaults in `local.properties.example`
+* If you are on OSX and installed Android Studio to the default location, you should be ok with the defaults in `local.properties`
 * Otherwise, open `local.properties` and make sure it points to the Android SDK on your system.  Change the path as needed.
 
 ## Opening the project in Android Studio
 
-* Open the project in Android Studio from the startup dialog or by going to File / Open Project and choosing the top-level directory (it should contain local.properties, gradlew, etc)
+* Open the project in Android Studio from the Welcome Screen or by going to File / Open Project and choosing the top-level project directory (eg, the directory that contains local.properties, gradlew, etc)
 * After your open the project, it should look like [this](http://cl.ly/image/2E3T1T2q261E)
 
 ## Configuring a database
@@ -36,27 +36,18 @@ GrocerySync is designed to sync all of its data to a CouchDB or Sync Gateway, so
 * Configure the hardcoded DB URL's in the MainActivity.java file to the URL of your CouchDB instance (or [Sync Gateway](https://github.com/couchbaselabs/sync_gateway)).  
 * Create a DB named `grocery-test` if it doesn't already exist.
 
-## Building via Android Studio
- 
-* Under the Build menu, choose the Make Project option.  This will just build the code to make sure there are no errors, it won't launch the app.
-
-## Building via Gradle
-
-* Open a terminal and cd into the project root directory that you cloned
-* Run `./gradlew clean && ./gradlew build`
-
-## Run via Android Studio UI
+## Run the app via Android Studio
 
 * Run it using the "play" or "debug" buttons in the UI
 
 ## Run via Gradle
 
 * Run the android emulator
-* Run `./gradlew installDebug`
+* Run `./gradlew clean && ./gradlew installDebug`
 * Switch to the emulator and you should have a new app called GrocerySync-Android
 * Tap it to open the app
 
-## Creating your own Couchbase-Lite app
+## Where to go from here: creating your own Couchbase-Lite app
 
 See the [Getting Started Guide](https://github.com/couchbase/couchbase-lite-android/wiki/Getting-Started).
 
