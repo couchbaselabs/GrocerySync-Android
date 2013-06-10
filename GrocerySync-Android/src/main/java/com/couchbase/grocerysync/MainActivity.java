@@ -45,10 +45,11 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
     public static String TAG = "GrocerySync";
 
     //constants
-    public static final String DATABASE_NAME = "grocery-sync";
+    public static final String DATABASE_NAME = "grocery-test";
     public static final String dDocName = "grocery-local";
     public static final String dDocId = "_design/" + dDocName;
     public static final String byDateViewName = "byDate";
+    public static final String DATABASE_URL = "http://10.0.2.2:5984";
 
     //splash screen
     protected SplashScreenDialog splashDialog;
@@ -168,10 +169,11 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
 
     public void startReplications() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String defaultDatabaseUrl = DATABASE_URL + "/" + DATABASE_NAME;
 
         pushReplicationCommand = new ReplicationCommand.Builder()
                 .source(DATABASE_NAME)
-                .target(prefs.getString("sync_url", "http://10.0.2.2:5984/grocery-test"))
+                .target(prefs.getString("sync_url", defaultDatabaseUrl))
                 .continuous(true)
                 .build();
 
@@ -186,7 +188,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         pushReplication.execute();
 
         pullReplicationCommand = new ReplicationCommand.Builder()
-                .source(prefs.getString("sync_url", "http://10.0.2.2:5984/grocery-test"))
+                .source(prefs.getString("sync_url", defaultDatabaseUrl))
                 .target(DATABASE_NAME)
                 .continuous(true)
                 .build();
