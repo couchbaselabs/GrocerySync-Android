@@ -19,11 +19,8 @@ dependencies {
 
     compile 'com.android.support:support-v4:13.0.0'
 
-    compile fileTree(dir: 'libs', include: 'td_collator_so.jar')  // hack to add .so objects (bit.ly/17pUlJ1)
-
-    compile 'com.couchbase.cblite:CBLite:0.7'
-    compile 'com.couchbase.cblite:CBLiteEktorp:0.7.2'
-    compile 'com.couchbase.cblite:CBLiteJavascript:0.7'
+    compile project(':CBLite')
+    compile project(':CBLiteEktorp')
 
 }
 

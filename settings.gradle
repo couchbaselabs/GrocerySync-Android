@@ -1,1 +1,3 @@
-include ':GrocerySync-Android'
+include ':GrocerySync-Android', ':CBLite', ':CBLiteEktorp'
+project(':CBLite').projectDir = new File(settingsDir, '../couchbase-lite-android/CouchbaseLiteProject/CBLite')
+project(':CBLiteEktorp').projectDir = new File(settingsDir, '../couchbase-lite-android/CouchbaseLiteProject/CBLiteEktorp')
