@@ -5,4 +5,9 @@
     <string name="add_item_hint">Add Item</string>
     <string name="error_dialog_title">Couchbase Error</string>
     <string name="error_dialog_button">Exit</string>
+
+    <string name="title_activity_persona_login">PersonaLoginActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>

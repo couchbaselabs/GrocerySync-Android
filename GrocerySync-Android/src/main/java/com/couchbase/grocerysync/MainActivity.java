@@ -2,11 +2,13 @@ package com.couchbase.grocerysync;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import org.codehaus.jackson.JsonNode;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.CouchDbInstance;
 import org.ektorp.ReplicationCommand;
+import org.ektorp.ReplicationStatus;
 import org.ektorp.UpdateConflictException;
 import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult.Row;
@@ -37,6 +39,7 @@ import com.couchbase.cblite.CBLServer;
 import com.couchbase.cblite.CBLView;
 import com.couchbase.cblite.CBLViewMapBlock;
 import com.couchbase.cblite.CBLViewMapEmitBlock;
+import com.couchbase.cblite.auth.CBLPersonaAuthorizer;
 import com.couchbase.cblite.ektorp.CBLiteHttpClient;
 import com.couchbase.cblite.router.CBLURLStreamHandlerFactory;
 
@@ -49,7 +52,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
     public static final String dDocName = "grocery-local";
     public static final String dDocId = "_design/" + dDocName;
     public static final String byDateViewName = "byDate";
-    public static final String DATABASE_URL = "http://10.0.2.2:5984";
+    public static final String DATABASE_URL = "http://10.0.2.2:4984";
 
     //splash screen
     protected SplashScreenDialog splashDialog;
@@ -89,8 +92,11 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         //show splash and start couch
         showSplashScreen();
         removeSplashScreen();
-        startTouchDB();
-        startEktorp();
+
+        Intent intent = new Intent(this, PersonaLoginActivity.class);
+
+        startActivityForResult(intent, PersonaLoginActivity.PERSONA_ACTIVITY);
+
     }
 
     protected void onDestroy() {
@@ -109,6 +115,24 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         }
 
         super.onDestroy();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case (PersonaLoginActivity.PERSONA_ACTIVITY) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    String assertion = data.getStringExtra(PersonaLoginActivity.PERSONA_ACTIVITY_RESULT_ASSERTION);
+
+                    startTouchDB();
+                    startEktorp();
+
+                    startReplications(assertion);
+                }
+                break;
+            }
+        }
     }
 
     protected void startTouchDB() {
@@ -160,16 +184,17 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
                 itemListView.setAdapter(itemListViewAdapter);
                 itemListView.setOnItemClickListener(MainActivity.this);
                 itemListView.setOnItemLongClickListener(MainActivity.this);
-
-                startReplications();
             }
         };
         startupTask.execute();
     }
 
-    public void startReplications() {
+    public void startReplications(String assertion) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String defaultDatabaseUrl = DATABASE_URL + "/" + DATABASE_NAME;
+
+        // add on the persona assertion as a parameter.  needed for hack
+        // described here: http://bit.ly/17lsw2a
+        String defaultDatabaseUrl = DATABASE_URL + "/" + DATABASE_NAME + "?" + CBLPersonaAuthorizer.QUERY_PARAMETER + "=" + assertion;
 
         pushReplicationCommand = new ReplicationCommand.Builder()
                 .source(DATABASE_NAME)

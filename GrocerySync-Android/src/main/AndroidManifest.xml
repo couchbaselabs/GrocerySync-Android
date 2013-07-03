@@ -25,6 +25,10 @@
         <activity
                 android:name="com.couchbase.grocerysync.GrocerySyncPreferencesActivity">
         </activity>
+        <activity android:name=".PersonaLoginActivity"
+                  android:label="@string/title_activity_persona_login"
+                >
+        </activity>
 
 
     </application>
