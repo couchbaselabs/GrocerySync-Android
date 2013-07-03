@@ -31,7 +31,7 @@ public class PersonaLoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupWebView(SIGNIN_URL);
+        setupWebView(MainActivity.getReplicationURL().toExternalForm());
     }
 
 

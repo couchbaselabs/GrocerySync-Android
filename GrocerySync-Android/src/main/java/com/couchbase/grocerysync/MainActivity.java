@@ -1,6 +1,8 @@
 package com.couchbase.grocerysync;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
@@ -75,6 +77,14 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
     //static inializer to ensure that touchdb:// URLs are handled properly
     {
         CBLURLStreamHandlerFactory.registerSelfIgnoreError();
+    }
+
+    public static URL getReplicationURL() {
+        try {
+            return new URL(String.format("%s/%s", DATABASE_URL, DATABASE_NAME));
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -194,7 +204,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
 
         // add on the persona assertion as a parameter.  needed for hack
         // described here: http://bit.ly/17lsw2a
-        String defaultDatabaseUrl = DATABASE_URL + "/" + DATABASE_NAME + "?" + CBLPersonaAuthorizer.QUERY_PARAMETER + "=" + assertion;
+        String defaultDatabaseUrl = getReplicationURL().toExternalForm() + "?" + CBLPersonaAuthorizer.QUERY_PARAMETER + "=" + assertion;
 
         pushReplicationCommand = new ReplicationCommand.Builder()
                 .source(DATABASE_NAME)
