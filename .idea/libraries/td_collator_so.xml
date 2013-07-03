@@ -2,6 +2,7 @@
   <library name="td_collator_so">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/GrocerySync-Android/libs/td_collator_so.jar!/" />
+      <root url="jar://$PROJECT_DIR$/GrocerySync-Android/build/exploded-bundles/CBLite.aar/libs/td_collator_so.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

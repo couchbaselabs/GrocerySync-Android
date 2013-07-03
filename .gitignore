@@ -20,3 +20,4 @@ build.properties
 /GrocerySync-Android/src/main/res/.DS_Store
 /.gradle/
 /.idea/workspace.xml
+/.DS_Store
