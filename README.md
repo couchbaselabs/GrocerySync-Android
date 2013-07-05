@@ -8,7 +8,7 @@ The "use case" is a shared grocery list where all devices using the application 
  
 ## Prequisites
 
-* Install [Android Studio](http://developer.android.com/sdk/installing/studio.html) version 0.1.3 or later
+* Install [Android Studio](http://developer.android.com/sdk/installing/studio.html) version 0.1.3 or later with Android Support Repository and Google Repository.
 * Install Apache CouchDB 
 
 ## Getting the code
@@ -25,11 +25,27 @@ Gradle (the build system used by Studio) needs to know where your Android SDK is
 * If you are on OSX and installed Android Studio to the default location, you should be ok with the defaults in `local.properties`
 * Otherwise, open `local.properties` and make sure it points to the Android SDK on your system.  Change the path as needed.
 
+
+
 ## Opening the project in Android Studio
 
 * Open the project in Android Studio from the Welcome Screen or by going to File / Open Project and choosing the top-level project directory (eg, the directory that contains local.properties, gradlew, etc)
 * If it is not recognizing the com.couchbase.* imports, try restarting Android Studio
 * After your open the project, it should look like [this](http://cl.ly/image/2E3T1T2q261E), and the imports should be ok, as shown [here](http://cl.ly/image/2m1a1K3n0c1V)
+
+## Enable Android Support Repository and Google Repository in Android Studio
+
+Open the Android SDK from Android Studio (Tools->Android->SDK Manager) and make sure that the Android Support Repository and Google Repository items are installed.
+
+This is needed in order to resolve this dependency on the android support library:
+
+```
+dependencies {
+    compile 'com.android.support:support-v4:13.0.0'
+    ...
+}
+```
+
 
 ## Configuring a database
 
