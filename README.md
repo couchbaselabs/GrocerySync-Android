@@ -33,7 +33,7 @@ Gradle (the build system used by Studio) needs to know where your Android SDK is
 * If it is not recognizing the com.couchbase.* imports, try restarting Android Studio
 * After your open the project, it should look like [this](http://cl.ly/image/2E3T1T2q261E), and the imports should be ok, as shown [here](http://cl.ly/image/2m1a1K3n0c1V)
 
-## Enable Android Support Repository and Google Repository in Android Studio
+## Enable Android Support Repository and Google Repository
 
 Open the Android SDK from Android Studio (Tools->Android->SDK Manager) and make sure that the Android Support Repository and Google Repository items are installed.
 
