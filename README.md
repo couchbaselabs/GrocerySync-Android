@@ -9,7 +9,7 @@ The "use case" is a shared grocery list where all devices using the application 
 ## Prequisites
 
 * Install [Android Studio](http://developer.android.com/sdk/installing/studio.html) version 0.1.3 or later with Android Support Repository and Google Repository.
-* Install Apache CouchDB 
+* Install Apache CouchDB or the Couchbase [Sync Gateway](https://github.com/couchbaselabs/sync_gateway) for Couchbase Server.
 
 ## Getting the code
 
