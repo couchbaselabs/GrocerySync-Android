@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.1'
+        classpath 'com.android.tools.build:gradle:0.5.+'
     }
 }
 apply plugin: 'android'
@@ -17,13 +17,13 @@ repositories {
 
 dependencies {
 
-    compile 'com.android.support:support-v4:13.0.0'
+    compile 'com.android.support:support-v4:13.0.+'
 
     compile fileTree(dir: 'libs', include: 'td_collator_so.jar')  // hack to add .so objects (bit.ly/17pUlJ1)
 
-    compile 'com.couchbase.cblite:CBLite:0.7'
-    compile 'com.couchbase.cblite:CBLiteEktorp:0.7.2'
-    compile 'com.couchbase.cblite:CBLiteJavascript:0.7'
+    compile 'com.couchbase.cblite:CBLite:0.7.2'
+    compile 'com.couchbase.cblite:CBLiteEktorp:0.7.4'
+    compile 'com.couchbase.cblite:CBLiteJavascript:0.7.2'
 
 }
 
