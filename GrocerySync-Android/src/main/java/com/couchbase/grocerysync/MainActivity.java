@@ -89,7 +89,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         //show splash and start couch
         showSplashScreen();
         removeSplashScreen();
-        startTouchDB();
+        startCBLite();
         startEktorp();
     }
 
@@ -111,7 +111,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         super.onDestroy();
     }
 
-    protected void startTouchDB() {
+    protected void startCBLite() {
         String filesDir = getFilesDir().getAbsolutePath();
         try {
             server = new CBLServer(filesDir);
