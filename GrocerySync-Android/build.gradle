@@ -1,3 +1,19 @@
+
+/*
+
+Build script for Grocery-Sync Android, an example application based on Couchbase Lite
+
+Regarding dependencies, this project depends on Couchbase Lite via remote maven artifacts, eg:
+
+    compile 'com.couchbase.cblite:CBLite:0.7.2'
+
+rather than directly depending on couchbase lite code.  This means you don't even
+need to clone the couchbase lite repository, since the dependencies and all
+transitive dependencies are declared here and will be resolved and downloaded by gradle.
+When new versions of couchbase lite are released, these versions should be bumped.
+
+ */
+
 buildscript {
     repositories {
         mavenCentral()
