@@ -37,9 +37,9 @@ dependencies {
 
     compile fileTree(dir: 'libs', include: 'td_collator_so.jar')  // hack to add .so objects (bit.ly/17pUlJ1)
 
-    compile 'com.couchbase.cblite:CBLite:0.7.4'
-    compile 'com.couchbase.cblite:CBLiteEktorp:0.7.6'
-    compile 'com.couchbase.cblite:CBLiteJavascript:0.7.4'
+    compile 'com.couchbase.cblite:CBLite:0.7.8'
+    compile 'com.couchbase.cblite:CBLiteEktorp:0.7.10'
+    compile 'com.couchbase.cblite:CBLiteJavascript:0.7.8'
 
 }
 
