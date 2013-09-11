@@ -4,12 +4,12 @@
  
 This is a simple example of using the [Couchbase Lite Android](https://github.com/couchbase/couchbase-lite-android) mobile database framework.
  
-The "use case" is a shared grocery list where all devices using the application would see a mirror of the grocery list.  Any changes will automatically background sync with a CouchDB running in the cloud.  (bi-directional)
+The "use case" is a shared grocery list where all devices using the application would see a mirror of the grocery list.  Any changes will automatically background sync with a Sync Gateway running in the cloud.  (bi-directional)
  
 ## Prequisites
 
 * Install [Android Studio](http://developer.android.com/sdk/installing/studio.html) version 0.1.3 or later with Android Support Repository and Google Repository.
-* Install Apache CouchDB or the Couchbase [Sync Gateway](https://github.com/couchbaselabs/sync_gateway) for Couchbase Server.
+* Install [Sync Gateway](https://github.com/couchbaselabs/sync_gateway).
 
 ## Getting the code
 
@@ -49,10 +49,10 @@ dependencies {
 
 ## Configuring a database
 
-GrocerySync is designed to sync all of its data to a CouchDB instance, so it needs a valid URL.
+GrocerySync is designed to sync all of its data to a Sync Gateway instance, so it needs a valid URL.
 
-* Configure the hardcoded DATABASE_URL in the MainActivity.java file to the URL of your CouchDB instance.  (there is also a value in the Settings that can be used, which will override the hardcoded default)  
-* Create a DB named `grocery-test` on the CouchDB instance.
+* Configure the hardcoded DATABASE_URL in the MainActivity.java file to the URL of your Sync Gateway instance.  (there is also a value in the Settings that can be used, which will override the hardcoded default)  
+* Create a DB named `grocery-test` on the Sync Gateway instance.
 
 ## Run the app via Android Studio
 
