@@ -49,7 +49,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
     public static final String dDocName = "grocery-local";
     public static final String dDocId = "_design/" + dDocName;
     public static final String byDateViewName = "byDate";
-    public static final String DATABASE_URL = "http://10.0.2.2:5984";
+    public static final String DATABASE_URL = "http://10.0.2.2:4984";  // 10.0.2.2 == Android Simulator equivalent of 127.0.0.1
 
     //splash screen
     protected SplashScreenDialog splashDialog;
