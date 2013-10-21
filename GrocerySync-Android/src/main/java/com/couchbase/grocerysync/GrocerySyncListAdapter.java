@@ -10,18 +10,26 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.couchbase.cblite.CBLDocument;
+import com.couchbase.cblite.CBLQueryRow;
 
-public class GrocerySyncListAdapter extends CouchbaseViewListAdapter {
+import java.util.List;
 
-	protected MainActivity parent;
 
-	public GrocerySyncListAdapter(MainActivity parent, CouchDbConnector couchDbConnector, ViewQuery viewQuery) {
-		super(couchDbConnector, viewQuery, true);
-		this.parent = parent;
-	}
+public class GrocerySyncListAdapter extends ArrayAdapter<CBLQueryRow> {
+
+    private final List<CBLQueryRow> list;
+    private final Context context;
+
+    public GrocerySyncListAdapter(Context context, int resource, int textViewResourceId, List<CBLQueryRow> objects) {
+        super(context, resource, textViewResourceId, objects);
+        this.context = context;
+        this.list = objects;
+    }
 
 	private static class ViewHolder {
 	   ImageView icon;
@@ -41,25 +49,16 @@ public class GrocerySyncListAdapter extends CouchbaseViewListAdapter {
         }
 
         TextView label = ((ViewHolder)v.getTag()).label;
-        Row row = getRow(position);
-        JsonNode item = row.getValueAsNode();
-        JsonNode itemText = item.get("text");
-        if(itemText != null) {
-        	label.setText(itemText.getTextValue());
+        CBLQueryRow row = list.get(position);
+        CBLDocument document = row.getDocument();
+        label.setText((String)document.getCurrentRevision().getProperty("text"));
+        boolean checked = ((Boolean) document.getCurrentRevision().getProperty("check")).booleanValue();
+        ImageView icon = ((ViewHolder)v.getTag()).icon;
+        if(checked) {
+            icon.setImageResource(R.drawable.list_area___checkbox___checked);
         }
         else {
-        	label.setText("");
-        }
-
-        ImageView icon = ((ViewHolder)v.getTag()).icon;
-        JsonNode checkNode = item.get("check");
-        if(checkNode != null) {
-	        if(checkNode.getBooleanValue()) {
-	        	icon.setImageResource(R.drawable.list_area___checkbox___checked);
-	        }
-	        else {
-	        	icon.setImageResource(R.drawable.list_area___checkbox___unchecked);
-	        }
+            icon.setImageResource(R.drawable.list_area___checkbox___unchecked);
         }
 
         return v;

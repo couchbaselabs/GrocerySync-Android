@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/CBLite/CBLite.iml" filepath="$PROJECT_DIR$/CBLite/CBLite.iml" />
       <module fileurl="file://$PROJECT_DIR$/GrocerySync-Android.iml" filepath="$PROJECT_DIR$/GrocerySync-Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/GrocerySync-Android/GrocerySync-Android-GrocerySync-Android.iml" filepath="$PROJECT_DIR$/GrocerySync-Android/GrocerySync-Android-GrocerySync-Android.iml" />
     </modules>

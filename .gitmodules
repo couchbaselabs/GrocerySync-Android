@@ -1,0 +1,3 @@
+[submodule "CBLite"]
+	path = CBLite
+	url = https://github.com/couchbase/couchbase-lite-android-core.git

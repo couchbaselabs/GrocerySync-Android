@@ -1,31 +1,14 @@
 package com.couchbase.grocerysync;
 
-import java.io.IOException;
-import java.util.Map;
-
-import org.codehaus.jackson.JsonNode;
-import org.ektorp.CouchDbConnector;
-import org.ektorp.CouchDbInstance;
-import org.ektorp.ReplicationCommand;
-import org.ektorp.UpdateConflictException;
-import org.ektorp.ViewQuery;
-import org.ektorp.ViewResult.Row;
-import org.ektorp.http.HttpClient;
-import org.ektorp.impl.StdCouchDbInstance;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
@@ -36,19 +19,33 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.couchbase.cblite.CBLDatabase;
-import com.couchbase.cblite.CBLServer;
+import com.couchbase.cblite.CBLDocument;
+import com.couchbase.cblite.CBLManager;
+import com.couchbase.cblite.CBLMapEmitFunction;
+import com.couchbase.cblite.CBLMapFunction;
+import com.couchbase.cblite.CBLQuery;
+import com.couchbase.cblite.CBLQueryEnumerator;
+import com.couchbase.cblite.CBLQueryRow;
 import com.couchbase.cblite.CBLView;
-import com.couchbase.cblite.CBLViewMapBlock;
-import com.couchbase.cblite.CBLViewMapEmitBlock;
-import com.couchbase.cblite.ektorp.CBLiteHttpClient;
+import com.couchbase.cblite.CBLiteException;
 import com.couchbase.cblite.router.CBLURLStreamHandlerFactory;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class MainActivity extends Activity implements OnItemClickListener, OnItemLongClickListener, OnKeyListener {
 
     public static String TAG = "GrocerySync";
 
     //constants
-    public static final String DATABASE_NAME = "how2db";
+    public static final String DATABASE_NAME = "grocery-sync";
     public static final String dDocName = "grocery-local";
     public static final String dDocId = "_design/" + dDocName;
     public static final String byDateViewName = "byDate";
@@ -63,16 +60,10 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
     protected GrocerySyncListAdapter itemListViewAdapter;
 
     //couch internals
-    protected static CBLServer server;
-    protected static HttpClient httpClient;
+    protected static CBLManager manager;
+    private CBLDatabase db;
 
-    //ektorp impl
-    protected CouchDbInstance dbInstance;
-    protected CouchDbConnector couchDbConnector;
-    protected ReplicationCommand pushReplicationCommand;
-    protected ReplicationCommand pullReplicationCommand;
-
-    GestureDetector gestureDetector;
+    // GestureDetector gestureDetector;
 
     //static inializer to ensure that touchdb:// URLs are handled properly
     {
@@ -87,9 +78,9 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         //connect items from layout
         addItemEditText = (EditText)findViewById(R.id.addItemEditText);
         itemListView = (ListView)findViewById(R.id.itemListView);
-        TouchListener onTouchListener = new TouchListener();
-        gestureDetector = new GestureDetector(this, new GestureListener());
-        itemListView.setOnTouchListener(onTouchListener);
+
+
+        initTouchListener();
 
         //connect listeners
         addItemEditText.setOnKeyListener(this);
@@ -97,123 +88,69 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         //show splash and start couch
         showSplashScreen();
         removeSplashScreen();
-        startCBLite();
-        startEktorp();
 
+        try {
+            startCBLite();
+        } catch (CBLiteException e) {
+            Toast.makeText(getApplicationContext(), "Error Initializing CBLIte, see logs for details", Toast.LENGTH_LONG).show();
+            Log.e(TAG, "Error initializing CBLite", e);
+            e.printStackTrace();
+        }
+
+    }
+
+    private void initTouchListener() {
+        /*TouchListener onTouchListener = new TouchListener();
+        gestureDetector = new GestureDetector(this, new GestureListener());
+        itemListView.setOnTouchListener(onTouchListener);*/
     }
 
     protected void onDestroy() {
         Log.v(TAG, "onDestroy");
 
-        //need to stop the async task thats following the changes feed
-        itemListViewAdapter.cancelContinuous();
 
-        //clean up our http client connection manager
-        if(httpClient != null) {
-            httpClient.shutdown();
-        }
-
-        if(server != null) {
-            server.close();
+        if(manager != null) {
+            manager.close();
         }
 
         super.onDestroy();
     }
 
-    protected void startCBLite() {
-        String filesDir = getFilesDir().getAbsolutePath();
-        try {
-            server = new CBLServer(filesDir);
-        } catch (IOException e) {
-            Log.e(TAG, "Error starting TDServer", e);
-        }
+    protected void startCBLite() throws CBLiteException {
+        manager = new CBLManager(getApplicationContext(), "grocery-sync");
 
         //install a view definition needed by the application
-        CBLDatabase db = server.getDatabaseNamed(DATABASE_NAME);
-        CBLView view = db.getViewNamed(String.format("%s/%s", dDocName, byDateViewName));
-        view.setMapReduceBlocks(new CBLViewMapBlock() {
-
+        db = manager.getDatabase(DATABASE_NAME);
+        CBLView view = db.getView(String.format("%s/%s", dDocName, byDateViewName));
+        view.setMap(new CBLMapFunction() {
             @Override
-            public void map(Map<String, Object> document, CBLViewMapEmitBlock emitter) {
+            public void map(Map<String, Object> document, CBLMapEmitFunction emitter) {
                 Object createdAt = document.get("created_at");
                 if(createdAt != null) {
                     emitter.emit(createdAt.toString(), document);
                 }
-
             }
-        }, null, "1.0");
+        }, "1.0");
+
+        fillList(view);
+
     }
 
-    protected void startEktorp() {
-        Log.v(TAG, "starting ektorp");
+    private void fillList(CBLView view) throws CBLiteException {
+        CBLQuery viewQuery = view.createQuery();
 
-        if(httpClient != null) {
-            httpClient.shutdown();
+        // TODO: this isn't ideal .. it should be using a LiveQuery here
+        CBLQueryEnumerator queryEnumerator = viewQuery.getRows();
+        List<CBLQueryRow> rows = new ArrayList<CBLQueryRow>();
+        for (Iterator<CBLQueryRow> it = queryEnumerator; it.hasNext();) {
+            CBLQueryRow row = it.next();
+            rows.add(row);
         }
 
-        httpClient = new CBLiteHttpClient(server);
-        dbInstance = new StdCouchDbInstance(httpClient);
-
-        GrocerySyncEktorpAsyncTask startupTask = new GrocerySyncEktorpAsyncTask() {
-
-            @Override
-            protected void doInBackground() {
-                couchDbConnector = dbInstance.createConnector(DATABASE_NAME, true);
-            }
-
-            @Override
-            protected void onSuccess() {
-                //attach list adapter to the list and handle clicks
-                ViewQuery viewQuery = new ViewQuery().designDocId(dDocId).viewName(byDateViewName).descending(true);
-                itemListViewAdapter = new GrocerySyncListAdapter(MainActivity.this, couchDbConnector, viewQuery);
-                itemListView.setAdapter(itemListViewAdapter);
-                itemListView.setOnItemClickListener(MainActivity.this);
-                itemListView.setOnItemLongClickListener(MainActivity.this);
-
-                startReplications();
-            }
-        };
-        startupTask.execute();
-    }
-
-    public void startReplications() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String defaultDatabaseUrl = DATABASE_URL + "/" + DATABASE_NAME;
-
-        pushReplicationCommand = new ReplicationCommand.Builder()
-                .source(DATABASE_NAME)
-                .target(prefs.getString("sync_url", defaultDatabaseUrl))
-                .continuous(true)
-                .build();
-
-        GrocerySyncEktorpAsyncTask pushReplication = new GrocerySyncEktorpAsyncTask() {
-
-            @Override
-            protected void doInBackground() {
-                dbInstance.replicate(pushReplicationCommand);
-            }
-        };
-
-        pushReplication.execute();
-
-        pullReplicationCommand = new ReplicationCommand.Builder()
-                .source(prefs.getString("sync_url", defaultDatabaseUrl))
-                .target(DATABASE_NAME)
-                .continuous(true)
-                .build();
-
-        GrocerySyncEktorpAsyncTask pullReplication = new GrocerySyncEktorpAsyncTask() {
-
-            @Override
-            protected void doInBackground() {
-                dbInstance.replicate(pullReplicationCommand);
-            }
-        };
-
-        pullReplication.execute();
-    }
-
-    public void stopEktorp() {
+        itemListViewAdapter = new GrocerySyncListAdapter(getApplicationContext(), R.layout.grocery_list_item, R.id.label, rows);
+        itemListView.setAdapter(itemListViewAdapter);
+        itemListView.setOnItemClickListener(MainActivity.this);
+        itemListView.setOnItemLongClickListener(MainActivity.this);
     }
 
 
@@ -226,7 +163,12 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
 
             String inputText = addItemEditText.getText().toString();
             if(!inputText.equals("")) {
-                createGroceryItem(inputText);
+                try {
+                    createGroceryItem(inputText);
+                } catch (CBLiteException e) {
+                    Toast.makeText(getApplicationContext(), "Error creating document, see logs for details", Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "Error creating document", e);
+                }
             }
             addItemEditText.setText("");
             return true;
@@ -238,29 +180,46 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
      * Handle click on item in list
      */
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Row row = (Row)parent.getItemAtPosition(position);
-        JsonNode item = row.getValueAsNode();
-        toggleItemChecked(item);
+
+        CBLQueryRow row = (CBLQueryRow) parent.getItemAtPosition(position);
+        CBLDocument document = row.getDocument();
+        Map<String, Object> curProperties = document.getUserProperties();
+        Map<String, Object> newProperties = new HashMap<String, Object>();
+        newProperties.putAll(curProperties);
+
+        boolean checked = ((Boolean) newProperties.get("check")).booleanValue();
+        newProperties.put("check", !checked);
+
+        try {
+            document.putProperties(newProperties);
+            itemListViewAdapter.notifyDataSetChanged();
+        } catch (CBLiteException e) {
+            Toast.makeText(getApplicationContext(), "Error updating database, see logs for details", Toast.LENGTH_LONG).show();
+            Log.e(TAG, "Error updating database", e);
+        }
+
     }
 
     /**
      * Handle long-click on item in list
      */
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        Row row = (Row)parent.getItemAtPosition(position);
-        final JsonNode item = row.getValueAsNode();
-        JsonNode textNode = item.get("text");
-        String itemText = "";
-        if(textNode != null) {
-            itemText = textNode.getTextValue();
-        }
+
+        CBLQueryRow row = (CBLQueryRow) parent.getItemAtPosition(position);
+        final CBLDocument clickedDocument = row.getDocument();
+        String itemText = (String) clickedDocument.getCurrentRevision().getProperty("text");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         AlertDialog alert = builder.setTitle("Delete Item?")
                 .setMessage("Are you sure you want to delete \"" + itemText + "\"?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        deleteGroceryItem(item);
+                        try {
+                            clickedDocument.delete();
+                        } catch (CBLiteException e) {
+                            Toast.makeText(getApplicationContext(), "Error deleting document, see logs for details", Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "Error deleting document", e);
+                        }
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -313,76 +272,31 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         return false;
     }
 
-    public void createGroceryItem(String name) {
-        final JsonNode item = GroceryItemUtils.createWithText(name);
-        GrocerySyncEktorpAsyncTask createItemTask = new GrocerySyncEktorpAsyncTask() {
+    public CBLDocument createGroceryItem(String text) throws CBLiteException {
 
-            @Override
-            protected void doInBackground() {
-                couchDbConnector.create(item);
-            }
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
-            @Override
-            protected void onSuccess() {
-                Log.d(TAG, "Document created successfully.  item: " + item.toString());
-            }
+        UUID uuid = UUID.randomUUID();
+        Calendar calendar = GregorianCalendar.getInstance();
+        long currentTime = calendar.getTimeInMillis();
+        String currentTimeString = dateFormatter.format(calendar.getTime());
 
-            @Override
-            protected void onUpdateConflict(
-                    UpdateConflictException updateConflictException) {
-                Log.d(TAG, "Got an update conflict for: " + item.toString());
-            }
-        };
-        createItemTask.execute();
-    }
+        String id = currentTime + "-" + uuid.toString();
 
-    public void toggleItemChecked(final JsonNode item) {
-        GroceryItemUtils.toggleCheck(item);
+        CBLDocument document = db.createUntitledDocument();
 
-        GrocerySyncEktorpAsyncTask updateTask = new GrocerySyncEktorpAsyncTask() {
+        Map<String, Object> properties = new HashMap<String, Object>();
+        properties.put("_id", id);
+        properties.put("text", text);
+        properties.put("check", Boolean.FALSE);
+        properties.put("created_at", currentTimeString);
+        document.putProperties(properties);
 
-            @Override
-            protected void doInBackground() {
-                couchDbConnector.update(item);
-            }
-
-            @Override
-            protected void onSuccess() {
-                Log.d(TAG, "Document updated successfully");
-            }
-
-            @Override
-            protected void onUpdateConflict(
-                    UpdateConflictException updateConflictException) {
-                Log.d(TAG, "Got an update conflict for: " + item.toString());
-            }
-        };
-        updateTask.execute();
-    }
-
-    public void deleteGroceryItem(final JsonNode item) {
-        GrocerySyncEktorpAsyncTask deleteTask = new GrocerySyncEktorpAsyncTask() {
-
-            @Override
-            protected void doInBackground() {
-                couchDbConnector.delete(item);
-            }
-
-            @Override
-            protected void onSuccess() {
-                Log.d(TAG, "Document deleted successfully");
-            }
-
-            @Override
-            protected void onUpdateConflict(
-                    UpdateConflictException updateConflictException) {
-                Log.d(TAG, "Got an update conflict for: " + item.toString());
-            }
-        };
-        deleteTask.execute();
+        return document;
     }
 
 
+    /*
     protected class TouchListener implements View.OnTouchListener {
 
         @Override
@@ -473,5 +387,6 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
             return false;
         }
     }
+    */
 
 }
