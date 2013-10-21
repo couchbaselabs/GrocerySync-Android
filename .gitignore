@@ -19,6 +19,8 @@ build.properties
 /GrocerySync-Android/build/
 /GrocerySync-Android/src/main/res/.DS_Store
 /.gradle/
-/.idea/workspace.xml
+/.idea/
 /.DS_Store
 /GrocerySync-Android/.DS_Store
+/GrocerySync-Android/GrocerySync-Android-GrocerySync-Android.iml
+/.idea/misc.xml
