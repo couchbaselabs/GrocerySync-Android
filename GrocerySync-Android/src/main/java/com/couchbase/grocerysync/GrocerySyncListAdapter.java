@@ -1,11 +1,5 @@
 package com.couchbase.grocerysync;
 
-import org.codehaus.jackson.JsonNode;
-import org.ektorp.CouchDbConnector;
-import org.ektorp.ViewQuery;
-import org.ektorp.ViewResult.Row;
-import org.ektorp.android.util.CouchbaseViewListAdapter;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
