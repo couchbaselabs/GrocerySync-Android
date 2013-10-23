@@ -23,6 +23,7 @@ import com.couchbase.cblite.CBLDocument;
 import com.couchbase.cblite.CBLManager;
 import com.couchbase.cblite.CBLMapEmitFunction;
 import com.couchbase.cblite.CBLMapFunction;
+import com.couchbase.cblite.CBLNewRevision;
 import com.couchbase.cblite.CBLQuery;
 import com.couchbase.cblite.CBLQueryEnumerator;
 import com.couchbase.cblite.CBLQueryRow;
@@ -164,7 +165,10 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
             String inputText = addItemEditText.getText().toString();
             if(!inputText.equals("")) {
                 try {
-                    createGroceryItem(inputText);
+                    CBLDocument groceryItemDoc = createGroceryItem(inputText);
+                    itemListViewAdapter.notifyDataSetChanged();
+                    Toast.makeText(getApplicationContext(), "Created new grocery item!", Toast.LENGTH_LONG).show();
+
                 } catch (CBLiteException e) {
                     Toast.makeText(getApplicationContext(), "Error creating document, see logs for details", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "Error creating document", e);
@@ -216,6 +220,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
                     public void onClick(DialogInterface dialog, int id) {
                         try {
                             clickedDocument.delete();
+                            itemListViewAdapter.notifyDataSetChanged();
                         } catch (CBLiteException e) {
                             Toast.makeText(getApplicationContext(), "Error deleting document, see logs for details", Toast.LENGTH_LONG).show();
                             Log.e(TAG, "Error deleting document", e);
