@@ -26,6 +26,7 @@ import com.couchbase.cblite.CBLMapFunction;
 import com.couchbase.cblite.CBLNewRevision;
 import com.couchbase.cblite.CBLQuery;
 import com.couchbase.cblite.CBLQueryEnumerator;
+import com.couchbase.cblite.CBLQueryOptions;
 import com.couchbase.cblite.CBLQueryRow;
 import com.couchbase.cblite.CBLView;
 import com.couchbase.cblite.CBLiteException;
@@ -133,22 +134,22 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
             }
         }, "1.0");
 
+        // view.updateIndex();  // workaround
+
         fillList(view);
 
     }
 
     private void fillList(CBLView view) throws CBLiteException {
-        CBLQuery viewQuery = view.createQuery();
 
-        // TODO: this isn't ideal .. it should be using a LiveQuery here
-        CBLQueryEnumerator queryEnumerator = viewQuery.getRows();
-        List<CBLQueryRow> rows = new ArrayList<CBLQueryRow>();
-        for (Iterator<CBLQueryRow> it = queryEnumerator; it.hasNext();) {
-            CBLQueryRow row = it.next();
-            rows.add(row);
-        }
+        List<CBLQueryRow> rows = view.queryWithOptions(new CBLQueryOptions());
 
-        itemListViewAdapter = new GrocerySyncListAdapter(getApplicationContext(), R.layout.grocery_list_item, R.id.label, rows);
+        itemListViewAdapter = new GrocerySyncListAdapter(
+                getApplicationContext(),
+                R.layout.grocery_list_item,
+                R.id.label,
+                rows
+        );
         itemListView.setAdapter(itemListViewAdapter);
         itemListView.setOnItemClickListener(MainActivity.this);
         itemListView.setOnItemLongClickListener(MainActivity.this);
