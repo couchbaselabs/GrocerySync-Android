@@ -188,7 +188,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
 
         CBLQueryRow row = (CBLQueryRow) parent.getItemAtPosition(position);
         CBLDocument document = row.getDocument();
-        Map<String, Object> curProperties = document.getUserProperties();
+        Map<String, Object> curProperties = document.getProperties();
         Map<String, Object> newProperties = new HashMap<String, Object>();
         newProperties.putAll(curProperties);
 
