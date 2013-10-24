@@ -291,7 +291,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         CBLDocument document = db.createUntitledDocument();
 
         Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put("_id", id);
+        properties.put("_id", id);  // TODO: we don't need this, remove it
         properties.put("text", text);
         properties.put("check", Boolean.FALSE);
         properties.put("created_at", currentTimeString);
