@@ -134,7 +134,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
             }
         }, "1.0");
 
-        // view.updateIndex();  // workaround
+        view.updateIndex();  // workaround
 
         fillList(view);
 
@@ -167,7 +167,12 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
             if(!inputText.equals("")) {
                 try {
                     CBLDocument groceryItemDoc = createGroceryItem(inputText);
-                    itemListViewAdapter.notifyDataSetChanged();
+                    CBLView view = db.getView(String.format("%s/%s", dDocName, byDateViewName));
+                    view.updateIndex();  // workaround
+
+                    List<CBLQueryRow> rows = view.queryWithOptions(new CBLQueryOptions());
+                    itemListViewAdapter.clear();
+                    itemListViewAdapter.addAll(rows);
                     Toast.makeText(getApplicationContext(), "Created new grocery item!", Toast.LENGTH_LONG).show();
 
                 } catch (CBLiteException e) {

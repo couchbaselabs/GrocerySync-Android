@@ -16,7 +16,7 @@ import java.util.List;
 
 public class GrocerySyncListAdapter extends ArrayAdapter<CBLQueryRow> {
 
-    private final List<CBLQueryRow> list;
+    private List<CBLQueryRow> list;
     private final Context context;
 
     public GrocerySyncListAdapter(Context context, int resource, int textViewResourceId, List<CBLQueryRow> objects) {
