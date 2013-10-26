@@ -23,9 +23,6 @@ import com.couchbase.cblite.CBLDocument;
 import com.couchbase.cblite.CBLManager;
 import com.couchbase.cblite.CBLMapEmitFunction;
 import com.couchbase.cblite.CBLMapFunction;
-import com.couchbase.cblite.CBLNewRevision;
-import com.couchbase.cblite.CBLQuery;
-import com.couchbase.cblite.CBLQueryEnumerator;
 import com.couchbase.cblite.CBLQueryOptions;
 import com.couchbase.cblite.CBLQueryRow;
 import com.couchbase.cblite.CBLView;
@@ -33,11 +30,9 @@ import com.couchbase.cblite.CBLiteException;
 import com.couchbase.cblite.router.CBLURLStreamHandlerFactory;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -134,8 +129,6 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
             }
         }, "1.0");
 
-        view.updateIndex();  // workaround
-
         fillList(view);
 
     }
@@ -167,12 +160,8 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
             if(!inputText.equals("")) {
                 try {
                     CBLDocument groceryItemDoc = createGroceryItem(inputText);
-                    CBLView view = db.getView(String.format("%s/%s", dDocName, byDateViewName));
-                    view.updateIndex();  // workaround
+                    refreshListViewAdapter();
 
-                    List<CBLQueryRow> rows = view.queryWithOptions(new CBLQueryOptions());
-                    itemListViewAdapter.clear();
-                    itemListViewAdapter.addAll(rows);
                     Toast.makeText(getApplicationContext(), "Created new grocery item!", Toast.LENGTH_LONG).show();
 
                 } catch (CBLiteException e) {
@@ -184,6 +173,12 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
             return true;
         }
         return false;
+    }
+
+    private CBLView getCblView() throws CBLiteException {
+        CBLView view = db.getView(String.format("%s/%s", dDocName, byDateViewName));
+        view.updateIndex();  // TODO: fix me .. this is just a temporary workaround
+        return view;
     }
 
     /**
@@ -226,7 +221,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
                     public void onClick(DialogInterface dialog, int id) {
                         try {
                             clickedDocument.delete();
-                            itemListViewAdapter.notifyDataSetChanged();
+                            refreshListViewAdapter();
                         } catch (CBLiteException e) {
                             Toast.makeText(getApplicationContext(), "Error deleting document, see logs for details", Toast.LENGTH_LONG).show();
                             Log.e(TAG, "Error deleting document", e);
@@ -243,6 +238,13 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         alert.show();
 
         return true;
+    }
+
+    private void refreshListViewAdapter() throws CBLiteException {
+        CBLView cblView = getCblView();
+        List<CBLQueryRow> rows = cblView.queryWithOptions(new CBLQueryOptions());
+        itemListViewAdapter.clear();
+        itemListViewAdapter.addAll(rows);
     }
 
     /**
@@ -294,7 +296,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
 
         String id = currentTime + "-" + uuid.toString();
 
-        CBLDocument document = db.createUntitledDocument();
+        CBLDocument document = db.createDocument();
 
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put("_id", id);  // TODO: we don't need this, remove it
