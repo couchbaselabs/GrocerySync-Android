@@ -50,7 +50,6 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
     //constants
     public static final String DATABASE_NAME = "grocery-sync";
     public static final String dDocName = "grocery-local";
-    public static final String dDocId = "_design/" + dDocName;
     public static final String byDateViewName = "byDate";
     public static final String DATABASE_URL = "http://sync.couchbasecloud.com";  // 10.0.2.2 == Android Simulator equivalent of 127.0.0.1
 
@@ -66,8 +65,6 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
     protected static CBLManager manager;
     private CBLDatabase db;
 
-    // GestureDetector gestureDetector;
-
     //static inializer to ensure that touchdb:// URLs are handled properly
     {
         CBLURLStreamHandlerFactory.registerSelfIgnoreError();
@@ -81,9 +78,6 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         //connect items from layout
         addItemEditText = (EditText)findViewById(R.id.addItemEditText);
         itemListView = (ListView)findViewById(R.id.itemListView);
-
-
-        initTouchListener();
 
         //connect listeners
         addItemEditText.setOnKeyListener(this);
@@ -102,15 +96,9 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
 
     }
 
-    private void initTouchListener() {
-        /*TouchListener onTouchListener = new TouchListener();
-        gestureDetector = new GestureDetector(this, new GestureListener());
-        itemListView.setOnTouchListener(onTouchListener);*/
-    }
 
     protected void onDestroy() {
         Log.v(TAG, "onDestroy");
-
 
         if(manager != null) {
             manager.close();
@@ -217,8 +205,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
             if(!inputText.equals("")) {
                 try {
 
-                    CBLDocument groceryItemDoc = createGroceryItem(inputText);
-
+                    createGroceryItem(inputText);
                     refreshListViewAdapter();
 
                     Toast.makeText(getApplicationContext(), "Created new grocery item!", Toast.LENGTH_LONG).show();
@@ -360,98 +347,5 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         return document;
     }
 
-
-    /*
-    protected class TouchListener implements View.OnTouchListener {
-
-        @Override
-        public boolean onTouch(View v, MotionEvent e)
-        {
-            if (gestureDetector.onTouchEvent(e)){
-                return true;
-            }else{
-                return false;
-            }
-        }
-
-    }
-
-    protected class GestureListener extends GestureDetector.SimpleOnGestureListener
-    {
-        private static final int SWIPE_MIN_DISTANCE = 150;
-        private static final int SWIPE_MAX_OFF_PATH = 100;
-        private static final int SWIPE_THRESHOLD_VELOCITY = 100;
-
-        private MotionEvent mLastOnDownEvent = null;
-
-
-        @Override
-        public boolean onDown(MotionEvent e)
-        {
-            mLastOnDownEvent = e;
-            return super.onDown(e);
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
-        {
-            if(e1 == null){
-                e1 = mLastOnDownEvent;
-            }
-            if(e1==null || e2==null){
-                return false;
-            }
-
-            float dX = e2.getX() - e1.getX();
-            float dY = e1.getY() - e2.getY();
-
-            int itemId = itemListView.pointToPosition((int) e1.getX(),(int) e1.getY());
-            Row row = (Row)itemListView.getAdapter().getItem(itemId);
-            final JsonNode item = row.getValueAsNode();
-            JsonNode itemText = item.get("text");
-            String text = (String) itemText.getTextValue();
-
-            GrocerySyncEktorpAsyncTask createItemTask = new GrocerySyncEktorpAsyncTask() {
-
-                @Override
-                protected void doInBackground() {
-                    couchDbConnector.delete(item);
-                }
-
-                @Override
-                protected void onSuccess() {
-                    itemListViewAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                protected void onUpdateConflict(
-                        UpdateConflictException updateConflictException) {
-                    Log.d(TAG, "Got an update conflict for: " + item.toString());
-                }
-            };
-            createItemTask.execute();
-
-
-
-            if (Math.abs(dY) < SWIPE_MAX_OFF_PATH && Math.abs(velocityX) >= SWIPE_THRESHOLD_VELOCITY && Math.abs(dX) >= SWIPE_MIN_DISTANCE ) {
-                if (dX > 0) {
-                    Toast.makeText(getApplicationContext(), "Right Swipe", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Left Swipe", Toast.LENGTH_SHORT).show();
-                }
-                return true;
-            }
-            else if (Math.abs(dX) < SWIPE_MAX_OFF_PATH && Math.abs(velocityY)>=SWIPE_THRESHOLD_VELOCITY && Math.abs(dY)>=SWIPE_MIN_DISTANCE ) {
-                if (dY>0) {
-                    Toast.makeText(getApplicationContext(), "Up Swipe", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Down Swipe", Toast.LENGTH_SHORT).show();
-                }
-                return true;
-            }
-            return false;
-        }
-    }
-    */
 
 }
