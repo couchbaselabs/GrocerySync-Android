@@ -1,6 +1,7 @@
 package com.couchbase.grocerysync;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +46,14 @@ public class GrocerySyncListAdapter extends ArrayAdapter<CBLQueryRow> {
         TextView label = ((ViewHolder)v.getTag()).label;
         CBLQueryRow row = list.get(position);
         CBLDocument document = row.getDocument();
-        label.setText((String)document.getCurrentRevision().getProperty("text"));
-        boolean checked = ((Boolean) document.getCurrentRevision().getProperty("check")).booleanValue();
+        boolean checked = false;
+        try {
+            label.setText((String)document.getCurrentRevision().getProperty("text"));
+            checked = ((Boolean) document.getCurrentRevision().getProperty("check")).booleanValue();
+        } catch (Exception e) {
+            label.setText("Error");
+            Log.e(MainActivity.TAG, "Error Displaying document", e);
+        }
         ImageView icon = ((ViewHolder)v.getTag()).icon;
         if(checked) {
             icon.setImageResource(R.drawable.list_area___checkbox___checked);
