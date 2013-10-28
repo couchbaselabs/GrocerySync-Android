@@ -137,9 +137,6 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         final ProgressDialog progressDialog = showLoadingSpinner();
 
         CBLQuery query = view.createQuery();
-
-        query.setStale(CBLQuery.CBLStaleness.CBLStaleNever);
-
         query.runAsync(new CBLQueryCompleteFunction() {
             @Override
             public void onQueryChanged(CBLQueryEnumerator queryEnumerator) {
