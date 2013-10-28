@@ -2,6 +2,7 @@ package com.couchbase.grocerysync;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +24,9 @@ import com.couchbase.cblite.CBLDocument;
 import com.couchbase.cblite.CBLManager;
 import com.couchbase.cblite.CBLMapEmitFunction;
 import com.couchbase.cblite.CBLMapFunction;
+import com.couchbase.cblite.CBLQuery;
+import com.couchbase.cblite.CBLQueryCompleteFunction;
+import com.couchbase.cblite.CBLQueryEnumerator;
 import com.couchbase.cblite.CBLQueryOptions;
 import com.couchbase.cblite.CBLQueryRow;
 import com.couchbase.cblite.CBLView;
@@ -30,9 +34,11 @@ import com.couchbase.cblite.CBLiteException;
 import com.couchbase.cblite.router.CBLURLStreamHandlerFactory;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -133,19 +139,67 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
 
     }
 
+    private void fillList() throws CBLiteException {
+        CBLView view = db.getView(String.format("%s/%s", dDocName, byDateViewName));
+        fillList(view);
+    }
+
     private void fillList(CBLView view) throws CBLiteException {
 
-        List<CBLQueryRow> rows = view.queryWithOptions(new CBLQueryOptions());
+        final ProgressDialog progressDialog = showLoadingSpinner();
 
-        itemListViewAdapter = new GrocerySyncListAdapter(
-                getApplicationContext(),
-                R.layout.grocery_list_item,
-                R.id.label,
-                rows
-        );
-        itemListView.setAdapter(itemListViewAdapter);
-        itemListView.setOnItemClickListener(MainActivity.this);
-        itemListView.setOnItemLongClickListener(MainActivity.this);
+        CBLQuery query = view.createQuery();
+        query.runAsync(new CBLQueryCompleteFunction() {
+            @Override
+            public void onQueryChanged(CBLQueryEnumerator queryEnumerator) {
+
+                final List<CBLQueryRow> rows = getRowsFromQueryEnumerator(queryEnumerator);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        itemListViewAdapter = new GrocerySyncListAdapter(
+                                getApplicationContext(),
+                                R.layout.grocery_list_item,
+                                R.id.label,
+                                rows
+                        );
+                        itemListView.setAdapter(itemListViewAdapter);
+                        itemListView.setOnItemClickListener(MainActivity.this);
+                        itemListView.setOnItemLongClickListener(MainActivity.this);
+
+                        progressDialog.dismiss();
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailureQueryChanged(CBLiteException exception) {
+                Toast.makeText(getApplicationContext(), "An internal error occurred running query, see logs for details", Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Error running query", exception);
+            }
+        });
+
+    }
+
+    private List<CBLQueryRow> getRowsFromQueryEnumerator(CBLQueryEnumerator queryEnumerator) {
+        List<CBLQueryRow> rows = new ArrayList<CBLQueryRow>();
+        for (Iterator<CBLQueryRow> it = queryEnumerator; it.hasNext();) {
+            CBLQueryRow row = it.next();
+            rows.add(row);
+        }
+        return rows;
+    }
+
+    private ProgressDialog showLoadingSpinner() {
+        ProgressDialog progress = new ProgressDialog(this);
+        progress.setTitle("Loading");
+        progress.setMessage("Wait while loading...");
+        progress.show();
+        return progress;
     }
 
 
@@ -159,7 +213,9 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
             String inputText = addItemEditText.getText().toString();
             if(!inputText.equals("")) {
                 try {
+
                     CBLDocument groceryItemDoc = createGroceryItem(inputText);
+
                     refreshListViewAdapter();
 
                     Toast.makeText(getApplicationContext(), "Created new grocery item!", Toast.LENGTH_LONG).show();
@@ -175,11 +231,6 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         return false;
     }
 
-    private CBLView getCblView() throws CBLiteException {
-        CBLView view = db.getView(String.format("%s/%s", dDocName, byDateViewName));
-        view.updateIndex();  // TODO: fix me .. this is just a temporary workaround
-        return view;
-    }
 
     /**
      * Handle click on item in list
@@ -241,10 +292,8 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
     }
 
     private void refreshListViewAdapter() throws CBLiteException {
-        CBLView cblView = getCblView();
-        List<CBLQueryRow> rows = cblView.queryWithOptions(new CBLQueryOptions());
         itemListViewAdapter.clear();
-        itemListViewAdapter.addAll(rows);
+        fillList();
     }
 
     /**
