@@ -21,17 +21,16 @@ import android.widget.Toast;
 
 import com.couchbase.cblite.CBLDatabase;
 import com.couchbase.cblite.CBLDocument;
+import com.couchbase.cblite.CBLLiveQuery;
+import com.couchbase.cblite.CBLLiveQueryChangedFunction;
 import com.couchbase.cblite.CBLManager;
 import com.couchbase.cblite.CBLMapEmitFunction;
 import com.couchbase.cblite.CBLMapFunction;
 import com.couchbase.cblite.CBLQuery;
-import com.couchbase.cblite.CBLQueryCompleteFunction;
 import com.couchbase.cblite.CBLQueryEnumerator;
-import com.couchbase.cblite.CBLQueryOptions;
 import com.couchbase.cblite.CBLQueryRow;
 import com.couchbase.cblite.CBLView;
 import com.couchbase.cblite.CBLiteException;
-import com.couchbase.cblite.router.CBLURLStreamHandlerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +40,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.UUID;
 
 public class MainActivity extends Activity implements OnItemClickListener, OnItemLongClickListener, OnKeyListener {
@@ -49,7 +49,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
 
     //constants
     public static final String DATABASE_NAME = "grocery-sync";
-    public static final String dDocName = "grocery-local";
+    public static final String designDocName = "grocery-local";
     public static final String byDateViewName = "byDate";
     public static final String DATABASE_URL = "http://sync.couchbasecloud.com";  // 10.0.2.2 == Android Simulator equivalent of 127.0.0.1
 
@@ -64,13 +64,10 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
     //couch internals
     protected static CBLManager manager;
     private CBLDatabase db;
-
-    //static inializer to ensure that touchdb:// URLs are handled properly
-    {
-        CBLURLStreamHandlerFactory.registerSelfIgnoreError();
-    }
+    private CBLLiveQuery liveQuery;
 
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -91,7 +88,6 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         } catch (CBLiteException e) {
             Toast.makeText(getApplicationContext(), "Error Initializing CBLIte, see logs for details", Toast.LENGTH_LONG).show();
             Log.e(TAG, "Error initializing CBLite", e);
-            e.printStackTrace();
         }
 
     }
@@ -107,69 +103,75 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         super.onDestroy();
     }
 
-    protected void startCBLite() throws CBLiteException {
+    private void startCBLite() throws CBLiteException {
+
         manager = new CBLManager(getApplicationContext(), "grocery-sync");
 
         //install a view definition needed by the application
         db = manager.getDatabase(DATABASE_NAME);
-        CBLView view = db.getView(String.format("%s/%s", dDocName, byDateViewName));
-        view.setMap(new CBLMapFunction() {
+        CBLView viewItemsByDate = db.getView(String.format("%s/%s", designDocName, byDateViewName));
+        viewItemsByDate.setMap(new CBLMapFunction() {
             @Override
             public void map(Map<String, Object> document, CBLMapEmitFunction emitter) {
                 Object createdAt = document.get("created_at");
-                if(createdAt != null) {
-                    emitter.emit(createdAt.toString(), document);
+                if (createdAt != null) {
+                    emitter.emit(createdAt.toString(), null);
                 }
             }
         }, "1.0");
 
-        fillList(view);
+        startLiveQuery(viewItemsByDate);
 
     }
 
-    private void fillList() throws CBLiteException {
-        CBLView view = db.getView(String.format("%s/%s", dDocName, byDateViewName));
-        fillList(view);
-    }
-
-    private void fillList(CBLView view) throws CBLiteException {
+    private void startLiveQuery(CBLView view) throws CBLiteException {
 
         final ProgressDialog progressDialog = showLoadingSpinner();
 
-        CBLQuery query = view.createQuery();
-        query.runAsync(new CBLQueryCompleteFunction() {
-            @Override
-            public void onQueryChanged(CBLQueryEnumerator queryEnumerator) {
+        if (liveQuery == null) {
 
-                final List<CBLQueryRow> rows = getRowsFromQueryEnumerator(queryEnumerator);
+            CBLQuery query = view.createQuery();
+            CBLLiveQuery liveQuery = query.toLiveQuery();
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+            liveQuery.addChangeListener(new CBLLiveQueryChangedFunction() {
 
-                        itemListViewAdapter = new GrocerySyncListAdapter(
-                                getApplicationContext(),
-                                R.layout.grocery_list_item,
-                                R.id.label,
-                                rows
-                        );
-                        itemListView.setAdapter(itemListViewAdapter);
-                        itemListView.setOnItemClickListener(MainActivity.this);
-                        itemListView.setOnItemLongClickListener(MainActivity.this);
+                @Override
+                public void onLiveQueryChanged(CBLQueryEnumerator queryEnumerator) {
 
-                        progressDialog.dismiss();
+                    final List<CBLQueryRow> rows = getRowsFromQueryEnumerator(queryEnumerator);
 
-                    }
-                });
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
 
-            }
+                            itemListViewAdapter = new GrocerySyncListAdapter(
+                                    getApplicationContext(),
+                                    R.layout.grocery_list_item,
+                                    R.id.label,
+                                    rows
+                            );
+                            itemListView.setAdapter(itemListViewAdapter);
+                            itemListView.setOnItemClickListener(MainActivity.this);
+                            itemListView.setOnItemLongClickListener(MainActivity.this);
 
-            @Override
-            public void onFailureQueryChanged(CBLiteException exception) {
-                Toast.makeText(getApplicationContext(), "An internal error occurred running query, see logs for details", Toast.LENGTH_LONG).show();
-                Log.e(TAG, "Error running query", exception);
-            }
-        });
+                            progressDialog.dismiss();
+
+                        }
+                    });
+
+                }
+
+                @Override
+                public void onFailureLiveQueryChanged(CBLiteException exception) {
+                    Toast.makeText(getApplicationContext(), "An internal error occurred running query, see logs for details", Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "Error running query", exception);
+                }
+            });
+
+            liveQuery.start();
+
+        }
+
 
     }
 
@@ -202,10 +204,15 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
             if(!inputText.equals("")) {
                 try {
 
-                    createGroceryItem(inputText);
-                    refreshListViewAdapter();
-
-                    Toast.makeText(getApplicationContext(), "Created new grocery item!", Toast.LENGTH_LONG).show();
+                    if (inputText.contains(":")) {
+                        int numCreated = createMultipleGrocerySyncItems(inputText);
+                        String msg = String.format("Created %d new grocery items!", numCreated);
+                        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        createGroceryItem(inputText);
+                        Toast.makeText(getApplicationContext(), "Created new grocery item!", Toast.LENGTH_LONG).show();
+                    }
 
                 } catch (CBLiteException e) {
                     Toast.makeText(getApplicationContext(), "Error creating document, see logs for details", Toast.LENGTH_LONG).show();
@@ -259,7 +266,6 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
                     public void onClick(DialogInterface dialog, int id) {
                         try {
                             clickedDocument.delete();
-                            refreshListViewAdapter();
                         } catch (CBLiteException e) {
                             Toast.makeText(getApplicationContext(), "Error deleting document, see logs for details", Toast.LENGTH_LONG).show();
                             Log.e(TAG, "Error deleting document", e);
@@ -278,10 +284,6 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         return true;
     }
 
-    private void refreshListViewAdapter() throws CBLiteException {
-        itemListViewAdapter.clear();
-        fillList();
-    }
 
     /**
      * Removes the Dialog that displays the splash screen
@@ -321,9 +323,9 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         return false;
     }
 
-    public CBLDocument createGroceryItem(String text) throws CBLiteException {
+    private CBLDocument createGroceryItem(String text) throws CBLiteException {
 
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
         UUID uuid = UUID.randomUUID();
         Calendar calendar = GregorianCalendar.getInstance();
@@ -342,6 +344,18 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         document.putProperties(properties);
 
         return document;
+    }
+
+    private int createMultipleGrocerySyncItems(String text) throws CBLiteException {
+        StringTokenizer st = new StringTokenizer(text, ":");
+        String itemText = st.nextToken();
+        String numItemsString = st.nextToken();
+        int numItems = Integer.parseInt(numItemsString);
+        for (int i = 0; i < numItems; i++) {
+            String curItemText = String.format("%s-%d", itemText, i);
+            createGroceryItem(curItemText);
+        }
+        return numItems;
     }
 
 
