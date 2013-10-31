@@ -108,9 +108,9 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         super.onDestroy();
     }
 
-    private void startCBLite() throws CBLiteException {
+    protected void startCBLite() throws CBLiteException {
 
-        manager = new CBLManager(getApplicationContext(), "grocery-sync");
+        manager = new CBLManager(getApplicationContext().getFilesDir());
 
         //install a view definition needed by the application
         database = manager.getDatabase(DATABASE_NAME);
