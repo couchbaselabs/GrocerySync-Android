@@ -44,10 +44,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
-public class MainActivity extends Activity implements OnItemClickListener, OnItemLongClickListener, OnKeyListener {
+public class MainActivity extends Activity implements Observer,
+        OnItemClickListener, OnItemLongClickListener, OnKeyListener {
 
     public static String TAG = "GrocerySync";
 
@@ -125,8 +128,6 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         startLiveQuery(viewItemsByDate);
 
         startSync();
-
-
 
     }
 
@@ -384,5 +385,20 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         return numItems;
     }
 
+    @Override
+    public void update(Observable observable, Object o) {
+        Log.d(TAG, "ReplicationObserver.update called.  observable: " + observable);
+        CBLReplicator replicator = (CBLReplicator) observable;
+        if (!replicator.isRunning()) {
+            String msg = String.format("Replicator %s not running", replicator);
+            Log.d(TAG, msg);
+        }
+        else {
+            int processed = replicator.getChangesProcessed();
+            int total = replicator.getChangesTotal();
+            String msg = String.format("Replicator processed %d / %d", processed, total);
+            Log.d(TAG, msg);
+        }
+    }
 
 }
