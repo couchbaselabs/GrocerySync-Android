@@ -327,7 +327,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
     /**
      * Shows the splash screen over the full Activity
      */
-    protected void showSplashScreen() {
+    private void showSplashScreen() {
         splashDialog = new SplashScreenDialog(this);
         splashDialog.show();
     }
