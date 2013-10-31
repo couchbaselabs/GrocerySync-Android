@@ -33,17 +33,16 @@ public class GrocerySyncListAdapter extends ArrayAdapter<CBLQueryRow> {
 
 	@Override
 	public View getView(int position, View itemView, ViewGroup parent) {
-        View v = itemView;
-        if (v == null) {
+        if (itemView == null) {
             LayoutInflater vi = (LayoutInflater)parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.grocery_list_item, null);
+            itemView = vi.inflate(R.layout.grocery_list_item, null);
             ViewHolder vh = new ViewHolder();
-            vh.label = (TextView) v.findViewById(R.id.label);
-            vh.icon = (ImageView) v.findViewById(R.id.icon);
-            v.setTag(vh);
+            vh.label = (TextView) itemView.findViewById(R.id.label);
+            vh.icon = (ImageView) itemView.findViewById(R.id.icon);
+            itemView.setTag(vh);
         }
 
-        TextView label = ((ViewHolder)v.getTag()).label;
+        TextView label = ((ViewHolder)itemView.getTag()).label;
         CBLQueryRow row = list.get(position);
         CBLDocument document = row.getDocument();
         boolean checked = false;
@@ -54,7 +53,7 @@ public class GrocerySyncListAdapter extends ArrayAdapter<CBLQueryRow> {
             label.setText("Error");
             Log.e(MainActivity.TAG, "Error Displaying document", e);
         }
-        ImageView icon = ((ViewHolder)v.getTag()).icon;
+        ImageView icon = ((ViewHolder)itemView.getTag()).icon;
         if(checked) {
             icon.setImageResource(R.drawable.list_area___checkbox___checked);
         }
@@ -62,6 +61,6 @@ public class GrocerySyncListAdapter extends ArrayAdapter<CBLQueryRow> {
             icon.setImageResource(R.drawable.list_area___checkbox___unchecked);
         }
 
-        return v;
+        return itemView;
 	}
 }

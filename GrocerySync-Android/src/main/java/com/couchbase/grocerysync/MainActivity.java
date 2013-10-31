@@ -160,8 +160,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
 
         if (liveQuery == null) {
 
-            CBLQuery query = view.createQuery();
-            liveQuery = query.toLiveQuery();
+            liveQuery = view.createQuery().toLiveQuery();
 
             liveQuery.addChangeListener(new CBLLiveQueryChangedFunction() {
 
@@ -259,9 +258,9 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
     /**
      * Handle click on item in list
      */
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-        CBLQueryRow row = (CBLQueryRow) parent.getItemAtPosition(position);
+        CBLQueryRow row = (CBLQueryRow) adapterView.getItemAtPosition(position);
         CBLDocument document = row.getDocument();
         Map<String, Object> curProperties = document.getProperties();
         Map<String, Object> newProperties = new HashMap<String, Object>();
@@ -283,9 +282,9 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
     /**
      * Handle long-click on item in list
      */
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-        CBLQueryRow row = (CBLQueryRow) parent.getItemAtPosition(position);
+        CBLQueryRow row = (CBLQueryRow) adapterView.getItemAtPosition(position);
         final CBLDocument clickedDocument = row.getDocument();
         String itemText = (String) clickedDocument.getCurrentRevision().getProperty("text");
 
@@ -367,7 +366,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         CBLDocument document = database.createDocument();
 
         Map<String, Object> properties = new HashMap<String, Object>();
-        properties.put("_id", id);  // TODO: we don't need this, remove it
+        properties.put("_id", id);
         properties.put("text", text);
         properties.put("check", Boolean.FALSE);
         properties.put("created_at", currentTimeString);
