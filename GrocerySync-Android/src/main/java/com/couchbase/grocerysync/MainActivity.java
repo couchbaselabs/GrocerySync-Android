@@ -99,12 +99,9 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
 
 
     protected void onDestroy() {
-        Log.v(TAG, "onDestroy");
-
         if(manager != null) {
             manager.close();
         }
-
         super.onDestroy();
     }
 
@@ -245,7 +242,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
 
                 } catch (CBLiteException e) {
                     Toast.makeText(getApplicationContext(), "Error creating document, see logs for details", Toast.LENGTH_LONG).show();
-                    Log.e(TAG, "Error creating document", e);
+                    Log.e(TAG, "Error creating document.", e);
                 }
             }
             addItemEditText.setText("");
