@@ -31,7 +31,11 @@ import com.couchbase.cblite.CBLQueryEnumerator;
 import com.couchbase.cblite.CBLQueryRow;
 import com.couchbase.cblite.CBLView;
 import com.couchbase.cblite.CBLiteException;
+import com.couchbase.cblite.replicator.CBLPuller;
+import com.couchbase.cblite.replicator.CBLReplicator;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,7 +55,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
     public static final String DATABASE_NAME = "grocery-sync";
     public static final String designDocName = "grocery-local";
     public static final String byDateViewName = "byDate";
-    public static final String DATABASE_URL = "http://sync.couchbasecloud.com";  // 10.0.2.2 == Android Simulator equivalent of 127.0.0.1
+    public static final String SYNC_URL = "http://10.0.2.2:4984/grocery-sync";  // 10.0.2.2 == Android Simulator equivalent of 127.0.0.1
 
     //splash screen
     protected SplashScreenDialog splashDialog;
@@ -63,8 +67,9 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
 
     //couch internals
     protected static CBLManager manager;
-    private CBLDatabase db;
+    private CBLDatabase database;
     private CBLLiveQuery liveQuery;
+
 
     public void onCreate(Bundle savedInstanceState) {
 
@@ -108,8 +113,8 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         manager = new CBLManager(getApplicationContext(), "grocery-sync");
 
         //install a view definition needed by the application
-        db = manager.getDatabase(DATABASE_NAME);
-        CBLView viewItemsByDate = db.getView(String.format("%s/%s", designDocName, byDateViewName));
+        database = manager.getDatabase(DATABASE_NAME);
+        CBLView viewItemsByDate = database.getView(String.format("%s/%s", designDocName, byDateViewName));
         viewItemsByDate.setMap(new CBLMapFunction() {
             @Override
             public void map(Map<String, Object> document, CBLMapEmitFunction emitter) {
@@ -122,6 +127,31 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
 
         startLiveQuery(viewItemsByDate);
 
+        startSync();
+
+
+
+    }
+
+    private void startSync() {
+
+        URL syncUrl;
+        try {
+            syncUrl = new URL(SYNC_URL);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+
+        CBLReplicator pullReplication = database.getPullReplication(syncUrl);
+        pullReplication.setContinuous(true);
+
+        CBLReplicator pushReplication = database.getPushReplication(syncUrl);
+        pushReplication.setContinuous(true);
+
+        pullReplication.start();
+        pushReplication.start();
+
+
     }
 
     private void startLiveQuery(CBLView view) throws CBLiteException {
@@ -131,7 +161,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
         if (liveQuery == null) {
 
             CBLQuery query = view.createQuery();
-            CBLLiveQuery liveQuery = query.toLiveQuery();
+            liveQuery = query.toLiveQuery();
 
             liveQuery.addChangeListener(new CBLLiveQueryChangedFunction() {
 
@@ -334,7 +364,7 @@ public class MainActivity extends Activity implements OnItemClickListener, OnIte
 
         String id = currentTime + "-" + uuid.toString();
 
-        CBLDocument document = db.createDocument();
+        CBLDocument document = database.createDocument();
 
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put("_id", id);  // TODO: we don't need this, remove it
