@@ -38,6 +38,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: 'td_collator_so.jar')  // hack to add .so objects (bit.ly/17pUlJ1)
 
     compile project(':CBLite')
+    compile project(':CBLiteConsole')
+
 
 }
 

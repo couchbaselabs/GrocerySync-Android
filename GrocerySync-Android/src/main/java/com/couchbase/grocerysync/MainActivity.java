@@ -31,6 +31,7 @@ import com.couchbase.cblite.CBLQueryEnumerator;
 import com.couchbase.cblite.CBLQueryRow;
 import com.couchbase.cblite.CBLView;
 import com.couchbase.cblite.CBLiteException;
+import com.couchbase.cblite.cbliteconsole.CBLiteConsoleActivity;
 import com.couchbase.cblite.replicator.CBLPuller;
 import com.couchbase.cblite.replicator.CBLReplicator;
 
@@ -231,10 +232,17 @@ public class MainActivity extends Activity implements Observer,
             if(!inputText.equals("")) {
                 try {
 
-                    if (inputText.contains(":")) {
+                    if (inputText.contains(":")) {  // hack to create multiple items
                         int numCreated = createMultipleGrocerySyncItems(inputText);
                         String msg = String.format("Created %d new grocery items!", numCreated);
                         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                    }
+                    else if (inputText.equals("console")) {
+                        Intent intent = new Intent(MainActivity.this, CBLiteConsoleActivity.class);
+                        Bundle b = new Bundle();
+                        b.putString(CBLiteConsoleActivity.INTENT_PARAMETER_DATABASE_NAME, DATABASE_NAME);
+                        intent.putExtras(b);
+                        startActivity(intent);
                     }
                     else {
                         createGroceryItem(inputText);
