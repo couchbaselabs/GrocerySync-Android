@@ -34,6 +34,7 @@ import com.couchbase.cblite.CBLiteException;
 import com.couchbase.cblite.cbliteconsole.CBLiteConsoleActivity;
 import com.couchbase.cblite.replicator.CBLPuller;
 import com.couchbase.cblite.replicator.CBLReplicator;
+import com.couchbase.cblite.support.CBLApplication;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -59,7 +60,7 @@ public class MainActivity extends Activity implements Observer,
     public static final String DATABASE_NAME = "grocery-sync";
     public static final String designDocName = "grocery-local";
     public static final String byDateViewName = "byDate";
-    public static final String SYNC_URL = "http://10.0.2.2:4984/grocery-sync";  // 10.0.2.2 == Android Simulator equivalent of 127.0.0.1
+    public static final String SYNC_URL = "http://127.0.0.1:4984/grocery-sync";  // 10.0.2.2 == Android Simulator equivalent of 127.0.0.1
 
     //splash screen
     protected SplashScreenDialog splashDialog;
@@ -125,6 +126,9 @@ public class MainActivity extends Activity implements Observer,
                 }
             }
         }, "1.0");
+
+        CBLApplication application = (CBLApplication) getApplication();
+        application.setManager(manager);
 
         startLiveQuery(viewItemsByDate);
 
