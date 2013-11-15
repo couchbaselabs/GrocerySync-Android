@@ -27,12 +27,12 @@ import com.couchbase.cblite.CBLManager;
 import com.couchbase.cblite.CBLMapEmitFunction;
 import com.couchbase.cblite.CBLMapFunction;
 import com.couchbase.cblite.CBLQuery;
+import com.couchbase.cblite.CBLQueryCompleteFunction;
 import com.couchbase.cblite.CBLQueryEnumerator;
 import com.couchbase.cblite.CBLQueryRow;
 import com.couchbase.cblite.CBLView;
 import com.couchbase.cblite.CBLiteException;
 import com.couchbase.cblite.cbliteconsole.CBLiteConsoleActivity;
-import com.couchbase.cblite.replicator.CBLPuller;
 import com.couchbase.cblite.replicator.CBLReplicator;
 import com.couchbase.cblite.support.CBLApplication;
 
@@ -131,6 +131,7 @@ public class MainActivity extends Activity implements Observer,
         application.setManager(manager);
 
         startLiveQuery(viewItemsByDate);
+        // startQuery(viewItemsByDate);
 
         startSync();
 
@@ -157,6 +158,32 @@ public class MainActivity extends Activity implements Observer,
 
     }
 
+
+    private void startQuery(CBLView view) throws CBLiteException {
+        final ProgressDialog progressDialog = showLoadingSpinner();
+        CBLQuery query = view.createQuery();
+        query.runAsync(new CBLQueryCompleteFunction() {
+            @Override
+            public void onQueryChanged(CBLQueryEnumerator queryEnumerator) {
+                displayRows(queryEnumerator);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailureQueryChanged(Throwable exception) {
+                Toast.makeText(getApplicationContext(), "An internal error occurred running query, see logs for details", Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Error running query", exception);
+            }
+        });
+    }
+
+
     private void startLiveQuery(CBLView view) throws CBLiteException {
 
         final ProgressDialog progressDialog = showLoadingSpinner();
@@ -170,31 +197,19 @@ public class MainActivity extends Activity implements Observer,
                 @Override
                 public void onLiveQueryChanged(CBLQueryEnumerator queryEnumerator) {
 
-                    final List<CBLQueryRow> rows = getRowsFromQueryEnumerator(queryEnumerator);
+                    displayRows(queryEnumerator);
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
-                            itemListViewAdapter = new GrocerySyncListAdapter(
-                                    getApplicationContext(),
-                                    R.layout.grocery_list_item,
-                                    R.id.label,
-                                    rows
-                            );
-                            itemListView.setAdapter(itemListViewAdapter);
-                            itemListView.setOnItemClickListener(MainActivity.this);
-                            itemListView.setOnItemLongClickListener(MainActivity.this);
-
                             progressDialog.dismiss();
-
                         }
                     });
 
                 }
 
                 @Override
-                public void onFailureLiveQueryChanged(CBLiteException exception) {
+                public void onFailureLiveQueryChanged(Throwable exception) {
                     Toast.makeText(getApplicationContext(), "An internal error occurred running query, see logs for details", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "Error running query", exception);
                 }
@@ -206,6 +221,29 @@ public class MainActivity extends Activity implements Observer,
 
 
     }
+
+    private void displayRows(CBLQueryEnumerator queryEnumerator) {
+
+        final List<CBLQueryRow> rows = getRowsFromQueryEnumerator(queryEnumerator);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                itemListViewAdapter = new GrocerySyncListAdapter(
+                        getApplicationContext(),
+                        R.layout.grocery_list_item,
+                        R.id.label,
+                        rows
+                );
+                itemListView.setAdapter(itemListViewAdapter);
+                itemListView.setOnItemClickListener(MainActivity.this);
+                itemListView.setOnItemLongClickListener(MainActivity.this);
+
+            }
+        });
+    }
+
 
     private List<CBLQueryRow> getRowsFromQueryEnumerator(CBLQueryEnumerator queryEnumerator) {
         List<CBLQueryRow> rows = new ArrayList<CBLQueryRow>();
