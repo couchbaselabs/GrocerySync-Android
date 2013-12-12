@@ -9,18 +9,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.couchbase.cblite.CBLDocument;
-import com.couchbase.cblite.CBLQueryRow;
+import com.couchbase.lite.Document;
+import com.couchbase.lite.QueryRow;
 
 import java.util.List;
 
 
-public class GrocerySyncListAdapter extends ArrayAdapter<CBLQueryRow> {
+public class GrocerySyncListAdapter extends ArrayAdapter<QueryRow> {
 
-    private List<CBLQueryRow> list;
+    private List<QueryRow> list;
     private final Context context;
 
-    public GrocerySyncListAdapter(Context context, int resource, int textViewResourceId, List<CBLQueryRow> objects) {
+    public GrocerySyncListAdapter(Context context, int resource, int textViewResourceId, List<QueryRow> objects) {
         super(context, resource, textViewResourceId, objects);
         this.context = context;
         this.list = objects;
@@ -43,8 +43,8 @@ public class GrocerySyncListAdapter extends ArrayAdapter<CBLQueryRow> {
         }
 
         TextView label = ((ViewHolder)itemView.getTag()).label;
-        CBLQueryRow row = list.get(position);
-        CBLDocument document = row.getDocument();
+        QueryRow row = list.get(position);
+        Document document = row.getDocument();
         boolean checked = false;
         try {
             label.setText((String)document.getCurrentRevision().getProperty("text"));

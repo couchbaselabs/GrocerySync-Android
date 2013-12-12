@@ -19,22 +19,17 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.couchbase.cblite.CBLDatabase;
-import com.couchbase.cblite.CBLDocument;
-import com.couchbase.cblite.CBLLiveQuery;
-import com.couchbase.cblite.CBLLiveQueryChangedFunction;
-import com.couchbase.cblite.CBLManager;
-import com.couchbase.cblite.CBLMapEmitFunction;
-import com.couchbase.cblite.CBLMapFunction;
-import com.couchbase.cblite.CBLQuery;
-import com.couchbase.cblite.CBLQueryCompleteFunction;
-import com.couchbase.cblite.CBLQueryEnumerator;
-import com.couchbase.cblite.CBLQueryRow;
-import com.couchbase.cblite.CBLView;
-import com.couchbase.cblite.CBLiteException;
 import com.couchbase.cblite.cbliteconsole.CBLiteConsoleActivity;
-import com.couchbase.cblite.replicator.CBLReplicator;
-import com.couchbase.cblite.support.CBLApplication;
+import com.couchbase.lite.Database;
+import com.couchbase.lite.Document;
+import com.couchbase.lite.Emitter;
+import com.couchbase.lite.LiveQuery;
+import com.couchbase.lite.Manager;
+import com.couchbase.lite.Mapper;
+import com.couchbase.lite.QueryEnumerator;
+import com.couchbase.lite.QueryRow;
+import com.couchbase.lite.replicator.Replication;
+import com.couchbase.lite.support.CouchbaseLiteApplication;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -46,12 +41,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
-public class MainActivity extends Activity implements Observer,
+public class MainActivity extends Activity implements Replication.ChangeListener,
         OnItemClickListener, OnItemLongClickListener, OnKeyListener {
 
     public static String TAG = "GrocerySync";
@@ -60,7 +53,7 @@ public class MainActivity extends Activity implements Observer,
     public static final String DATABASE_NAME = "grocery-sync";
     public static final String designDocName = "grocery-local";
     public static final String byDateViewName = "byDate";
-    public static final String SYNC_URL = "http://127.0.0.1:4984/grocery-sync";  // 10.0.2.2 == Android Simulator equivalent of 127.0.0.1
+    public static final String SYNC_URL = "http://10.0.2.2:4984/grocery-sync";  // 10.0.2.2 == Android Simulator equivalent of 127.0.0.1
 
     //splash screen
     protected SplashScreenDialog splashDialog;
@@ -71,9 +64,9 @@ public class MainActivity extends Activity implements Observer,
     protected GrocerySyncListAdapter itemListViewAdapter;
 
     //couch internals
-    protected static CBLManager manager;
-    private CBLDatabase database;
-    private CBLLiveQuery liveQuery;
+    protected static Manager manager;
+    private Database database;
+    private LiveQuery liveQuery;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -95,7 +88,7 @@ public class MainActivity extends Activity implements Observer,
 
         try {
             startCBLite();
-        } catch (CBLiteException e) {
+        } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Error Initializing CBLIte, see logs for details", Toast.LENGTH_LONG).show();
             Log.e(TAG, "Error initializing CBLite", e);
         }
@@ -110,16 +103,16 @@ public class MainActivity extends Activity implements Observer,
         super.onDestroy();
     }
 
-    protected void startCBLite() throws CBLiteException {
+    protected void startCBLite() throws Exception {
 
-        manager = new CBLManager(getApplicationContext().getFilesDir());
+        manager = new Manager(getApplicationContext().getFilesDir(), Manager.DEFAULT_OPTIONS);
 
         //install a view definition needed by the application
         database = manager.getDatabase(DATABASE_NAME);
-        CBLView viewItemsByDate = database.getView(String.format("%s/%s", designDocName, byDateViewName));
-        viewItemsByDate.setMap(new CBLMapFunction() {
+        com.couchbase.lite.View viewItemsByDate = database.getView(String.format("%s/%s", designDocName, byDateViewName));
+        viewItemsByDate.setMap(new Mapper() {
             @Override
-            public void map(Map<String, Object> document, CBLMapEmitFunction emitter) {
+            public void map(Map<String, Object> document, Emitter emitter) {
                 Object createdAt = document.get("created_at");
                 if (createdAt != null) {
                     emitter.emit(createdAt.toString(), null);
@@ -127,11 +120,10 @@ public class MainActivity extends Activity implements Observer,
             }
         }, "1.0");
 
-        CBLApplication application = (CBLApplication) getApplication();
+        CouchbaseLiteApplication application = (CouchbaseLiteApplication) getApplication();
         application.setManager(manager);
 
         startLiveQuery(viewItemsByDate);
-        // startQuery(viewItemsByDate);
 
         startSync();
 
@@ -146,45 +138,21 @@ public class MainActivity extends Activity implements Observer,
             throw new RuntimeException(e);
         }
 
-        CBLReplicator pullReplication = database.getPullReplication(syncUrl);
+        Replication pullReplication = database.getPullReplication(syncUrl);
         pullReplication.setContinuous(true);
 
-        CBLReplicator pushReplication = database.getPushReplication(syncUrl);
+        Replication pushReplication = database.getPushReplication(syncUrl);
         pushReplication.setContinuous(true);
 
         pullReplication.start();
         pushReplication.start();
 
+        pullReplication.addChangeListener(this);
+        pushReplication.addChangeListener(this);
 
     }
 
-
-    private void startQuery(CBLView view) throws CBLiteException {
-        final ProgressDialog progressDialog = showLoadingSpinner();
-        CBLQuery query = view.createQuery();
-        query.runAsync(new CBLQueryCompleteFunction() {
-            @Override
-            public void onQueryChanged(CBLQueryEnumerator queryEnumerator) {
-                displayRows(queryEnumerator);
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressDialog.dismiss();
-                    }
-                });
-            }
-
-            @Override
-            public void onFailureQueryChanged(Throwable exception) {
-                Toast.makeText(getApplicationContext(), "An internal error occurred running query, see logs for details", Toast.LENGTH_LONG).show();
-                Log.e(TAG, "Error running query", exception);
-            }
-        });
-    }
-
-
-    private void startLiveQuery(CBLView view) throws CBLiteException {
+    private void startLiveQuery(com.couchbase.lite.View view) throws Exception {
 
         final ProgressDialog progressDialog = showLoadingSpinner();
 
@@ -192,26 +160,16 @@ public class MainActivity extends Activity implements Observer,
 
             liveQuery = view.createQuery().toLiveQuery();
 
-            liveQuery.addChangeListener(new CBLLiveQueryChangedFunction() {
-
+            liveQuery.addChangeListener(new LiveQuery.ChangeListener() {
                 @Override
-                public void onLiveQueryChanged(CBLQueryEnumerator queryEnumerator) {
-
-                    displayRows(queryEnumerator);
-
+                public void changed(LiveQuery.ChangeEvent event) {
+                    displayRows(event.getRows());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             progressDialog.dismiss();
                         }
                     });
-
-                }
-
-                @Override
-                public void onFailureLiveQueryChanged(Throwable exception) {
-                    Toast.makeText(getApplicationContext(), "An internal error occurred running query, see logs for details", Toast.LENGTH_LONG).show();
-                    Log.e(TAG, "Error running query", exception);
                 }
             });
 
@@ -219,12 +177,11 @@ public class MainActivity extends Activity implements Observer,
 
         }
 
-
     }
 
-    private void displayRows(CBLQueryEnumerator queryEnumerator) {
+    private void displayRows(QueryEnumerator queryEnumerator) {
 
-        final List<CBLQueryRow> rows = getRowsFromQueryEnumerator(queryEnumerator);
+        final List<QueryRow> rows = getRowsFromQueryEnumerator(queryEnumerator);
 
         runOnUiThread(new Runnable() {
             @Override
@@ -245,10 +202,10 @@ public class MainActivity extends Activity implements Observer,
     }
 
 
-    private List<CBLQueryRow> getRowsFromQueryEnumerator(CBLQueryEnumerator queryEnumerator) {
-        List<CBLQueryRow> rows = new ArrayList<CBLQueryRow>();
-        for (Iterator<CBLQueryRow> it = queryEnumerator; it.hasNext();) {
-            CBLQueryRow row = it.next();
+    private List<QueryRow> getRowsFromQueryEnumerator(QueryEnumerator queryEnumerator) {
+        List<QueryRow> rows = new ArrayList<QueryRow>();
+        for (Iterator<QueryRow> it = queryEnumerator; it.hasNext();) {
+            QueryRow row = it.next();
             rows.add(row);
         }
         return rows;
@@ -291,7 +248,7 @@ public class MainActivity extends Activity implements Observer,
                         Toast.makeText(getApplicationContext(), "Created new grocery item!", Toast.LENGTH_LONG).show();
                     }
 
-                } catch (CBLiteException e) {
+                } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "Error creating document, see logs for details", Toast.LENGTH_LONG).show();
                     Log.e(TAG, "Error creating document.", e);
                 }
@@ -308,8 +265,8 @@ public class MainActivity extends Activity implements Observer,
      */
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-        CBLQueryRow row = (CBLQueryRow) adapterView.getItemAtPosition(position);
-        CBLDocument document = row.getDocument();
+        QueryRow row = (QueryRow) adapterView.getItemAtPosition(position);
+        Document document = row.getDocument();
         Map<String, Object> curProperties = document.getProperties();
         Map<String, Object> newProperties = new HashMap<String, Object>();
         newProperties.putAll(curProperties);
@@ -320,7 +277,7 @@ public class MainActivity extends Activity implements Observer,
         try {
             document.putProperties(newProperties);
             itemListViewAdapter.notifyDataSetChanged();
-        } catch (CBLiteException e) {
+        } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Error updating database, see logs for details", Toast.LENGTH_LONG).show();
             Log.e(TAG, "Error updating database", e);
         }
@@ -332,8 +289,8 @@ public class MainActivity extends Activity implements Observer,
      */
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-        CBLQueryRow row = (CBLQueryRow) adapterView.getItemAtPosition(position);
-        final CBLDocument clickedDocument = row.getDocument();
+        QueryRow row = (QueryRow) adapterView.getItemAtPosition(position);
+        final Document clickedDocument = row.getDocument();
         String itemText = (String) clickedDocument.getCurrentRevision().getProperty("text");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -343,7 +300,7 @@ public class MainActivity extends Activity implements Observer,
                     public void onClick(DialogInterface dialog, int id) {
                         try {
                             clickedDocument.delete();
-                        } catch (CBLiteException e) {
+                        } catch (Exception e) {
                             Toast.makeText(getApplicationContext(), "Error deleting document, see logs for details", Toast.LENGTH_LONG).show();
                             Log.e(TAG, "Error deleting document", e);
                         }
@@ -400,7 +357,7 @@ public class MainActivity extends Activity implements Observer,
         return false;
     }
 
-    private CBLDocument createGroceryItem(String text) throws CBLiteException {
+    private Document createGroceryItem(String text) throws Exception {
 
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
@@ -411,7 +368,7 @@ public class MainActivity extends Activity implements Observer,
 
         String id = currentTime + "-" + uuid.toString();
 
-        CBLDocument document = database.createDocument();
+        Document document = database.createDocument();
 
         Map<String, Object> properties = new HashMap<String, Object>();
         properties.put("_id", id);
@@ -423,7 +380,7 @@ public class MainActivity extends Activity implements Observer,
         return document;
     }
 
-    private int createMultipleGrocerySyncItems(String text) throws CBLiteException {
+    private int createMultipleGrocerySyncItems(String text) throws Exception {
         StringTokenizer st = new StringTokenizer(text, ":");
         String itemText = st.nextToken();
         String numItemsString = st.nextToken();
@@ -436,19 +393,20 @@ public class MainActivity extends Activity implements Observer,
     }
 
     @Override
-    public void update(Observable observable, Object o) {
-        Log.d(TAG, "ReplicationObserver.update called.  observable: " + observable);
-        CBLReplicator replicator = (CBLReplicator) observable;
-        if (!replicator.isRunning()) {
-            String msg = String.format("Replicator %s not running", replicator);
+    public void changed(Replication.ChangeEvent event) {
+
+        Replication replication = event.getSource();
+        Log.d(TAG, "Replication : " + replication + " changed.");
+        if (!replication.isRunning()) {
+            String msg = String.format("Replicator %s not running", replication);
             Log.d(TAG, msg);
         }
         else {
-            int processed = replicator.getChangesProcessed();
-            int total = replicator.getChangesTotal();
+            int processed = replication.getCompletedChangesCount();
+            int total = replication.getChangesCount();
             String msg = String.format("Replicator processed %d / %d", processed, total);
             Log.d(TAG, msg);
         }
-    }
 
+    }
 }
