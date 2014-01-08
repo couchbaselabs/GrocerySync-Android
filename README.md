@@ -40,16 +40,9 @@ Gradle (the build system used by Studio) needs to know where your Android SDK is
 
 ## Enable Android Support Repository and Google Repository
 
-Open the Android SDK from Android Studio (Tools->Android->SDK Manager) and make sure that the Android Support Repository and Google Repository items are installed.
+Open the Android SDK from Android Studio (Tools->Android->SDK Manager) and make sure that the Android Support Repository and Google Repository items are installed.  
 
-This is needed in order to resolve this dependency on the android support library:
-
-```
-dependencies {
-    compile 'com.android.support:support-v4:13.0.0'
-    ...
-}
-```
+(This may be enabled by default, but it's good to double check since it's a required dependency in order to get the android support library: 'com.android.support:support-v4:13.0.0' )
 
 
 ## Configuring a database
