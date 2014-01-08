@@ -13,7 +13,11 @@ The "use case" is a shared grocery list where all devices using the application 
 
 ## Getting the code
 
-* `git clone git@github.com:couchbaselabs/GrocerySync-Android.git`
+
+```
+$ git clone git@github.com:couchbaselabs/GrocerySync-Android.git
+$ git submodule init && git submodule update
+```
 
 _Note_: it is important to leave the directory name as the default, otherwise it could confuse the Android Studio IDE
 
