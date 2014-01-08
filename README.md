@@ -31,10 +31,11 @@ Gradle (the build system used by Studio) needs to know where your Android SDK is
 
 
 
-## Opening the project in Android Studio
+## Import the project in Android Studio
 
-* Open the project in Android Studio from the Welcome Screen or by going to File / Open Project and choosing the top-level project directory (eg, the directory that contains local.properties, gradlew, etc)
-* If it is not recognizing the com.couchbase.* imports, try restarting Android Studio
+* Choose File / Import project
+* Check "Auto-import"
+* Leave "Use default gradle wrapper"
 * After your open the project, it should look like [this](http://cl.ly/image/2E3T1T2q261E), and the imports should be ok, as shown [here](http://cl.ly/image/2m1a1K3n0c1V)
 
 ## Enable Android Support Repository and Google Repository
