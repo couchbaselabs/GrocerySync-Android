@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.couchbase.cblite.cbliteconsole.CBLiteConsoleActivity;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.Document;
 import com.couchbase.lite.Emitter;
@@ -235,13 +234,6 @@ public class MainActivity extends Activity implements Replication.ChangeListener
                         int numCreated = createMultipleGrocerySyncItems(inputText);
                         String msg = String.format("Created %d new grocery items!", numCreated);
                         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-                    }
-                    else if (inputText.equals("console")) {
-                        Intent intent = new Intent(MainActivity.this, CBLiteConsoleActivity.class);
-                        Bundle b = new Bundle();
-                        b.putString(CBLiteConsoleActivity.INTENT_PARAMETER_DATABASE_NAME, DATABASE_NAME);
-                        intent.putExtras(b);
-                        startActivity(intent);
                     }
                     else {
                         createGroceryItem(inputText);

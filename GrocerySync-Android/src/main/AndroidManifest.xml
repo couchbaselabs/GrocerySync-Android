@@ -27,19 +27,6 @@
                 android:name="com.couchbase.grocerysync.GrocerySyncPreferencesActivity">
         </activity>
 
-        <activity
-            android:name="com.couchbase.cblite.cbliteconsole.CBLiteConsoleActivity"
-            android:label="@string/console_activity_display_message"
-            android:parentActivityName="com.couchbase.couchbaseliteproject.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.couchbase.couchbaseliteproject.MainActivity" />
-        </activity>
-
-        <activity
-            android:name="com.couchbase.cblite.cbliteconsole.AllDocsActivity"
-            android:label="@string/title_activity_all_docs" >
-        </activity>
 
     </application>
 
