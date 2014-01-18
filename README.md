@@ -9,14 +9,12 @@ The "use case" is a shared grocery list where all devices using the application 
 ## Prequisites
 
 * Install [Android Studio](http://developer.android.com/sdk/installing/studio.html) version 0.1.3 or later with Android Support Repository and Google Repository.
-* Install [Sync Gateway](https://github.com/couchbaselabs/sync_gateway).
+* (optional) Install [Sync Gateway](https://github.com/couchbaselabs/sync_gateway) to use the sync feature.
 
 ## Getting the code
 
-
 ```
 $ git clone git@github.com:couchbaselabs/GrocerySync-Android.git
-$ git submodule init && git submodule update
 ```
 
 _Note_: it is important to leave the directory name as the default, otherwise it could confuse the Android Studio IDE
@@ -28,7 +26,6 @@ Gradle (the build system used by Studio) needs to know where your Android SDK is
 * First the local.properties file must be created so that Android knows where your SDK is: `$ cp local.properties.example local.properties`. 
 * If you are on OSX and installed Android Studio to the default location, you should be ok with the defaults in `local.properties`
 * Otherwise, open `local.properties` and make sure it points to the Android SDK on your system.  Change the path as needed.
-
 
 
 ## Import the project in Android Studio
@@ -45,9 +42,9 @@ Open the Android SDK from Android Studio (Tools->Android->SDK Manager) and make 
 (This may be enabled by default, but it's good to double check since it's a required dependency in order to get the android support library: 'com.android.support:support-v4:13.0.0' )
 
 
-## Configuring a database
+## Configuring a remote sync gateway (optional)
 
-GrocerySync is designed to sync all of its data to a Sync Gateway instance, so it needs a valid URL.
+GrocerySync can be configured to do a two way sync all of its data to a Sync Gateway instance, so it needs a valid URL.
 
 * Configure the hardcoded DATABASE_URL in the MainActivity.java file to the URL of your Sync Gateway instance.  (there is also a value in the Settings that can be used, which will override the hardcoded default)  
 * Create a DB named `grocery-test` on the Sync Gateway instance.
@@ -62,6 +59,12 @@ GrocerySync is designed to sync all of its data to a Sync Gateway instance, so i
 * Run `./gradlew clean && ./gradlew installDebug`
 * Switch to the emulator and you should have a new app called GrocerySync-Android
 * Tap it to open the app
+
+## Change the dependency from Maven -> Direct code dependency
+
+By default, this project depends on the Couchbase Lite maven artifacts.  However, it can also depend on the CBLite code directly, which is useful if you want to debug into the CBLIte code (or just browse the code).
+
+See the build.gradle and settings.gradle files for instructions on how to do this.
 
 ## Where to go from here: creating your own Couchbase-Lite app
 

@@ -38,8 +38,14 @@ dependencies {
 
     compile fileTree(dir: 'libs', include: 'td_collator_so.jar')  // hack to add .so objects (bit.ly/17pUlJ1)
 
-    compile project(':CBLite')
+    // To directly including the code rather than using maven artifacts
+    // 1) Run 'git submodule init && git submodule update' on the command line
+    // 2) uncomment the next line
+    // 3) uncomment the line in settings.gradle
+    // 4) comment the compile 'com.couchbase.cblite:CBLite:1.0.0-beta2rc1' line below
+    // compile project(':CBLite')
 
+    compile 'com.couchbase.cblite:CBLite:1.0.0-beta2rc1'
 
 }
 
