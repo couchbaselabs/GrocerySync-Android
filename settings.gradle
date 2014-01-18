@@ -1,1 +1,1 @@
-include ':GrocerySync-Android', ':CBLite', ':CBLiteConsole'
+include ':GrocerySync-Android', ':CBLite'
