@@ -138,10 +138,10 @@ public class MainActivity extends Activity implements Replication.ChangeListener
             throw new RuntimeException(e);
         }
 
-        Replication pullReplication = database.getPullReplication(syncUrl);
+        Replication pullReplication = database.createPullReplication(syncUrl);
         pullReplication.setContinuous(true);
 
-        Replication pushReplication = database.getPushReplication(syncUrl);
+        Replication pushReplication = database.createPushReplication(syncUrl);
         pushReplication.setContinuous(true);
 
         pullReplication.start();
