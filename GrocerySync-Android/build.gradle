@@ -42,10 +42,10 @@ dependencies {
     // 1) Run 'git submodule init && git submodule update' on the command line
     // 2) uncomment the next line
     // 3) uncomment the line in settings.gradle
-    // 4) comment the compile 'com.couchbase.cblite:CBLite:1.0.0-beta2rc1' line below
+    // 4) comment the compile 'com.couchbase.cblite:CBLite:1.0.0-beta2' line below
     // compile project(':CBLite')
 
-    compile 'com.couchbase.cblite:CBLite:1.0.0-beta2rc1'
+    compile 'com.couchbase.cblite:CBLite:1.0.0-beta2'
 
 }
 
