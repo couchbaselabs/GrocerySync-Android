@@ -1,32 +1,32 @@
 ## Grocery Sync for Couchbase Lite Android 
+
+An example app that uses the [Couchbase Lite Android](https://github.com/couchbase/couchbase-lite-android) mobile database framework.
  
 ![](http://cl.ly/image/1H11131G2c3d/Screen%20Shot%202013-05-14%20at%204.44.48%20PM.png)
  
-This is a simple example of using the [Couchbase Lite Android](https://github.com/couchbase/couchbase-lite-android) mobile database framework.
  
-The "use case" is a shared grocery list where all devices using the application would see a mirror of the grocery list.  Any changes will automatically background sync with a Sync Gateway running in the cloud.  (bi-directional)
- 
+## Architecture
+
+![](http://cl.ly/image/3c1k113o182b/GrocerySync.png)
+
+If Couchbase Lite is configured to sync it's changes with a Sync Gateway, then all changes will automatically background sync bi-directionally such that any changes on either device will propagate to the other.
+
 ## Prequisites
 
-* Install [Android Studio](http://developer.android.com/sdk/installing/studio.html) version 0.1.3 or later with Android Support Repository and Google Repository.
+* Install [Android Studio](http://developer.android.com/sdk/installing/studio.html)
 * (optional) Install [Sync Gateway](https://github.com/couchbaselabs/sync_gateway) to use the sync feature.
+
+## Android Studio Version
+
+* If you are using the stable branch of GrocerySync, use the latest version of Android Studio from the stable channel (currently Android Studio 0.3.X)
+
+* If you are using the master branch of GrocerySync, use the latest version of Android Studio from the canary channel (currently Android Studio 0.4.X)
 
 ## Getting the code
 
 ```
 $ git clone git@github.com:couchbaselabs/GrocerySync-Android.git
 ```
-
-_Note_: it is important to leave the directory name as the default, otherwise it could confuse the Android Studio IDE
-
-## Configure Android SDK location
-
-Gradle (the build system used by Studio) needs to know where your Android SDK is, otherwise it won't be able to build anything.
-
-* First the local.properties file must be created so that Android knows where your SDK is: `$ cp local.properties.example local.properties`. 
-* If you are on OSX and installed Android Studio to the default location, you should be ok with the defaults in `local.properties`
-* Otherwise, open `local.properties` and make sure it points to the Android SDK on your system.  Change the path as needed.
-
 
 ## Import the project in Android Studio
 
@@ -77,3 +77,14 @@ Android typically uses a long-click to trigger additional action, as opposed to 
 ## Known Issues
  
 We currently do not handle the Sync URL changing at runtime (if you change it you have to restart the app)
+
+## Troubleshooting
+
+### Configure Android SDK location
+
+Gradle (the build system used by Studio) needs to know where your Android SDK is, otherwise it won't be able to build anything.
+
+* First the local.properties file must be created so that Android knows where your SDK is: `$ cp local.properties.example local.properties`.
+* If you are on OSX and installed Android Studio to the default location, you should be ok with the defaults in `local.properties`
+* Otherwise, open `local.properties` and make sure it points to the Android SDK on your system.  Change the path as needed.
+
