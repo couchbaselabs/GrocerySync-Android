@@ -25,3 +25,4 @@ build.properties
 /GrocerySync-Android/GrocerySync-Android-GrocerySync-Android.iml
 /.idea/misc.xml
 /GrocerySync-Android.iml
+*.iml
