@@ -28,7 +28,6 @@ import com.couchbase.lite.Mapper;
 import com.couchbase.lite.QueryEnumerator;
 import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.replicator.Replication;
-import com.couchbase.lite.support.CouchbaseLiteApplication;
 
 import java.net.MalformedURLException;
 import java.net.URL;

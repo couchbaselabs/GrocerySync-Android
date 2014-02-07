@@ -1,8 +1,14 @@
 package com.couchbase.grocerysync;
 
+import android.app.Application;
+
 import com.couchbase.lite.Manager;
 
-public class GrocerySyncApplication extends CouchbaseLiteApplication {
+/**
+ * Helper class to make it easier to share a Couchbase Lite Manager
+ * among different activities
+ */
+public class CouchbaseLiteApplication extends Application {
 
     private Manager manager;
 
@@ -13,4 +19,5 @@ public class GrocerySyncApplication extends CouchbaseLiteApplication {
     public void setManager(Manager manager) {
         this.manager = manager;
     }
+
 }
