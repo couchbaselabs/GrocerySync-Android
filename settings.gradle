@@ -1,6 +1,1 @@
-
-// to directly include the CBLite code, rather than maven artifacts, use this version of
-// include and see build.gradle for more changes you'll need to make
-// include ':GrocerySync-Android', ':CBLite'
-
-include ':GrocerySync-Android'
+include ':GrocerySync-Android', ':libraries:couchbase-lite-android', ':libraries:couchbase-lite-java-core'
