@@ -118,8 +118,6 @@ public class MainActivity extends Activity implements Replication.ChangeListener
             }
         }, "1.0");
 
-        CouchbaseLiteApplication application = (CouchbaseLiteApplication) getApplication();
-        application.setManager(manager);
 
         startLiveQuery(viewItemsByDate);
 
