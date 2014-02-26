@@ -9,4 +9,4 @@
 	url = https://github.com/couchbase/couchbase-lite-android.git
 [submodule "libraries/couchbase-lite-java-core"]
 	path = libraries/couchbase-lite-java-core
-	url = https://github.com/couchbase/couchbase-lite-android-core.git
+	url = https://github.com/couchbase/couchbase-lite-java-core.git
