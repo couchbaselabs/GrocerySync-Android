@@ -33,6 +33,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -90,6 +91,9 @@ public class MainActivity extends Activity implements Replication.ChangeListener
             Toast.makeText(getApplicationContext(), "Error Initializing CBLIte, see logs for details", Toast.LENGTH_LONG).show();
             Log.e(TAG, "Error initializing CBLite", e);
         }
+
+        NetworkConnectivityListener connectivityListener = new NetworkConnectivityListener(Arrays.asList(database));
+        connectivityListener.startListening(getApplicationContext());
 
     }
 
