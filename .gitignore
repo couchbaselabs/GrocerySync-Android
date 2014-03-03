@@ -26,3 +26,12 @@ build.properties
 /.idea/misc.xml
 /GrocerySync-Android.iml
 *.iml
+
+\#*
+*~
+.#*
+\#*\#
+
+*.class
+
+/.DS_Store
