@@ -39,12 +39,12 @@ dependencies {
     compile fileTree(dir: 'libs', include: 'td_collator_so.jar')  // hack to add .so objects (bit.ly/17pUlJ1)
 
     // By default, this depends on couchbase lite via the maven artifact
-    compile 'com.couchbase.lite:android:1.0.0-beta3rc1'
+    compile 'com.couchbase.lite:android:1.0.0-beta3rc3'
 
     // To directly including the code rather than using maven artifacts
     // 1) Run 'git submodule init && git submodule update' on the command line
     // 2) uncomment the "compile project" lines below
-    // 4) comment the compile 'com.couchbase.cblite:CBLite:1.0.0-beta2' line above
+    // 4) comment the compile 'com.couchbase.cblite:CBLite:1.0.0-${version}' line above
     // compile project(':libraries:couchbase-lite-android')
     // compile project(':libraries:couchbase-lite-java-core')
 
