@@ -1,6 +1,8 @@
 ## Grocery Sync for Couchbase Lite Android 
 
 An example app that uses the [Couchbase Lite Android](https://github.com/couchbase/couchbase-lite-android) mobile database framework.
+
+This example code corresopnds to the master branch of Couchbase Lite Android.  If you are looking for a version that corresponds with the beta2 version, you should checkout the [1.0-beta2](https://github.com/couchbaselabs/GrocerySync-Android/tree/1.0-beta2) tag.
  
 ![](http://cl.ly/image/1H11131G2c3d/Screen%20Shot%202013-05-14%20at%204.44.48%20PM.png)
  
