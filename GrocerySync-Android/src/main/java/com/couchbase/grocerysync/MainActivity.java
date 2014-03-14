@@ -93,9 +93,6 @@ public class MainActivity extends Activity implements Replication.ChangeListener
             Log.e(TAG, "Error initializing CBLite", e);
         }
 
-        NetworkConnectivityListener connectivityListener = new NetworkConnectivityListener(Arrays.asList(database));
-        connectivityListener.startListening(getApplicationContext());
-
     }
 
 
