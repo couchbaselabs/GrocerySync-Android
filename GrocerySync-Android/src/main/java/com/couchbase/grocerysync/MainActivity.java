@@ -27,6 +27,7 @@ import com.couchbase.lite.Manager;
 import com.couchbase.lite.Mapper;
 import com.couchbase.lite.QueryEnumerator;
 import com.couchbase.lite.QueryRow;
+import com.couchbase.lite.android.AndroidContext;
 import com.couchbase.lite.replicator.Replication;
 
 import java.net.MalformedURLException;
@@ -107,7 +108,7 @@ public class MainActivity extends Activity implements Replication.ChangeListener
 
     protected void startCBLite() throws Exception {
 
-        manager = new Manager(getApplicationContext().getFilesDir(), Manager.DEFAULT_OPTIONS);
+        manager = new Manager(new AndroidContext(getApplicationContext()), Manager.DEFAULT_OPTIONS);
 
         //install a view definition needed by the application
         database = manager.getDatabase(DATABASE_NAME);
