@@ -105,7 +105,7 @@ public class MainActivity extends Activity implements Replication.ChangeListener
 
     protected void startCBLite() throws Exception {
 
-        manager = new Manager(new AndroidContext(getApplicationContext()), Manager.DEFAULT_OPTIONS);
+        manager = new Manager(new AndroidContext(this), Manager.DEFAULT_OPTIONS);
 
         //install a view definition needed by the application
         database = manager.getDatabase(DATABASE_NAME);
