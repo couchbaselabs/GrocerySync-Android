@@ -48,8 +48,13 @@ Open the Android SDK from Android Studio (Tools->Android->SDK Manager) and make 
 
 GrocerySync can be configured to do a two way sync all of its data to a Sync Gateway instance, so it needs a valid URL.
 
-* Configure the hardcoded DATABASE_URL in the MainActivity.java file to the URL of your Sync Gateway instance.  (there is also a value in the Settings that can be used, which will override the hardcoded default)  
-* Create a DB named `grocery-test` on the Sync Gateway instance.
+* Configure the hardcoded `SYNC_URL` in the MainActivity.java file to the URL of your Sync Gateway instance.  
+    - If you are using the Genymotion emulator: `http://10.0.3.2:4984/grocery-sync`
+    - If you are using the standard android emulator: `http://10.0.2.2:4984/grocery-sync`
+    - If you are running on a device: `http://<ip of sync gw>:4984/grocery-sync`
+* Create a DB named `grocery-sync` on the Sync Gateway instance.
+* Use this [config.json](https://gist.github.com/tleyden/11154924)
+ 
 
 ## Run the app via Android Studio
 
