@@ -25,7 +25,6 @@ import com.couchbase.lite.Emitter;
 import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.Manager;
 import com.couchbase.lite.Mapper;
-import com.couchbase.lite.QueryEnumerator;
 import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.android.AndroidContext;
 import com.couchbase.lite.replicator.Replication;
@@ -34,12 +33,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.UUID;
@@ -61,7 +58,7 @@ public class MainActivity extends Activity implements Replication.ChangeListener
     //main screen
     protected EditText addItemEditText;
     protected ListView itemListView;
-    protected GrocerySyncListAdapter itemListViewAdapter;
+    protected GrocerySyncArrayAdapter grocerySyncArrayAdapter;
 
     //couch internals
     protected static Manager manager;
@@ -163,11 +160,11 @@ public class MainActivity extends Activity implements Replication.ChangeListener
                 public void changed(final LiveQuery.ChangeEvent event) {
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            itemListViewAdapter.clear();
+                            grocerySyncArrayAdapter.clear();
                             for (Iterator<QueryRow> it = event.getRows(); it.hasNext();) {
-                                itemListViewAdapter.add(it.next());
+                                grocerySyncArrayAdapter.add(it.next());
                             }
-                            itemListViewAdapter.notifyDataSetChanged();
+                            grocerySyncArrayAdapter.notifyDataSetChanged();
                             progressDialog.dismiss();
                         }
                     });
@@ -181,13 +178,13 @@ public class MainActivity extends Activity implements Replication.ChangeListener
     }
 
     private void initItemListAdapter() {
-        itemListViewAdapter = new GrocerySyncListAdapter(
+        grocerySyncArrayAdapter = new GrocerySyncArrayAdapter(
                 getApplicationContext(),
                 R.layout.grocery_list_item,
                 R.id.label,
                 new ArrayList<QueryRow>()
         );
-        itemListView.setAdapter(itemListViewAdapter);
+        itemListView.setAdapter(grocerySyncArrayAdapter);
         itemListView.setOnItemClickListener(MainActivity.this);
         itemListView.setOnItemLongClickListener(MainActivity.this);
     }
@@ -241,7 +238,7 @@ public class MainActivity extends Activity implements Replication.ChangeListener
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
         QueryRow row = (QueryRow) adapterView.getItemAtPosition(position);
-        Document document = addocument();
+        Document document = row.getDocument();
         Map<String, Object> newProperties = new HashMap<String, Object>(document.getProperties());
 
         boolean checked = ((Boolean) newProperties.get("check")).booleanValue();
@@ -249,7 +246,7 @@ public class MainActivity extends Activity implements Replication.ChangeListener
 
         try {
             document.putProperties(newProperties);
-            itemListViewAdapter.notifyDataSetChanged();
+            grocerySyncArrayAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Error updating database, see logs for details", Toast.LENGTH_LONG).show();
             Log.e(TAG, "Error updating database", e);

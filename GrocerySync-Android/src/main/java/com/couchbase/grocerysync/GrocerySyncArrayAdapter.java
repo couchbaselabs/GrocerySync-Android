@@ -1,8 +1,6 @@
 package com.couchbase.grocerysync;
 
-import android.app.DownloadManager;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +8,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.couchbase.lite.Document;
 import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.SavedRevision;
 
 import java.util.List;
 
 
-public class GrocerySyncListAdapter extends ArrayAdapter<QueryRow> {
+public class GrocerySyncArrayAdapter extends ArrayAdapter<QueryRow> {
 
     private List<QueryRow> list;
     private final Context context;
 
-    public GrocerySyncListAdapter(Context context, int resource, int textViewResourceId, List<QueryRow> objects) {
+    public GrocerySyncArrayAdapter(Context context, int resource, int textViewResourceId, List<QueryRow> objects) {
         super(context, resource, textViewResourceId, objects);
         this.context = context;
     }
