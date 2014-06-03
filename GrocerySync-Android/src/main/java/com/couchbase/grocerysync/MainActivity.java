@@ -120,6 +120,7 @@ public class MainActivity extends Activity implements Replication.ChangeListener
             }
         }, "1.0");
 
+        initItemListAdapter();
 
         startLiveQuery(viewItemsByDate);
 
@@ -159,12 +160,14 @@ public class MainActivity extends Activity implements Replication.ChangeListener
             liveQuery = view.createQuery().toLiveQuery();
 
             liveQuery.addChangeListener(new LiveQuery.ChangeListener() {
-                @Override
-                public void changed(LiveQuery.ChangeEvent event) {
-                    displayRows(event.getRows());
+                public void changed(final LiveQuery.ChangeEvent event) {
                     runOnUiThread(new Runnable() {
-                        @Override
                         public void run() {
+                            itemListViewAdapter.clear();
+                            for (Iterator<QueryRow> it = event.getRows(); it.hasNext();) {
+                                itemListViewAdapter.add(it.next());
+                            }
+                            itemListViewAdapter.notifyDataSetChanged();
                             progressDialog.dismiss();
                         }
                     });
@@ -177,37 +180,18 @@ public class MainActivity extends Activity implements Replication.ChangeListener
 
     }
 
-    private void displayRows(QueryEnumerator queryEnumerator) {
-
-        final List<QueryRow> rows = getRowsFromQueryEnumerator(queryEnumerator);
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-                itemListViewAdapter = new GrocerySyncListAdapter(
-                        getApplicationContext(),
-                        R.layout.grocery_list_item,
-                        R.id.label,
-                        rows
-                );
-                itemListView.setAdapter(itemListViewAdapter);
-                itemListView.setOnItemClickListener(MainActivity.this);
-                itemListView.setOnItemLongClickListener(MainActivity.this);
-
-            }
-        });
+    private void initItemListAdapter() {
+        itemListViewAdapter = new GrocerySyncListAdapter(
+                getApplicationContext(),
+                R.layout.grocery_list_item,
+                R.id.label,
+                new ArrayList<QueryRow>()
+        );
+        itemListView.setAdapter(itemListViewAdapter);
+        itemListView.setOnItemClickListener(MainActivity.this);
+        itemListView.setOnItemLongClickListener(MainActivity.this);
     }
 
-
-    private List<QueryRow> getRowsFromQueryEnumerator(QueryEnumerator queryEnumerator) {
-        List<QueryRow> rows = new ArrayList<QueryRow>();
-        for (Iterator<QueryRow> it = queryEnumerator; it.hasNext();) {
-            QueryRow row = it.next();
-            rows.add(row);
-        }
-        return rows;
-    }
 
     private ProgressDialog showLoadingSpinner() {
         ProgressDialog progress = new ProgressDialog(this);
@@ -257,10 +241,8 @@ public class MainActivity extends Activity implements Replication.ChangeListener
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
         QueryRow row = (QueryRow) adapterView.getItemAtPosition(position);
-        Document document = row.getDocument();
-        Map<String, Object> curProperties = document.getProperties();
-        Map<String, Object> newProperties = new HashMap<String, Object>();
-        newProperties.putAll(curProperties);
+        Document document = addocument();
+        Map<String, Object> newProperties = new HashMap<String, Object>(document.getProperties());
 
         boolean checked = ((Boolean) newProperties.get("check")).booleanValue();
         newProperties.put("check", !checked);
