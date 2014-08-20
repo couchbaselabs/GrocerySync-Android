@@ -1,7 +1,6 @@
 package com.couchbase.grocerysync;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,21 +8,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.couchbase.lite.Document;
 import com.couchbase.lite.QueryRow;
+import com.couchbase.lite.SavedRevision;
 
 import java.util.List;
 
 
-public class GrocerySyncListAdapter extends ArrayAdapter<QueryRow> {
+public class GrocerySyncArrayAdapter extends ArrayAdapter<QueryRow> {
 
     private List<QueryRow> list;
     private final Context context;
 
-    public GrocerySyncListAdapter(Context context, int resource, int textViewResourceId, List<QueryRow> objects) {
+    public GrocerySyncArrayAdapter(Context context, int resource, int textViewResourceId, List<QueryRow> objects) {
         super(context, resource, textViewResourceId, objects);
         this.context = context;
-        this.list = objects;
     }
 
 	private static class ViewHolder {
@@ -43,18 +41,14 @@ public class GrocerySyncListAdapter extends ArrayAdapter<QueryRow> {
         }
 
         TextView label = ((ViewHolder)itemView.getTag()).label;
-        QueryRow row = list.get(position);
-        Document document = row.getDocument();
-        boolean checked = false;
-        try {
-            label.setText((String)document.getCurrentRevision().getProperty("text"));
-            checked = ((Boolean) document.getCurrentRevision().getProperty("check")).booleanValue();
-        } catch (Exception e) {
-            label.setText("Error");
-            Log.e(MainActivity.TAG, "Error Displaying document", e);
-        }
+        QueryRow row = getItem(position);
+        SavedRevision currentRevision = row.getDocument().getCurrentRevision();
+        boolean isGroceryItemChecked = ((Boolean) currentRevision.getProperty("check")).booleanValue();
+        String groceryItemText = (String) currentRevision.getProperty("text");
+        label.setText(groceryItemText);
+
         ImageView icon = ((ViewHolder)itemView.getTag()).icon;
-        if(checked) {
+        if(isGroceryItemChecked) {
             icon.setImageResource(R.drawable.list_area___checkbox___checked);
         }
         else {

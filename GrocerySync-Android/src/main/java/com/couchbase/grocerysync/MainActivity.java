@@ -25,7 +25,6 @@ import com.couchbase.lite.Emitter;
 import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.Manager;
 import com.couchbase.lite.Mapper;
-import com.couchbase.lite.QueryEnumerator;
 import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.android.AndroidContext;
 import com.couchbase.lite.replicator.Replication;
@@ -34,12 +33,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.UUID;
@@ -61,7 +58,7 @@ public class MainActivity extends Activity implements Replication.ChangeListener
     //main screen
     protected EditText addItemEditText;
     protected ListView itemListView;
-    protected GrocerySyncListAdapter itemListViewAdapter;
+    protected GrocerySyncArrayAdapter grocerySyncArrayAdapter;
 
     //couch internals
     protected static Manager manager;
@@ -120,6 +117,7 @@ public class MainActivity extends Activity implements Replication.ChangeListener
             }
         }, "1.0");
 
+        initItemListAdapter();
 
         startLiveQuery(viewItemsByDate);
 
@@ -159,12 +157,14 @@ public class MainActivity extends Activity implements Replication.ChangeListener
             liveQuery = view.createQuery().toLiveQuery();
 
             liveQuery.addChangeListener(new LiveQuery.ChangeListener() {
-                @Override
-                public void changed(LiveQuery.ChangeEvent event) {
-                    displayRows(event.getRows());
+                public void changed(final LiveQuery.ChangeEvent event) {
                     runOnUiThread(new Runnable() {
-                        @Override
                         public void run() {
+                            grocerySyncArrayAdapter.clear();
+                            for (Iterator<QueryRow> it = event.getRows(); it.hasNext();) {
+                                grocerySyncArrayAdapter.add(it.next());
+                            }
+                            grocerySyncArrayAdapter.notifyDataSetChanged();
                             progressDialog.dismiss();
                         }
                     });
@@ -177,37 +177,18 @@ public class MainActivity extends Activity implements Replication.ChangeListener
 
     }
 
-    private void displayRows(QueryEnumerator queryEnumerator) {
-
-        final List<QueryRow> rows = getRowsFromQueryEnumerator(queryEnumerator);
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-                itemListViewAdapter = new GrocerySyncListAdapter(
-                        getApplicationContext(),
-                        R.layout.grocery_list_item,
-                        R.id.label,
-                        rows
-                );
-                itemListView.setAdapter(itemListViewAdapter);
-                itemListView.setOnItemClickListener(MainActivity.this);
-                itemListView.setOnItemLongClickListener(MainActivity.this);
-
-            }
-        });
+    private void initItemListAdapter() {
+        grocerySyncArrayAdapter = new GrocerySyncArrayAdapter(
+                getApplicationContext(),
+                R.layout.grocery_list_item,
+                R.id.label,
+                new ArrayList<QueryRow>()
+        );
+        itemListView.setAdapter(grocerySyncArrayAdapter);
+        itemListView.setOnItemClickListener(MainActivity.this);
+        itemListView.setOnItemLongClickListener(MainActivity.this);
     }
 
-
-    private List<QueryRow> getRowsFromQueryEnumerator(QueryEnumerator queryEnumerator) {
-        List<QueryRow> rows = new ArrayList<QueryRow>();
-        for (Iterator<QueryRow> it = queryEnumerator; it.hasNext();) {
-            QueryRow row = it.next();
-            rows.add(row);
-        }
-        return rows;
-    }
 
     private ProgressDialog showLoadingSpinner() {
         ProgressDialog progress = new ProgressDialog(this);
@@ -258,16 +239,14 @@ public class MainActivity extends Activity implements Replication.ChangeListener
 
         QueryRow row = (QueryRow) adapterView.getItemAtPosition(position);
         Document document = row.getDocument();
-        Map<String, Object> curProperties = document.getProperties();
-        Map<String, Object> newProperties = new HashMap<String, Object>();
-        newProperties.putAll(curProperties);
+        Map<String, Object> newProperties = new HashMap<String, Object>(document.getProperties());
 
         boolean checked = ((Boolean) newProperties.get("check")).booleanValue();
         newProperties.put("check", !checked);
 
         try {
             document.putProperties(newProperties);
-            itemListViewAdapter.notifyDataSetChanged();
+            grocerySyncArrayAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Error updating database, see logs for details", Toast.LENGTH_LONG).show();
             Log.e(TAG, "Error updating database", e);
