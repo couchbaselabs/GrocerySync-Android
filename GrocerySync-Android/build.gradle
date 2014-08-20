@@ -14,43 +14,12 @@ When new versions of couchbase lite are released, these versions should be bumpe
 
  */
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.9.+'
-    }
-}
 apply plugin: 'android'
 
-repositories {
-    mavenCentral()
-    maven {
-        url "http://files.couchbase.com/maven2/"
-    }
-    mavenLocal()
-}
-
-dependencies {
-
-    compile 'com.android.support:support-v4:13.0.+'
-
-    // By default, this depends on couchbase lite via the maven artifact
-    compile 'com.couchbase.lite:couchbase-lite-android:1.0.0'
-
-    // To directly including the code rather than using maven artifacts
-    // 1) Run 'git submodule init && git submodule update' on the command line
-    // 2) comment the compile 'com.couchbase....' line above
-    // 3) uncomment the "compile project" lines below
-    // compile project(':libraries:couchbase-lite-android')
-    // compile project(':libraries:couchbase-lite-java-core')
-
-}
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.3"
+    buildToolsVersion "19.1.0"
 
     defaultConfig {
         minSdkVersion 11
@@ -65,6 +34,23 @@ android {
         exclude 'META-INF/NOTICE'
     }
 }
+
+dependencies {
+
+    compile 'com.android.support:support-v4:19.0.0'
+
+    // By default, this depends on couchbase lite via the maven artifact
+    compile 'com.couchbase.lite:couchbase-lite-android:0.0.0-451'
+
+    // To directly including the code rather than using maven artifacts
+    // 1) Run 'git submodule init && git submodule update' on the command line
+    // 2) comment the compile 'com.couchbase....' line above
+    // 3) uncomment the "compile project" lines below
+    // compile project(':libraries:couchbase-lite-android')
+    // compile project(':libraries:couchbase-lite-java-core')
+
+}
+
 
 task sourcesJar(type: Jar) {
     classifier = 'sources'
