@@ -50,7 +50,12 @@ public class MainActivity extends Activity implements Replication.ChangeListener
     public static final String DATABASE_NAME = "grocery-sync";
     public static final String designDocName = "grocery-local";
     public static final String byDateViewName = "byDate";
-    public static final String SYNC_URL = "http://10.0.2.2:4984/grocery-sync";  // 10.0.2.2 == Android Simulator equivalent of 127.0.0.1
+
+    // By default, use the sync gateway running on the Couchbase demo server.
+    // Warning: this will have "random data" entered by other users.
+    // If you want to limit this to your own data, please install and run your own
+    // Sync Gateway and point it to that URL instead.
+    public static final String SYNC_URL = "http://demo.mobile.couchbase.com/grocery-sync";
 
     //splash screen
     protected SplashScreenDialog splashDialog;
