@@ -51,7 +51,7 @@ GrocerySync can be configured to do a two way sync all of its data to a Sync Gat
 **Run Sync Gateway**
 
 * Install [Sync Gateway](https://github.com/couchbase/sync_gateway)
-* Copy Grocery-Sync example config by going to your Sync Gateway directory and running: `$ cp examples/grocery_sync.json config.json`.  
+* Download example config by going to your Sync Gateway directory and running: `$ curl -o config.json https://github.com/couchbaselabs/GrocerySync-Android/blob/master/docs/sync_gw_config.json`.  
 * Run Sync Gateway via `$./run.sh config.json`
  
 **Configure Grocery Sync with Sync Gateway URL**
