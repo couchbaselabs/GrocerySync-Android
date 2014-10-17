@@ -31,6 +31,7 @@ public class GrocerySyncArrayAdapter extends ArrayAdapter<QueryRow> {
 
 	@Override
 	public View getView(int position, View itemView, ViewGroup parent) {
+
         if (itemView == null) {
             LayoutInflater vi = (LayoutInflater)parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             itemView = vi.inflate(R.layout.grocery_list_item, null);
@@ -40,19 +41,27 @@ public class GrocerySyncArrayAdapter extends ArrayAdapter<QueryRow> {
             itemView.setTag(vh);
         }
 
-        TextView label = ((ViewHolder)itemView.getTag()).label;
-        QueryRow row = getItem(position);
-        SavedRevision currentRevision = row.getDocument().getCurrentRevision();
-        boolean isGroceryItemChecked = ((Boolean) currentRevision.getProperty("check")).booleanValue();
-        String groceryItemText = (String) currentRevision.getProperty("text");
-        label.setText(groceryItemText);
+        try {
+            TextView label = ((ViewHolder)itemView.getTag()).label;
+            QueryRow row = getItem(position);
+            SavedRevision currentRevision = row.getDocument().getCurrentRevision();
+            Object check = (Object) currentRevision.getProperty("check");
+            boolean isGroceryItemChecked = false;
+            if (check != null && check instanceof Boolean) {
+                isGroceryItemChecked = ((Boolean)check).booleanValue();
+            }
+            String groceryItemText = (String) currentRevision.getProperty("text");
+            label.setText(groceryItemText);
 
-        ImageView icon = ((ViewHolder)itemView.getTag()).icon;
-        if(isGroceryItemChecked) {
-            icon.setImageResource(R.drawable.list_area___checkbox___checked);
-        }
-        else {
-            icon.setImageResource(R.drawable.list_area___checkbox___unchecked);
+            ImageView icon = ((ViewHolder)itemView.getTag()).icon;
+            if(isGroceryItemChecked) {
+                icon.setImageResource(R.drawable.list_area___checkbox___checked);
+            }
+            else {
+                icon.setImageResource(R.drawable.list_area___checkbox___unchecked);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return itemView;
