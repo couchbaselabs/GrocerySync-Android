@@ -27,7 +27,7 @@ If Couchbase Lite is configured to sync it's changes with a Sync Gateway, then a
 ## Getting the code
 
 ```
-$ git clone git@github.com:couchbaselabs/GrocerySync-Android.git
+$ git clone https://github.com/couchbaselabs/GrocerySync-Android.git
 ```
 
 ## Import the project in Android Studio
