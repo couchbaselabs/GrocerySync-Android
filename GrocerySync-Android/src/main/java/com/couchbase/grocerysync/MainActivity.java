@@ -107,6 +107,7 @@ public class MainActivity extends Activity implements Replication.ChangeListener
 
     protected void startCBLite() throws Exception {
 
+        Manager.enableLogging(TAG, Log.VERBOSE);
         Manager.enableLogging(Log.TAG, Log.VERBOSE);
         Manager.enableLogging(Log.TAG_SYNC_ASYNC_TASK, Log.VERBOSE);
         Manager.enableLogging(Log.TAG_SYNC, Log.VERBOSE);
@@ -390,5 +391,23 @@ public class MainActivity extends Activity implements Replication.ChangeListener
             Log.d(TAG, msg);
         }
 
+        if (event.getError() != null) {
+            showError("Sync error", event.getError());
+        }
+
     }
+
+    public void showError(final String errorMessage, final Throwable throwable) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String msg = String.format("%s: %s", errorMessage, throwable);
+                Log.e(TAG, msg, throwable);
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
 }
