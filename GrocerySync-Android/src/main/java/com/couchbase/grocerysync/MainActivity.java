@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +27,7 @@ import com.couchbase.lite.Mapper;
 import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.android.AndroidContext;
 import com.couchbase.lite.replicator.Replication;
+import com.couchbase.lite.util.Log;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -106,6 +106,13 @@ public class MainActivity extends Activity implements Replication.ChangeListener
     }
 
     protected void startCBLite() throws Exception {
+
+        Manager.enableLogging(Log.TAG, Log.VERBOSE);
+        Manager.enableLogging(Log.TAG_SYNC_ASYNC_TASK, Log.VERBOSE);
+        Manager.enableLogging(Log.TAG_SYNC, Log.VERBOSE);
+        Manager.enableLogging(Log.TAG_QUERY, Log.VERBOSE);
+        Manager.enableLogging(Log.TAG_VIEW, Log.VERBOSE);
+        Manager.enableLogging(Log.TAG_DATABASE, Log.VERBOSE);
 
         manager = new Manager(new AndroidContext(this), Manager.DEFAULT_OPTIONS);
 
