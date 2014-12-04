@@ -2,7 +2,7 @@
 
 An example app that uses the [Couchbase Lite Android](https://github.com/couchbase/couchbase-lite-android) mobile database framework.
 
-This example code corresopnds to the master branch of Couchbase Lite Android.  If you are looking for a version that corresponds with the beta2 version, you should checkout the [1.0-beta2](https://github.com/couchbaselabs/GrocerySync-Android/tree/1.0-beta2) tag.
+This example code corresopnds to the master branch of Couchbase Lite Android.  
  
 ![](http://cl.ly/image/1H11131G2c3d/Screen%20Shot%202013-05-14%20at%204.44.48%20PM.png)
  
@@ -15,14 +15,7 @@ If Couchbase Lite is configured to sync it's changes with a Sync Gateway, then a
 
 ## Prequisites
 
-* Install [Android Studio](http://developer.android.com/sdk/installing/studio.html)
-* (optional) Install [Sync Gateway](https://github.com/couchbaselabs/sync_gateway) to use the sync feature.
-
-## Android Studio Version
-
-* If you are using the stable branch of GrocerySync, use the latest version of Android Studio from the stable channel (currently Android Studio 0.3.X)
-
-* If you are using the master branch of GrocerySync, use the latest version of Android Studio from the canary channel (currently Android Studio 0.4.X)
+* [Android Studio](http://developer.android.com/sdk/installing/studio.html) -- see the [Android Studio Compatibility Table](https://github.com/couchbase/couchbase-lite-android/blob/master/README.md#building-couchbase-lite-via-android-studio) to make sure the version you are using is supported.
 
 ## Getting the code
 
@@ -32,26 +25,24 @@ $ git clone https://github.com/couchbaselabs/GrocerySync-Android.git
 
 ## Import the project in Android Studio
 
-* Choose File / Import project
-* Check "Auto-import"
-* Leave "Use default gradle wrapper"
-* After your open the project, it should look like [this](http://cl.ly/image/2E3T1T2q261E), and the imports should be ok, as shown [here](http://cl.ly/image/2m1a1K3n0c1V)
+Follow the same instructions as importing [Couchbase Lite](https://github.com/couchbase/couchbase-lite-android#importing-project-into-android-studio)
 
-## Enable Android Support Repository and Google Repository
+## Run the app via Android Studio
 
-Open the Android SDK from Android Studio (Tools->Android->SDK Manager) and make sure that the Android Support Repository and Google Repository items are installed.  
+* Run it using the "play" or "debug" buttons in the UI
 
-(This may be enabled by default, but it's good to double check since it's a required dependency in order to get the android support library: 'com.android.support:support-v4:13.0.0' )
+Congratulations!  If you got this far and see [this UI](http://cl.ly/image/1H11131G2c3d/Screen%20Shot%202013-05-14%20at%204.44.48%20PM.png), you have your first Couchbase Lite Android app up and running.
 
+# Optional steps
 
-## Configuring a remote sync gateway (optional)
+## Configuring a custom sync gateway (optional)
 
-GrocerySync can be configured to do a two way sync all of its data to a Sync Gateway instance.
+By default, GrocerySync is configured to sync to the Couchbase Mobile demo server.  If you want to point it to your own Sync Gateway, follow these instructions.
 
 **Run Sync Gateway**
 
-* Install [Sync Gateway](https://github.com/couchbase/sync_gateway)
-* Download example config by going to your Sync Gateway directory and running: `$ curl -o config.json https://github.com/couchbaselabs/GrocerySync-Android/blob/master/docs/sync_gw_config.json`.  
+* Install Sync Gateway via [downloading pre-built binaries](http://www.couchbase.com/nosql-databases/downloads#Couchbase_Mobile) or [building from source](https://github.com/couchbase/sync_gateway)
+* Download the GrocerySync Sync Gateway config by going to your Sync Gateway directory and running: `$ curl -o config.json https://github.com/couchbaselabs/GrocerySync-Android/blob/master/docs/sync_gw_config.json`.  
 * Run Sync Gateway via `$./run.sh config.json`
  
 **Configure Grocery Sync with Sync Gateway URL**
@@ -61,35 +52,26 @@ GrocerySync can be configured to do a two way sync all of its data to a Sync Gat
     - If you are using the standard android emulator: `http://10.0.2.2:4984/grocery-sync`
     - If you are running on a device: `http://<ip of sync gw>:4984/grocery-sync`
 
+## Change the dependency from Maven -> Direct code dependency (optional)
 
-## Run the app via Android Studio
+By default, this project depends on the Couchbase Lite maven artifacts.  However, it can also depend on the CBLite code directly, which is useful if you need to modify the Couchbase Lite code.  (Note: if you are using maven artifacts, since we ship the source code artifacts, you should already be able to browse the code and debug)
 
-* Run it using the "play" or "debug" buttons in the UI
+See the build.gradle and settings.gradle files for instructions on how to do this.
 
-## Run via Gradle
+## Run via Gradle (optional)
+
+If you would rather run the project via the command line, you can do the following:
 
 * Run the android emulator
 * Run `./gradlew clean && ./gradlew installDebug`
 * Switch to the emulator and you should have a new app called GrocerySync-Android
 * Tap it to open the app
 
-## Change the dependency from Maven -> Direct code dependency
-
-By default, this project depends on the Couchbase Lite maven artifacts.  However, it can also depend on the CBLite code directly, which is useful if you want to debug into the CBLIte code (or just browse the code).
-
-See the build.gradle and settings.gradle files for instructions on how to do this.
+# Additional Information
 
 ## Where to go from here: creating your own Couchbase-Lite app
 
-See the [Getting Started Guide](https://github.com/couchbase/couchbase-lite-android/wiki/Getting-Started).
-
-## Deviations from the iOS version
- 
-Android typically uses a long-click to trigger additional action, as opposed to swipe-to-delete, so this convention was followed.
- 
-## Known Issues
- 
-We currently do not handle the Sync URL changing at runtime (if you change it you have to restart the app)
+See the [Getting Started Guide](http://developer.couchbase.com/mobile/develop/training/build-first-android-app/index.html).
 
 ## Troubleshooting
 
@@ -101,3 +83,6 @@ Gradle (the build system used by Studio) needs to know where your Android SDK is
 * If you are on OSX and installed Android Studio to the default location, you should be ok with the defaults in `local.properties`
 * Otherwise, open `local.properties` and make sure it points to the Android SDK on your system.  Change the path as needed.
 
+## Support
+
+See [Getting Help](https://github.com/couchbase/couchbase-lite-android#getting-help)
