@@ -52,6 +52,10 @@ By default, GrocerySync is configured to sync to the Couchbase Mobile demo serve
     - If you are using the standard android emulator: `http://10.0.2.2:4984/grocery-sync`
     - If you are running on a device: `http://<ip of sync gw>:4984/grocery-sync`
 
+**Run Grocery Sync**
+
+After the above steps, if you run GrocerySync your data will sync with your local Sync Gateway.  To verify the data was pushed, you can use the [Sync Gateway REST API](http://developer.couchbase.com/mobile/develop/references/sync-gateway/rest-api/index.html).
+
 ## Change the dependency from Maven -> Direct code dependency (optional)
 
 By default, this project depends on the Couchbase Lite maven artifacts.  However, it can also depend on the CBLite code directly, which is useful if you need to modify the Couchbase Lite code.  (Note: if you are using maven artifacts, since we ship the source code artifacts, you should already be able to browse the code and debug)
@@ -72,16 +76,6 @@ If you would rather run the project via the command line, you can do the followi
 ## Where to go from here: creating your own Couchbase-Lite app
 
 See the [Getting Started Guide](http://developer.couchbase.com/mobile/develop/training/build-first-android-app/index.html).
-
-## Troubleshooting
-
-### Configure Android SDK location
-
-Gradle (the build system used by Studio) needs to know where your Android SDK is, otherwise it won't be able to build anything.
-
-* First the local.properties file must be created so that Android knows where your SDK is: `$ cp local.properties.example local.properties`.
-* If you are on OSX and installed Android Studio to the default location, you should be ok with the defaults in `local.properties`
-* Otherwise, open `local.properties` and make sure it points to the Android SDK on your system.  Change the path as needed.
 
 ## Support
 
