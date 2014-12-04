@@ -360,6 +360,8 @@ public class MainActivity extends Activity implements Replication.ChangeListener
         properties.put("created_at", currentTimeString);
         document.putProperties(properties);
 
+        Log.d(TAG, "Created new grocery item with id: %s", document.getId());
+
         return document;
     }
 
