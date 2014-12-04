@@ -41,10 +41,23 @@ By default, GrocerySync is configured to sync to the Couchbase Mobile demo serve
 
 **Run Sync Gateway**
 
-* Install Sync Gateway via [downloading pre-built binaries](http://www.couchbase.com/nosql-databases/downloads#Couchbase_Mobile) or [building from source](https://github.com/couchbase/sync_gateway)
-* Download the GrocerySync Sync Gateway config by going to your Sync Gateway directory and running: `$ curl -o config.json https://github.com/couchbaselabs/GrocerySync-Android/blob/master/docs/sync_gw_config.json`.  
-* Run Sync Gateway via `$./run.sh config.json`
- 
+* Download Sync Gateway via [downloading pre-built binaries](http://www.couchbase.com/nosql-databases/downloads#Couchbase_Mobile).  Alternatively, you can [buildi it from source](https://github.com/couchbase/sync_gateway).  These instructions will assume you are using the pre-built binary.
+* Untar/gz the file, you should end up with a `couchbase-sync-gateway` directory
+* `cd couchbase-sync-gateway`
+* `$ curl -o config.json https://raw.githubusercontent.com/couchbaselabs/GrocerySync-Android/master/docs/sync_gw_config.json` - this will download the Sync Gateway config that is suitable for Grocery Sync.
+* Run Sync Gateway via `$./bin/sync_gateway config.json`
+
+You should see the following output:
+
+```
+14:19:27.869724 Enabling logging: [CRUD+ REST+ Changes+ Attach+]
+14:19:27.869785 ==== Couchbase Sync Gateway/1.0.3(81;fa9a6e7) ====
+14:19:27.869800 Configured Go to use all 8 CPUs; setenv GOMAXPROCS to override this
+14:19:27.869815 Opening db /grocery-sync as bucket "grocery-sync", pool "default", server <walrus:>
+``` 
+
+*If you are wondering why you don't need to download Couchbase Server -- Sync Gateway comes with an in-memory database called Walrus, which is good enough for testing.  In order to deploy it to production, you will need to use Couchbase Server as the backing store*
+
 **Configure Grocery Sync with Sync Gateway URL**
 
 * Configure the hardcoded `SYNC_URL` in the MainActivity.java file to the URL of your Sync Gateway instance.  
@@ -54,7 +67,20 @@ By default, GrocerySync is configured to sync to the Couchbase Mobile demo serve
 
 **Run Grocery Sync**
 
-After the above steps, if you run GrocerySync your data will sync with your local Sync Gateway.  To verify the data was pushed, you can use the [Sync Gateway REST API](http://developer.couchbase.com/mobile/develop/references/sync-gateway/rest-api/index.html).
+After the above steps, if you run GrocerySync your data will sync with your local Sync Gateway.  
+
+To verify the data is being pushed from the app to Sync Gateway:
+
+* In the Sync Gateway terminal, you should see entries like:
+
+```
+14:22:25.518106 HTTP:  #005: POST /grocery-sync/_revs_diff
+14:22:25.544508 HTTP:  #006: POST /grocery-sync/_bulk_docs
+```
+
+* You can use the [Sync Gateway REST API](http://developer.couchbase.com/mobile/develop/references/sync-gateway/rest-api/index.html) to view the documents in Sync Gateway.
+
+
 
 ## Change the dependency from Maven -> Direct code dependency (optional)
 
