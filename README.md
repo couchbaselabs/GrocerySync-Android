@@ -13,9 +13,18 @@ This example code corresopnds to the master branch of Couchbase Lite Android.
 
 If Couchbase Lite is configured to sync it's changes with a Sync Gateway, then all changes will automatically background sync bi-directionally such that any changes on either device will propagate to the other.
 
-## Prequisites
+## Install Android Studio
 
 * [Android Studio](http://developer.android.com/sdk/installing/studio.html) -- see the [Android Studio Compatibility Table](https://github.com/couchbase/couchbase-lite-android/blob/master/README.md#building-couchbase-lite-via-android-studio) to make sure the version you are using is supported.
+
+## Screencasts
+
+The following screencasts walk you through getting GrocerySync up and running:
+
+* [GrocerySync - Couchbase Lite Android demo app: Part I](https://www.youtube.com/watch?v=9rWY2CrnFHw) -- get up and running
+* [GrocerySync - Couchbase Lite Android demo app: Part II](https://www.youtube.com/watch?v=rX9IPMBl780) -- run a local Sync Gateway
+
+The screencasts follow the instructions in the remainder of this document.
 
 ## Getting the code
 
