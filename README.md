@@ -21,8 +21,8 @@ If Couchbase Lite is configured to sync it's changes with a Sync Gateway, then a
 
 The following screencasts walk you through getting GrocerySync up and running:
 
-* [GrocerySync - Couchbase Lite Android demo app: Part I](https://www.youtube.com/watch?v=9rWY2CrnFHw) -- get up and running
-* [GrocerySync - Couchbase Lite Android demo app: Part II](https://www.youtube.com/watch?v=rX9IPMBl780) -- run a local Sync Gateway
+* [GrocerySync - Couchbase Lite Android demo app: Part I](https://www.youtube.com/watch?v=9rWY2CrnFHw) -- get up and running (4m 35s)
+* [GrocerySync - Couchbase Lite Android demo app: Part II](https://www.youtube.com/watch?v=rX9IPMBl780) -- run a local Sync Gateway (5m 47s)
 
 The screencasts follow the instructions in the remainder of this document.
 
