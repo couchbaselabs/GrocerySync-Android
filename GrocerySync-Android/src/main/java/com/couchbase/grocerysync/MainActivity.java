@@ -23,6 +23,7 @@ import com.couchbase.lite.Document;
 import com.couchbase.lite.Emitter;
 import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.Manager;
+import com.couchbase.lite.ManagerOptions;
 import com.couchbase.lite.Mapper;
 import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.android.AndroidContext;
@@ -115,7 +116,9 @@ public class MainActivity extends Activity implements Replication.ChangeListener
         Manager.enableLogging(Log.TAG_VIEW, Log.VERBOSE);
         Manager.enableLogging(Log.TAG_DATABASE, Log.VERBOSE);
 
-        manager = new Manager(new AndroidContext(this), Manager.DEFAULT_OPTIONS);
+        ManagerOptions options = new ManagerOptions();
+        options.setStoreClassName("com.couchbase.lite.store.ForestDBStore");
+        manager = new Manager(new AndroidContext(this), options);
 
         //install a view definition needed by the application
         database = manager.getDatabase(DATABASE_NAME);
