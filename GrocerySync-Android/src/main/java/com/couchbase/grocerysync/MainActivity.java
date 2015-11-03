@@ -55,7 +55,8 @@ public class MainActivity extends Activity implements Replication.ChangeListener
     // Warning: this will have "random data" entered by other users.
     // If you want to limit this to your own data, please install and run your own
     // Sync Gateway and point it to that URL instead.
-    public static final String SYNC_URL = "http://demo-mobile.couchbase.com/grocery-sync";
+    //public static final String SYNC_URL = "http://demo-mobile.couchbase.com/grocery-sync";
+    public static final String SYNC_URL = "http://10.0.0.23:4984/grocery-sync";
 
     //splash screen
     protected SplashScreenDialog splashDialog;
@@ -123,7 +124,8 @@ public class MainActivity extends Activity implements Replication.ChangeListener
         viewItemsByDate.setMap(new Mapper() {
             @Override
             public void map(Map<String, Object> document, Emitter emitter) {
-                Object createdAt = document.get("created_at");
+                //Object createdAt = document.get("created_at");
+                Object createdAt = document.get("text");
                 if (createdAt != null) {
                     emitter.emit(createdAt.toString(), null);
                 }
