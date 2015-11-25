@@ -13,10 +13,5 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-//        mavenCentral()
-//        maven {
-//            url "http://files.couchbase.com/maven2/"
-//        }
-//        mavenLocal()
     }
 }
