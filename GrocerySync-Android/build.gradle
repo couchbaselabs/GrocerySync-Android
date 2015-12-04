@@ -47,7 +47,7 @@ dependencies {
     // 3) uncomment the "compile project" lines below
     compile project(':libraries:couchbase-lite-android')
     compile project(':libraries:couchbase-lite-java-core')
-    compile project(':libraries:couchbase-lite-java-native:sqlite-system')
+    compile project(':libraries:couchbase-lite-java-native:sqlite-default')
 }
 
 
