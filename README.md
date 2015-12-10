@@ -106,6 +106,14 @@ If you would rather run the project via the command line, you can do the followi
 * Switch to the emulator and you should have a new app called GrocerySync-Android
 * Tap it to open the app
 
+## Compile with submodules (Couchbase Lite from source code) (optional)
+
+If you would rather compile the project with couchbase lite source codes, you can do the following:
+
+* Open `sttings.gradle`, remove `/*` and `*/`.
+* Open `build.gradle` in `GrocerySync-Android` folder, comment out `compile 'com.couchbase.lite:couchbase-lite-android:1.1.0'` and remove `//` for `compile project(':libraries:couchbase-lite-android')`, `compile project(':libraries:couchbase-lite-java-core')`, and `compile project(':libraries:couchbase-lite-java-native:sqlite-default')`.
+
+
 # Additional Information
 
 ## Where to go from here: creating your own Couchbase-Lite app
