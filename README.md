@@ -30,7 +30,9 @@ The screencasts follow the instructions in the remainder of this document.
 
 ```
 $ git clone https://github.com/couchbaselabs/GrocerySync-Android.git
+$ git submodule update --init
 ```
+
 
 ## Import the project in Android Studio
 
