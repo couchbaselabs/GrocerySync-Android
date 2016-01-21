@@ -118,12 +118,10 @@ public class MainActivity extends Activity implements Replication.ChangeListener
         Manager.enableLogging(Log.TAG_DATABASE, Log.VERBOSE);
 
         manager = new Manager(new AndroidContext(this), Manager.DEFAULT_OPTIONS);
-        manager.setStorageType(Manager.FORESTDB_STORAGE);
 
         //install a view definition needed by the application
         DatabaseOptions options = new DatabaseOptions();
         options.setCreate(true);
-        options.setStorageType(Manager.FORESTDB_STORAGE);
         options.setEncryptionKey(KEY_4_DATABASE);
         database = manager.openDatabase(DATABASE_NAME, options);
         com.couchbase.lite.View viewItemsByDate = database.getView(String.format("%s/%s", designDocName, byDateViewName));
