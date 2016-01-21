@@ -56,7 +56,10 @@ public class MainActivity extends Activity implements Replication.ChangeListener
     // Warning: this will have "random data" entered by other users.
     // If you want to limit this to your own data, please install and run your own
     // Sync Gateway and point it to that URL instead.
-    public static final String SYNC_URL = "http://demo-mobile.couchbase.com/grocery-sync";
+    //irpublic static final String SYNC_URL = "http://demo-mobile.couchbase.com/grocery-sync";
+    public static final String SYNC_URL = "http://ec2-54-145-244-2.compute-1.amazonaws.com:4984/grocery-sync/";
+
+    private static final String KEY_4_DATABASE = "Passw0rd";
 
     //splash screen
     protected SplashScreenDialog splashDialog;
@@ -70,7 +73,6 @@ public class MainActivity extends Activity implements Replication.ChangeListener
     protected static Manager manager;
     private Database database;
     private LiveQuery liveQuery;
-
 
     public void onCreate(Bundle savedInstanceState) {
 
@@ -98,7 +100,6 @@ public class MainActivity extends Activity implements Replication.ChangeListener
 
     }
 
-
     protected void onDestroy() {
         if(manager != null) {
             manager.close();
@@ -123,8 +124,8 @@ public class MainActivity extends Activity implements Replication.ChangeListener
         DatabaseOptions options = new DatabaseOptions();
         options.setCreate(true);
         options.setStorageType(Manager.FORESTDB_STORAGE);
+        options.setEncryptionKey(KEY_4_DATABASE);
         database = manager.openDatabase(DATABASE_NAME, options);
-        //database = manager.getDatabase(DATABASE_NAME);
         com.couchbase.lite.View viewItemsByDate = database.getView(String.format("%s/%s", designDocName, byDateViewName));
         viewItemsByDate.setMap(new Mapper() {
             @Override
@@ -141,7 +142,6 @@ public class MainActivity extends Activity implements Replication.ChangeListener
         startLiveQuery(viewItemsByDate);
 
         startSync();
-
     }
 
     private void startSync() {
