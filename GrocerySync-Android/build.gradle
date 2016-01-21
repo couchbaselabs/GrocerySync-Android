@@ -38,7 +38,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.0.0'
 
     // By default, this depends on couchbase lite via the maven artifact
-    compile 'com.couchbase.lite:couchbase-lite-android:0.0.0-545'
+    compile 'com.couchbase.lite:couchbase-lite-android:1.1.0'
 }
 
 
