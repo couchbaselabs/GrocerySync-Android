@@ -39,7 +39,7 @@ dependencies {
 
     // By default, this depends on couchbase lite via the maven artifact
     compile 'com.couchbase.lite:couchbase-lite-android:1.2.0-11'
-    compile 'com.couchbase.lite:couchbase-lite-android-sqlite-custom:1.2.0-11'
+    compile 'com.couchbase.lite:couchbase-lite-android-forestdb:1.2.0-11'
 }
 
 
