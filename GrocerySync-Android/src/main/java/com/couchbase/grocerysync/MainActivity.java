@@ -116,9 +116,8 @@ public class MainActivity extends Activity implements Replication.ChangeListener
         Manager.enableLogging(Log.TAG_QUERY, Log.VERBOSE);
         Manager.enableLogging(Log.TAG_VIEW, Log.VERBOSE);
         Manager.enableLogging(Log.TAG_DATABASE, Log.VERBOSE);
-
-        manager = new Manager(new AndroidContext(this), Manager.DEFAULT_OPTIONS);
-        manager.setStorageType(Manager.FORESTDB_STORAGE);
+        
+        manager = new Manager(new AndroidContext(getApplicationContext()), Manager.DEFAULT_OPTIONS);
 
         //install a view definition needed by the application
         DatabaseOptions options = new DatabaseOptions();
