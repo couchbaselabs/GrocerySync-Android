@@ -56,8 +56,8 @@ public class MainActivity extends Activity implements Replication.ChangeListener
     // Warning: this will have "random data" entered by other users.
     // If you want to limit this to your own data, please install and run your own
     // Sync Gateway and point it to that URL instead.
-    //public static final String SYNC_URL = "http://demo-mobile.couchbase.com/grocery-sync";
-    public static final String SYNC_URL = "http://ec2-54-145-244-2.compute-1.amazonaws.com:4984/grocery-sync/";
+    public static final String SYNC_URL = "http://demo-mobile.couchbase.com/grocery-sync";
+
     //splash screen
     protected SplashScreenDialog splashDialog;
 
