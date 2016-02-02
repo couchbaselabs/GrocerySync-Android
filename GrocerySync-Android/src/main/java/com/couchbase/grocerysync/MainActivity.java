@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.couchbase.lite.Database;
+import com.couchbase.lite.DatabaseOptions;
 import com.couchbase.lite.Document;
 import com.couchbase.lite.Emitter;
 import com.couchbase.lite.LiveQuery;
@@ -120,7 +121,9 @@ public class MainActivity extends Activity implements Replication.ChangeListener
         manager = new Manager(new AndroidContext(getApplicationContext()), Manager.DEFAULT_OPTIONS);
 
         //install a view definition needed by the application
-        database = manager.getDatabase(DATABASE_NAME);
+        DatabaseOptions options = new DatabaseOptions();
+        options.setCreate(true);
+        database = manager.openDatabase(DATABASE_NAME, options);
         com.couchbase.lite.View viewItemsByDate = database.getView(String.format("%s/%s", designDocName, byDateViewName));
         viewItemsByDate.setMap(new Mapper() {
             @Override
