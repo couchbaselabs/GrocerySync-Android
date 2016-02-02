@@ -123,7 +123,6 @@ public class MainActivity extends Activity implements Replication.ChangeListener
         options.setCreate(true);
         options.setStorageType(Manager.FORESTDB_STORAGE);
         database = manager.openDatabase(DATABASE_NAME, options);
-        //database = manager.getDatabase(DATABASE_NAME);
         com.couchbase.lite.View viewItemsByDate = database.getView(String.format("%s/%s", designDocName, byDateViewName));
         viewItemsByDate.setMap(new Mapper() {
             @Override
