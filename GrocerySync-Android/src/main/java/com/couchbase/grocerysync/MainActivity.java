@@ -3,8 +3,10 @@ package com.couchbase.grocerysync;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -329,6 +331,21 @@ public class MainActivity extends Activity implements Replication.ChangeListener
      * Add settings item to the menu
      */
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuItem offlineMenu = menu.add("Toggle Wifi");
+        offlineMenu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        offlineMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                                                   @Override
+                                                   public boolean onMenuItemClick(MenuItem item) {
+                                                       WifiManager wifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+                                                       boolean nextWifiState = !wifiManager.isWifiEnabled();
+                                                       wifiManager.setWifiEnabled(nextWifiState);
+                                                       String itemTitle = !nextWifiState ? "Enable Wifi" : "Disable Wifi";
+                                                       item.setTitle(itemTitle);
+                                                       return true;
+                                                   }
+                                               });
+
         menu.add(Menu.NONE, 0, 0, "Settings");
         return super.onCreateOptionsMenu(menu);
     }
