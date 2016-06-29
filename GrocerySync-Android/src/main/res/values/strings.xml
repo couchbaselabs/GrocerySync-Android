@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Grocery Sync</string>
-    <string name="startup_message">Starting Couchbase Mobile</string>
     <string name="add_item_hint">Add Item</string>
-    <string name="error_dialog_title">Couchbase Error</string>
-    <string name="error_dialog_button">Exit</string>
-    <string name="action_settings">Action Settings</string>
+    <string name="auth_code_signin_button">Sign in with Auth Code Flow</string>
+
+    <!-- Actions -->
+    <string name="action_logout">Logout</string>
+    <string name="action_cancel">Cancel</string>
+
+    <!-- Server Client ID.  This should be a valid Web OAuth 2.0 Client ID obtained
+         from https://console.developers.google.com/ -->
+    <string name="server_client_id">31919031332-8ea1795ckkphb7hmg6i4ul0blcpq8oq5.apps.googleusercontent.com</string>
 </resources>

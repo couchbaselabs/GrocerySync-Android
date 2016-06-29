@@ -13,16 +13,16 @@ for instructions on getting the latest release version.
 
  */
 
-apply plugin: 'android'
-
+apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 22
+        applicationId "com.couchbase.grocerysync"
+        minSdkVersion 16
+        targetSdkVersion 24
     }
 
     // workaround for "duplicate files during packaging of APK" issue
@@ -35,11 +35,22 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:appcompat-v7:24.0.0'
 
-    // By default, this depends on couchbase lite via the maven artifact
-    compile 'com.couchbase.lite:couchbase-lite-android:0.0.0-679'
+    // Google Sign-In:
+    compile 'com.google.android.gms:play-services-auth:9.0.2'
+
+    // OkHttp:
+    compile 'com.squareup.okhttp3:okhttp:3.3.1'
+
+    // GSON:
+    compile 'com.google.code.gson:gson:2.7'
+
+    // couchbase-lite-android:
+    compile 'com.couchbase.lite:couchbase-lite-android:0.0.0-764'
 }
+
+apply plugin: 'com.google.gms.google-services'
 
 
 task sourcesJar(type: Jar) {
