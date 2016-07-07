@@ -13,7 +13,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.couchbase.lite.auth.OpenIDConnectAuthorizer;
+import com.couchbase.lite.auth.OIDCLoginContinuation;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -72,7 +72,7 @@ public class OpenIDActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String key = intent.getStringExtra(INTENT_CONTINUATION_KEY);
         if (key != null) {
-            OpenIDConnectAuthorizer.OIDCLoginContinuation continuation =
+            OIDCLoginContinuation continuation =
                     OpenIDAuthenticator.getLoginContinuation(key);
 
             URL authUrl = null;

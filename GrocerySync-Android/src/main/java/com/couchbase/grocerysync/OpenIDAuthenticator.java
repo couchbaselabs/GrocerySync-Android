@@ -4,7 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 
-import com.couchbase.lite.auth.OpenIDConnectAuthorizer;
+import com.couchbase.lite.auth.OIDCLoginCallback;
+import com.couchbase.lite.auth.OIDCLoginContinuation;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -12,16 +13,16 @@ import java.util.Map;
 import java.util.UUID;
 
 public class OpenIDAuthenticator {
-    private static final Map<String, OpenIDConnectAuthorizer.OIDCLoginContinuation> continuationMap
+    private static final Map<String, OIDCLoginContinuation> continuationMap
             = new HashMap<>();
 
-    public static String registerLoginContinuation(OpenIDConnectAuthorizer.OIDCLoginContinuation continuation) {
+    public static String registerLoginContinuation(OIDCLoginContinuation continuation) {
         String key = UUID.randomUUID().toString();
         continuationMap.put(key, continuation);
         return key;
     }
 
-    public static OpenIDConnectAuthorizer.OIDCLoginContinuation getLoginContinuation(String key) {
+    public static OIDCLoginContinuation getLoginContinuation(String key) {
         return continuationMap.get(key);
     }
 
@@ -29,13 +30,13 @@ public class OpenIDAuthenticator {
         continuationMap.remove(key);
     }
 
-    public static OpenIDConnectAuthorizer.OIDCLoginCallback getOIDCLoginCallback(final Context context) {
-        OpenIDConnectAuthorizer.OIDCLoginCallback callback =
-            new OpenIDConnectAuthorizer.OIDCLoginCallback() {
+    public static OIDCLoginCallback getOIDCLoginCallback(final Context context) {
+        OIDCLoginCallback callback =
+            new OIDCLoginCallback() {
                 @Override
                 public void callback(final URL loginURL,
                                      final URL redirectURL,
-                                     final OpenIDConnectAuthorizer.OIDCLoginContinuation continuation) {
+                                     final OIDCLoginContinuation continuation) {
                     runOnUiThread(context, new Runnable() {
                         @Override
                         public void run() {

@@ -11,6 +11,7 @@ import com.couchbase.lite.Database;
 import com.couchbase.lite.DatabaseOptions;
 import com.couchbase.lite.Manager;
 import com.couchbase.lite.android.AndroidContext;
+import com.couchbase.lite.auth.OIDCLoginCallback;
 import com.couchbase.lite.auth.OpenIDConnectAuthenticatorFactory;
 import com.couchbase.lite.auth.OpenIDConnectAuthorizer;
 import com.couchbase.lite.replicator.Replication;
@@ -168,7 +169,7 @@ public class Application extends android.app.Application implements Replication.
                         startPush(new ReplicationSetupCallback() {
                             @Override
                             public void setup(Replication repl) {
-                                OpenIDConnectAuthorizer.OIDCLoginCallback callback =
+                                OIDCLoginCallback callback =
                                         OpenIDAuthenticator.getOIDCLoginCallback(getApplicationContext());
                                 repl.setAuthenticator(
                                         OpenIDConnectAuthenticatorFactory.createOpenIDConnectAuthenticator(
@@ -210,7 +211,7 @@ public class Application extends android.app.Application implements Replication.
             @Override
             public void setup(Replication repl) {
                 shouldStartPushAfterPullStart = true;
-                OpenIDConnectAuthorizer.OIDCLoginCallback callback =
+                OIDCLoginCallback callback =
                         OpenIDAuthenticator.getOIDCLoginCallback(getApplicationContext());
                 repl.setAuthenticator(
                         OpenIDConnectAuthenticatorFactory.createOpenIDConnectAuthenticator(
