@@ -13,7 +13,6 @@ import com.couchbase.lite.Manager;
 import com.couchbase.lite.android.AndroidContext;
 import com.couchbase.lite.auth.OIDCLoginCallback;
 import com.couchbase.lite.auth.OpenIDConnectAuthenticatorFactory;
-import com.couchbase.lite.auth.OpenIDConnectAuthorizer;
 import com.couchbase.lite.replicator.Replication;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -151,8 +150,17 @@ public class Application extends android.app.Application implements Replication.
     }
 
     private void stopReplication() {
-        if (pull != null) pull.stop();
-        if (push != null) push.stop();
+        if (pull != null) {
+            pull.stop();
+            pull.removeChangeListener(this);
+            pull = null;
+        }
+
+        if (push != null) {
+            push.stop();
+            push.removeChangeListener(this);
+            push = null;
+        }
     }
 
     @Override
@@ -163,23 +171,32 @@ public class Application extends android.app.Application implements Replication.
         if (pull != null) {
             error = pull.getLastError();
             if (shouldStartPushAfterPullStart && isReplicatorStartedOrError(pull)) {
+                boolean needRelogin = false;
                 if (error == null) {
                     String username = pull.getAuthenticator().getUsername();
                     if (login(username)) {
-                        startPush(new ReplicationSetupCallback() {
-                            @Override
-                            public void setup(Replication repl) {
-                                OIDCLoginCallback callback =
-                                        OpenIDAuthenticator.getOIDCLoginCallback(getApplicationContext());
-                                repl.setAuthenticator(
-                                        OpenIDConnectAuthenticatorFactory.createOpenIDConnectAuthenticator(
-                                                callback, context));
-                            }
-                        });
-                        startApplication();
+                        if (pull == repl) {
+                            startPush(new ReplicationSetupCallback() {
+                                @Override
+                                public void setup(Replication repl) {
+                                    OIDCLoginCallback callback =
+                                            OpenIDAuthenticator.getOIDCLoginCallback(getApplicationContext());
+                                    repl.setAuthenticator(
+                                            OpenIDConnectAuthenticatorFactory.createOpenIDConnectAuthenticator(
+                                                    callback, context));
+                                }
+                            });
+                            startApplication();
+                        } else
+                            needRelogin = true;
                     }
                 }
                 shouldStartPushAfterPullStart = false;
+
+                if (needRelogin) {
+                    loginWithAuthCode();
+                    return;
+                }
             }
         }
 
@@ -205,7 +222,7 @@ public class Application extends android.app.Application implements Replication.
         return isIdle || repl.getChangesCount() > 0 || repl.getLastError() != null;
     }
 
-    public void loginWithAuthCode(final Activity activity) {
+    public void loginWithAuthCode() {
         stopReplication();
         startPull(new ReplicationSetupCallback() {
             @Override
@@ -279,7 +296,7 @@ public class Application extends android.app.Application implements Replication.
 
         if (database != null) {
             Map<String, Object> user = database.getExistingLocalDocument(USER_LOCAL_DOC_ID);
-            if (user != null && username.equals(user.get("username"))) {
+            if (user != null && !username.equals(user.get("username"))) {
                 stopReplication();
                 try {
                     database.delete();

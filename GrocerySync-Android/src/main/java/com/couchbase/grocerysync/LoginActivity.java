@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity implements
 
     private void authCodeSignIn() {
         Application application = (Application)getApplication();
-        application.loginWithAuthCode(this);
+        application.loginWithAuthCode();
     }
 
     private void googleSignIn() {
