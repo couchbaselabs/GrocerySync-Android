@@ -29,6 +29,22 @@
           }
         },
         {
+          "client_id": "31919031332-i94cpv9g66vqgfq052f3kbvg14tgeebn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.couchbase.grocerysync",
+            "certificate_hash": "CEA8EAC634FFFED532499A961CDC54380CBAC1FE"
+          }
+        },
+        {
+          "client_id": "31919031332-ei4bonks6idg745ct0j05caf7rhhl47h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.couchbase.grocerysync",
+            "certificate_hash": "BADB6CA27ADF5414D3B05569884A552891928F00"
+          }
+        },
+        {
           "client_id": "31919031332-8ea1795ckkphb7hmg6i4ul0blcpq8oq5.apps.googleusercontent.com",
           "client_type": 3
         }
