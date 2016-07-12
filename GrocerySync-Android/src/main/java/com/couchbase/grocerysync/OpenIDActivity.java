@@ -1,9 +1,11 @@
 package com.couchbase.grocerysync;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,13 +15,19 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.couchbase.lite.auth.OIDCLoginCallback;
 import com.couchbase.lite.auth.OIDCLoginContinuation;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class OpenIDActivity extends AppCompatActivity {
+    private static final Map<String, OIDCLoginContinuation> continuationMap = new HashMap<>();
+
     public static final String INTENT_LOGIN_URL = "loginUrl";
     public static final String INTENT_REDIRECT_URL = "redirectUrl";
     public static final String INTENT_CONTINUATION_KEY = "continuationKey";
@@ -64,7 +72,7 @@ public class OpenIDActivity extends AppCompatActivity {
     private void cancel() {
         Intent intent = getIntent();
         String key = intent.getStringExtra(INTENT_CONTINUATION_KEY);
-        OpenIDAuthenticator.deregisterLoginContinuation(key);
+        OpenIDActivity.deregisterLoginContinuation(key);
         finish();
     }
 
@@ -73,7 +81,7 @@ public class OpenIDActivity extends AppCompatActivity {
         String key = intent.getStringExtra(INTENT_CONTINUATION_KEY);
         if (key != null) {
             OIDCLoginContinuation continuation =
-                    OpenIDAuthenticator.getLoginContinuation(key);
+                    OpenIDActivity.getLoginContinuation(key);
 
             URL authUrl = null;
             if (url != null) {
@@ -93,7 +101,7 @@ public class OpenIDActivity extends AppCompatActivity {
 
             continuation.callback(authUrl, (error != null ? new Exception(error) : null));
         }
-        OpenIDAuthenticator.deregisterLoginContinuation(key);
+        OpenIDActivity.deregisterLoginContinuation(key);
     }
 
     private class OpenIdWebViewClient extends WebViewClient {
@@ -134,5 +142,48 @@ public class OpenIDActivity extends AppCompatActivity {
             }
             return false;
         }
+    }
+
+    /** Manage OIDCLoginContinuation callback object */
+
+    public static String registerLoginContinuation(OIDCLoginContinuation continuation) {
+        String key = UUID.randomUUID().toString();
+        continuationMap.put(key, continuation);
+        return key;
+    }
+
+    public static OIDCLoginContinuation getLoginContinuation(String key) {
+        return continuationMap.get(key);
+    }
+
+    public static void deregisterLoginContinuation(String key) {
+        continuationMap.remove(key);
+    }
+
+    /** A factory to create OIDCLoginCallback callback */
+
+    public static OIDCLoginCallback getOIDCLoginCallback(final Context context) {
+        OIDCLoginCallback callback = new OIDCLoginCallback() {
+            @Override
+            public void callback(final URL loginURL,
+                                 final URL redirectURL,
+                                 final OIDCLoginContinuation cont) {
+                // Ensure to run the code on the UI Thread:
+                Handler handler = new Handler(context.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String continuationKey = OpenIDActivity.registerLoginContinuation(cont);
+                        Intent intent = new Intent(context, OpenIDActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(OpenIDActivity.INTENT_LOGIN_URL, loginURL.toExternalForm());
+                        intent.putExtra(OpenIDActivity.INTENT_REDIRECT_URL, redirectURL.toExternalForm());
+                        intent.putExtra(OpenIDActivity.INTENT_CONTINUATION_KEY, continuationKey);
+                        context.startActivity(intent);
+                    }
+                });
+            }
+        };
+        return callback;
     }
 }

@@ -1,6 +1,5 @@
 package com.couchbase.grocerysync;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
@@ -40,10 +39,14 @@ public class Application extends android.app.Application implements Replication.
 
     private static final String DATABASE_NAME = "grocery-sync";
     private static final String USER_LOCAL_DOC_ID = "user";
-    private static final String SERVER_DB_URL = "http://<HOST>:<PORT>/grocery-sync";
+    private static final String SERVER_DB_URL = "http://us-west.testfest.couchbasemobile.com:4984/grocery-sync/";
 
     interface ReplicationSetupCallback {
         void setup(Replication repl);
+    }
+
+    interface ReplicationChangeHandler {
+        void change(Replication repl);
     }
 
     private final OkHttpClient httpClient = new OkHttpClient();
@@ -58,8 +61,7 @@ public class Application extends android.app.Application implements Replication.
 
     private String username;
 
-    private boolean shouldStartPushAfterPullStart = false;
-    private int pullIdleCount = 0;
+    private ReplicationChangeHandler changeHandler = null;
 
     @Override
     public void onCreate() {
@@ -133,10 +135,11 @@ public class Application extends android.app.Application implements Replication.
     }
 
     private void startPull(ReplicationSetupCallback callback) {
-        pullIdleCount = 0;
         pull = database.createPullReplication(getServerDbUrl());
         pull.setContinuous(true);
+
         if (callback != null) callback.setup(pull);
+
         pull.addChangeListener(this);
         pull.start();
     }
@@ -144,21 +147,29 @@ public class Application extends android.app.Application implements Replication.
     private void startPush(ReplicationSetupCallback callback) {
         push = database.createPushReplication(getServerDbUrl());
         push.setContinuous(true);
+
         if (callback != null) callback.setup(push);
+
         push.addChangeListener(this);
         push.start();
     }
 
-    private void stopReplication() {
+    private void stopReplication(boolean removeCredentials) {
+        this.changeHandler = null;
+
         if (pull != null) {
             pull.stop();
             pull.removeChangeListener(this);
+            if (removeCredentials)
+                pull.removeStoredCredentials();
             pull = null;
         }
 
         if (push != null) {
             push.stop();
             push.removeChangeListener(this);
+            if (removeCredentials)
+                push.removeStoredCredentials();
             push = null;
         }
     }
@@ -166,39 +177,14 @@ public class Application extends android.app.Application implements Replication.
     @Override
     public void changed(Replication.ChangeEvent event) {
         Replication repl = event.getSource();
-        Log.v(TAG, "Replication Change Status: " + repl.getStatus() + " [ " + repl  + " ]");
-        Throwable error = null;
-        if (pull != null) {
-            error = pull.getLastError();
-            if (shouldStartPushAfterPullStart && isReplicatorStartedOrError(pull)) {
-                boolean needRelogin = false;
-                if (error == null) {
-                    String username = pull.getAuthenticator().getUsername();
-                    if (login(username)) {
-                        if (pull == repl) {
-                            startPush(new ReplicationSetupCallback() {
-                                @Override
-                                public void setup(Replication repl) {
-                                    OIDCLoginCallback callback =
-                                            OpenIDAuthenticator.getOIDCLoginCallback(getApplicationContext());
-                                    repl.setAuthenticator(
-                                            OpenIDConnectAuthenticatorFactory.createOpenIDConnectAuthenticator(
-                                                    callback, context));
-                                }
-                            });
-                            startApplication();
-                        } else
-                            needRelogin = true;
-                    }
-                }
-                shouldStartPushAfterPullStart = false;
+        Log.d(TAG, "Replication Change Status: " + repl.getStatus() + " [ " + repl  + " ]");
 
-                if (needRelogin) {
-                    loginWithAuthCode();
-                    return;
-                }
-            }
-        }
+        if (changeHandler != null)
+            changeHandler.change(repl);
+
+        Throwable error = null;
+        if (pull != null)
+            error = pull.getLastError();
 
         if (push != null) {
             if (error == null)
@@ -207,37 +193,69 @@ public class Application extends android.app.Application implements Replication.
 
         if (error != syncError) {
             syncError = error;
-            showErrorMessage(syncError.getMessage(), null);
+            showMessage(syncError.getMessage(), null);
         }
-    }
-
-    private boolean isReplicatorStartedOrError(Replication repl) {
-        boolean isIdle;
-        if (repl == pull) {
-            isIdle = repl.getStatus() == Replication.ReplicationStatus.REPLICATION_IDLE;
-            isIdle = isIdle && (++pullIdleCount > 1);
-        } else {
-            isIdle = repl.getStatus() == Replication.ReplicationStatus.REPLICATION_IDLE;
-        }
-        return isIdle || repl.getChangesCount() > 0 || repl.getLastError() != null;
     }
 
     public void loginWithAuthCode() {
-        stopReplication();
+        stopReplication(false);
         startPull(new ReplicationSetupCallback() {
             @Override
             public void setup(Replication repl) {
-                shouldStartPushAfterPullStart = true;
                 OIDCLoginCallback callback =
-                        OpenIDAuthenticator.getOIDCLoginCallback(getApplicationContext());
+                        OpenIDActivity.getOIDCLoginCallback(getApplicationContext());
                 repl.setAuthenticator(
                         OpenIDConnectAuthenticatorFactory.createOpenIDConnectAuthenticator(
                                 callback, context));
+
+                // Setup a change handler to check if the pull replicator is done authenticating or not.
+                // If done, start the push replicator
+                changeHandler = new ReplicationChangeHandler() {
+                    @Override
+                    public void change(Replication repl) {
+                        checkAuthCodeLogInComplete(repl);
+                    }
+                };
             }
         });
     }
 
-    public void loginWithGoogleSignIn(final Activity activity, final String idToken) {
+    private void checkAuthCodeLogInComplete(Replication repl) {
+        if (repl != pull)
+            return;
+
+        // Check the pull replicator is done authenticating or not.
+        // If done, start the push replicator:
+        if (username == null && repl.getUsername() != null && isReplicatorStarted(repl)) {
+            if (login(repl.getUsername())) {
+                if (pull != null) {
+                    changeHandler = null;
+                    startPush(new ReplicationSetupCallback() {
+                        @Override
+                        public void setup(Replication repl) {
+                            OIDCLoginCallback callback =
+                                    OpenIDActivity.getOIDCLoginCallback(getApplicationContext());
+                            repl.setAuthenticator(
+                                    OpenIDConnectAuthenticatorFactory.createOpenIDConnectAuthenticator(
+                                            callback, context));
+                        }
+                    });
+                    completeLogin();
+                } else {
+                    // Re authentication as database is deleted due to switching user:
+                    loginWithAuthCode();
+                }
+            }
+        }
+    }
+
+    private boolean isReplicatorStarted(Replication repl) {
+        boolean isIdle = repl.getStatus() == Replication.ReplicationStatus.REPLICATION_IDLE;
+        return isIdle || repl.getChangesCount() > 0;
+    }
+
+    public void loginWithGoogleSignIn(final String idToken) {
+        // Send POST _session with the idToken to create a new SGW session:
         Request request = new Request.Builder()
                 .url(getServerDbSessionUrl())
                 .header("Authorization", "Bearer " + idToken)
@@ -246,7 +264,7 @@ public class Application extends android.app.Application implements Replication.
 
         httpClient.newCall(request).enqueue(new Callback() {
             @Override public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
+                showMessage("Failed to create a new SGW session with IDToken : " + idToken, e);
             }
 
             @Override public void onResponse(Call call, Response response) throws IOException {
@@ -258,7 +276,7 @@ public class Application extends android.app.Application implements Replication.
                     final List<Cookie> cookies =
                             Cookie.parseAll(HttpUrl.get(getServerDbUrl()), response.headers());
                     if (login(username, cookies)) {
-                        startApplication();
+                        completeLogin();
                     }
                 }
             }
@@ -297,7 +315,7 @@ public class Application extends android.app.Application implements Replication.
         if (database != null) {
             Map<String, Object> user = database.getExistingLocalDocument(USER_LOCAL_DOC_ID);
             if (user != null && !username.equals(user.get("username"))) {
-                stopReplication();
+                stopReplication(false);
                 try {
                     database.delete();
                 } catch (CouchbaseLiteException e) {
@@ -325,7 +343,7 @@ public class Application extends android.app.Application implements Replication.
         return true;
     }
 
-    private void startApplication() {
+    private void completeLogin() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -336,19 +354,32 @@ public class Application extends android.app.Application implements Replication.
         });
     }
 
+    public void logout() {
+        stopReplication(true);
+
+        this.username = null;
+
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setAction(LoginActivity.INTENT_ACTION_LOGOUT);
+        startActivity(intent);
+    }
+
     private void runOnUiThread(Runnable runnable) {
         Handler mainHandler = new Handler(getApplicationContext().getMainLooper());
         mainHandler.post(runnable);
     }
 
-    public void showErrorMessage(final String errorMessage, final Throwable throwable) {
+    public void showMessage(final String message, final Throwable throwable) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.e(TAG, errorMessage, throwable);
-                String msg = String.format("%s: %s",
-                        errorMessage, throwable != null ? throwable : "");
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                StringBuilder sb = new StringBuilder(message);
+                if (throwable != null) {
+                    sb.append(": " + throwable);
+                    Log.e(TAG, message, throwable);
+                }
+                Toast.makeText(getApplicationContext(), sb.toString(), Toast.LENGTH_LONG).show();
             }
         });
     }

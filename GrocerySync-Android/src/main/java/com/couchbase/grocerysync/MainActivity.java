@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements
             startCBLite();
         } catch (Exception e) {
             Application application = (Application) getApplication();
-            application.showErrorMessage("Error initializing CBLite", e);
+            application.showMessage("Error initializing CBLite", e);
         }
     }
 
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements
             grocerySyncArrayAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             Application application = (Application) getApplication();
-            application.showErrorMessage("Error updating database", e);
+            application.showMessage("Error updating database", e);
         }
     }
 
@@ -278,6 +278,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void logout() {
-        // TODO:
+        Application application = (Application) getApplication();
+        application.logout();
     }
 }
