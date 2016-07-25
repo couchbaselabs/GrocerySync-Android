@@ -53,6 +53,14 @@
           }
         },
         {
+          "client_id": "31919031332-r4tv2bp9j03rs21aqne1831d3qp39vio.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.couchbase.grocerysync",
+            "certificate_hash": "37169709EB01D2FB1D57AC25ECE52685856065D4"
+          }
+        },
+        {
           "client_id": "31919031332-8ea1795ckkphb7hmg6i4ul0blcpq8oq5.apps.googleusercontent.com",
           "client_type": 3
         }
