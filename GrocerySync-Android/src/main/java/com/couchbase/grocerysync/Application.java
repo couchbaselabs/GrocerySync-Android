@@ -161,7 +161,7 @@ public class Application extends android.app.Application implements Replication.
             pull.stop();
             pull.removeChangeListener(this);
             if (removeCredentials)
-                pull.removeStoredCredentials();
+                pull.clearAuthenticationStores();
             pull = null;
         }
 
@@ -169,7 +169,7 @@ public class Application extends android.app.Application implements Replication.
             push.stop();
             push.removeChangeListener(this);
             if (removeCredentials)
-                push.removeStoredCredentials();
+                push.clearAuthenticationStores();
             push = null;
         }
     }
