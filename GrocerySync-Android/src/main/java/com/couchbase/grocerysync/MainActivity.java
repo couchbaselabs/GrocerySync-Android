@@ -28,6 +28,7 @@ import com.couchbase.lite.Mapper;
 import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.android.AndroidContext;
 import com.couchbase.lite.replicator.Replication;
+import com.couchbase.lite.support.CouchbaseLiteHttpClientFactory;
 import com.couchbase.lite.util.Log;
 
 import java.net.MalformedURLException;
@@ -56,7 +57,8 @@ public class MainActivity extends Activity implements Replication.ChangeListener
     // Warning: this will have "random data" entered by other users.
     // If you want to limit this to your own data, please install and run your own
     // Sync Gateway and point it to that URL instead.
-    public static final String SYNC_URL = "http://demo-mobile.couchbase.com/grocery-sync";
+    //public static final String SYNC_URL = "http://demo-mobile.couchbase.com/grocery-sync";
+    public static final String SYNC_URL = "https://10.0.2.2:5984/cblite-test";
 
     //splash screen
     protected SplashScreenDialog splashDialog;
@@ -70,8 +72,7 @@ public class MainActivity extends Activity implements Replication.ChangeListener
     protected static Manager manager;
     private Database database;
     private LiveQuery liveQuery;
-
-
+    
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -142,6 +143,10 @@ public class MainActivity extends Activity implements Replication.ChangeListener
     }
 
     private void startSync() {
+
+        CouchbaseLiteHttpClientFactory clientFactory = new CouchbaseLiteHttpClientFactory(database.getPersistentCookieStore());
+        clientFactory.allowSelfSignedSSLCertificates();
+        manager.setDefaultHttpClientFactory(clientFactory);
 
         URL syncUrl;
         try {

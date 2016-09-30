@@ -13,7 +13,7 @@ for instructions on getting the latest release version.
 
  */
 
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 
 android {
@@ -38,7 +38,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.0.0'
 
     // By default, this depends on couchbase lite via the maven artifact
-    compile 'com.couchbase.lite:couchbase-lite-android:0.0.0-679'
+    compile 'com.couchbase.lite:couchbase-lite-android:1.2.1'
 }
 
 
