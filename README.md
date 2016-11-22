@@ -5,8 +5,7 @@ An example app that uses the [Couchbase Lite Android](https://github.com/couchba
 This example code corresopnds to the master branch of Couchbase Lite Android.  
  
 ![](http://cl.ly/image/1H11131G2c3d/Screen%20Shot%202013-05-14%20at%204.44.48%20PM.png)
- 
- 
+
 ## Architecture
 
 ![](http://cl.ly/image/3c1k113o182b/GrocerySync.png)
@@ -33,7 +32,6 @@ $ git clone https://github.com/couchbaselabs/GrocerySync-Android.git
 $ git submodule update --init
 ```
 
-
 ## Import the project in Android Studio
 
 Follow the same instructions as importing [Couchbase Lite](https://github.com/couchbase/couchbase-lite-android#importing-project-into-android-studio)
@@ -44,54 +42,28 @@ Follow the same instructions as importing [Couchbase Lite](https://github.com/co
 
 Congratulations!  If you got this far and see [this UI](http://cl.ly/image/1H11131G2c3d/Screen%20Shot%202013-05-14%20at%204.44.48%20PM.png), you have your first Couchbase Lite Android app up and running.
 
-# Optional steps
+## Install Sync Gateway
 
-## Configuring a custom sync gateway (optional)
+1. Download and install Sync Gateway (see the [installation page](http://developer.couchbase.com/documentation/mobile/current/installation/sync-gateway/index.html) for details).
+2. Start Sync Gateway with the configuration file in the root of this project.
 
-By default, GrocerySync is configured to sync to the Couchbase Mobile demo server.  If you want to point it to your own Sync Gateway, follow these instructions.
+	```bash
+	~/Downloads/couchbase-sync-gateway/bin/sync_gateway sync-gateway-config.json
+	```
 
-**Run Sync Gateway**
+3. Open **MainActivity.java** and update the `SYNC_URL` constant to point to your Sync Gateway instance.
 
-* Download Sync Gateway via [downloading pre-built binaries](http://www.couchbase.com/nosql-databases/downloads#Couchbase_Mobile).  Alternatively, you can [buildi it from source](https://github.com/couchbase/sync_gateway).  These instructions will assume you are using the pre-built binary.
-* Untar/gz the file, you should end up with a `couchbase-sync-gateway` directory
-* `cd couchbase-sync-gateway`
-* `$ curl -o config.json https://raw.githubusercontent.com/couchbaselabs/GrocerySync-Android/master/docs/sync_gw_config.json` - this will download the Sync Gateway config that is suitable for Grocery Sync.
-* Run Sync Gateway via `$./bin/sync_gateway config.json`
+	```java
+	public static final String SYNC_URL = "http://10.0.2.2:4984/grocery-sync";
+	```
 
-You should see the following output:
+	- If you are using the Genymotion emulator: `http://10.0.3.2:4984/grocery-sync`
+	- If you are using the standard android emulator: `http://10.0.2.2:4984/grocery-sync`
+	- If you are running on a device: `http://<ip of sync gw>:4984/grocery-sync`
 
-```
-14:19:27.869724 Enabling logging: [CRUD+ REST+ Changes+ Attach+]
-14:19:27.869785 ==== Couchbase Sync Gateway/1.0.3(81;fa9a6e7) ====
-14:19:27.869800 Configured Go to use all 8 CPUs; setenv GOMAXPROCS to override this
-14:19:27.869815 Opening db /grocery-sync as bucket "grocery-sync", pool "default", server <walrus:>
-``` 
-
-*If you are wondering why you don't need to download Couchbase Server -- Sync Gateway comes with an in-memory database called Walrus, which is good enough for testing.  In order to deploy it to production, you will need to use Couchbase Server as the backing store*
-
-**Configure Grocery Sync with Sync Gateway URL**
-
-* Configure the hardcoded `SYNC_URL` in the MainActivity.java file to the URL of your Sync Gateway instance.  
-    - If you are using the Genymotion emulator: `http://10.0.3.2:4984/grocery-sync`
-    - If you are using the standard android emulator: `http://10.0.2.2:4984/grocery-sync`
-    - If you are running on a device: `http://<ip of sync gw>:4984/grocery-sync`
-
-**Run Grocery Sync**
-
-After the above steps, if you run GrocerySync your data will sync with your local Sync Gateway.  
-
-To verify the data is being pushed from the app to Sync Gateway:
-
-* In the Sync Gateway terminal, you should see entries like:
-
-```
-14:22:25.518106 HTTP:  #005: POST /grocery-sync/_revs_diff
-14:22:25.544508 HTTP:  #006: POST /grocery-sync/_bulk_docs
-```
-
-* You can use the [Sync Gateway REST API](http://developer.couchbase.com/mobile/develop/references/sync-gateway/rest-api/index.html) to view the documents in Sync Gateway.
-
-
+4. Build and run the app.
+5. Add items and they should be visible on the Sync Gateway Admin UI at [http://localhost:4985/_admin/]
+(http://localhost:4985/_admin/).
 
 ## Change the dependency from Maven -> Direct code dependency (optional)
 
