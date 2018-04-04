@@ -33,7 +33,7 @@ $ git submodule update --init
 ```
 ```
 ## Using SSL, in certain cases you might need to use SSL
-git clone git@github.com:YourUser/GrocerySync-Android 
+git clone git@github.com:couchbaselabs/GrocerySync-Android 
 git submodule update --init
 ```
 
