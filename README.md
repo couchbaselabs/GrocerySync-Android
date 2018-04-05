@@ -31,6 +31,12 @@ The screencasts follow the instructions in the remainder of this document.
 $ git clone https://github.com/couchbaselabs/GrocerySync-Android.git
 $ git submodule update --init
 ```
+```
+## Using SSL, in certain cases you might need to use SSL
+git clone git@github.com:couchbaselabs/GrocerySync-Android 
+git submodule update --init
+```
+
 
 ## Import the project in Android Studio
 
