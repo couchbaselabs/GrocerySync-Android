@@ -1,3 +1,5 @@
+⚠️ This repo is obsolete.  It was built against a version of Couchbase Lite that reached end of life years ago.
+
 ## Grocery Sync for Couchbase Lite Android 
 
 An example app that uses the [Couchbase Lite Android](https://github.com/couchbase/couchbase-lite-android) mobile database framework.
